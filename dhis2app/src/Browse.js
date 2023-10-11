@@ -7,49 +7,47 @@ import {
     TableBody,
     TableCell,
     TableCellHead,
-    TableFoot,
     TableHead,
     TableRow,
     TableRowHead,
 } from '@dhis2/ui'
 
 const dataQuery = {
-    dataSets: {
-        resource: 'dataSets/aLpVgfXiz0f',
-        params: {
-            fields: [
-                'name',
-                'id',
-                'dataSetElements[dataElement[id, displayName]',
-            ],
-        },
+  dataValues: {
+    resource: "/dataValueSets",
+    params: {
+    //TODO: make a option to choose orgunit and period
+      orgUnit: "plnHVbJR6p4",
+      period: "202209",
+      dataSet: "ULowA8V3ucd",
     },
-    dataValueSets: {
-        resource: 'dataValueSets',
-        params: {
-            orgUnit: 'KiheEgvUZ0i',
-            dataSet: 'aLpVgfXiz0f',
-            period: '2020',
-        },
+  },
+  dataElements: {
+    resource: "/dataElements",
+    params: {
+      fields: ["id", "displayName"],
+      //all Commodities starts with Commodities, filter after that
+      filter: "displayName:like:Commodities",
     },
-}
+  },
+};
 
 function mergeData(data) {
-    let mergedData = data.dataSets.dataSetElements.map(d => {
-        let matchedValue = data.dataValueSets.dataValues.find(dataValues => {
-            if (dataValues.dataElement == d.dataElement.id) {
-                return true
-            }
+    let mergedData = data.dataElements.dataElements.map(d => {
+        let matchedValue = data.dataValues.dataValues.find(dataValue => {
+            return dataValue.dataElement == d.id;
         })
 
         return {
-            displayName: d.dataElement.displayName,
-            id: d.dataElement.id,
+            displayName: d.displayName,
+            id: d.id,
             value: matchedValue.value,
         }
     })
     return mergedData
 }
+
+
 
 export function Browse() {
     const { loading, error, data } = useDataQuery(dataQuery)
@@ -62,13 +60,14 @@ export function Browse() {
     }
 
     if (data) {
+        console.log("stuff starts here")
         let mergedData = mergeData(data)
         console.log(mergedData)
         return (
             <Table>
                 <TableHead>
                     <TableRowHead>
-                        <TableCellHead>Display Name</TableCellHead>
+                        <TableCellHead>Commodities</TableCellHead>
                         <TableCellHead>Value</TableCellHead>
                         <TableCellHead>ID</TableCellHead>
                     </TableRowHead>

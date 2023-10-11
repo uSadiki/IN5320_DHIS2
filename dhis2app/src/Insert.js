@@ -10,11 +10,48 @@ import {
 } from '@dhis2/ui'
 
 import { useDataMutation } from '@dhis2/app-runtime'
+import { useDataQuery } from '@dhis2/app-runtime'
+
+const dataQuery = {
+  dataValues: {
+    resource: "/dataValueSets",
+    params: {
+    //todo make a option to choose orgunit and period
+      orgUnit: "plnHVbJR6p4",
+      period: "202209",
+      dataSet: "ULowA8V3ucd",
+    },
+  },
+  dataElements: {
+    resource: "/dataElements",
+    params: {
+      fields: ["id", "displayName"],
+      //all Commodities starts with Commodities, filter after that
+      filter: "displayName:like:Commodities",
+    },
+  },
+};
+
+function mergeData(data) {
+    let mergedData = data.dataElements.dataElements.map(d => {
+        let matchedValue = data.dataValues.dataValues.find(dataValue => {
+            return dataValue.dataElement == d.id;
+        })
+
+        return {
+            displayName: d.displayName,
+            id: d.id,
+            value: matchedValue.value,
+        }
+    })
+    return mergedData
+}
+
 
 const dataMutationQuery = {
     resource: 'dataValueSets',
     type: 'create',
-    dataSet: 'aLpVgfXiz0f',
+    dataSet: 'ULowA8V3ucd',
     data: ({ value, dataElement, period, orgUnit }) => ({
         dataValues: [
             {
@@ -29,62 +66,59 @@ const dataMutationQuery = {
 
 export function Insert(props) {
     const [mutate, { loading, error }] = useDataMutation(dataMutationQuery)
+    const { data } = useDataQuery(dataQuery)
 
     function onSubmit(formInput) {
-        console.log(formInput)
-        mutate({
-            value: formInput.value,
-            dataElement: formInput.dataElement,
-            period: '2020',
-            orgUnit: 'KiheEgvUZ0i',
-        })
+        if (data) {
+            let mergedData = mergeData(data);
+            
+            const originalValue = mergedData.find(commoditie => commoditie.id === formInput.dataElement).value || 0;
+            const newValue = originalValue - formInput.value;
+
+            console.log(formInput)
+            mutate({
+                value: newValue,
+                dataElement: formInput.dataElement,
+                period: '202209',
+                orgUnit: 'plnHVbJR6p4',
+            })
+        }
     }
 
-    return (
-        <div>
-            <ReactFinalForm.Form onSubmit={onSubmit}>
-                {({ handleSubmit }) => (
-                    <form onSubmit={handleSubmit} autoComplete="off">
-                        <ReactFinalForm.Field
-                            component={SingleSelectFieldFF}
-                            name="dataElement"
-                            label="Select field"
-                            initialValue="WUg3MYWQ7pt"
-                            options={[
-                                {
-                                    label: 'Total Population',
-                                    value: 'WUg3MYWQ7pt',
-                                },
-                                {
-                                    label: 'Population of women of child bearing age (WRA)',
-                                    value: 'vg6pdjObxsm',
-                                },
-                                {
-                                    label: 'Total population < 5 years  ',
-                                    value: 'DTtCy7Nx5jH',
-                                },
-                                {
-                                    label: 'Expected pregnancies',
-                                    value: 'h0xKKjijTdI',
-                                },
-                                {
-                                    label: 'Total population < 1 year   ',
-                                    value: 'DTVRnCGamkV',
-                                },
-                            ]}
-                        />
-                        <ReactFinalForm.Field
-                            name="value"
-                            label="Value"
-                            component={InputFieldFF}
-                            validate={composeValidators(hasValue, number)}
-                        />
-                        <Button type="submit" primary>
-                            Submit
-                        </Button>
-                    </form>
-                )}
-            </ReactFinalForm.Form>
-        </div>
-    )
+    if(data){
+        let mergedData = mergeData(data)
+        
+        return (
+            <div>
+                <ReactFinalForm.Form onSubmit={onSubmit}>
+                    {({ handleSubmit }) => (
+                        <form onSubmit={handleSubmit} autoComplete="off">
+                            <ReactFinalForm.Field
+                                component={SingleSelectFieldFF}
+                                name="dataElement"
+                                label="Select commoditie"
+                                initialValue={mergedData[0].id}
+                                options={mergedData.map(item => ({
+                                    label: item.displayName,
+                                    value: item.id,
+                                }))}  
+                            />
+                            <ReactFinalForm.Field
+                                name="value"
+                                label="Dispensed"
+                                placeholder="Enter the ammount dispensed"
+                                component={InputFieldFF}
+                                validate={composeValidators(hasValue, number)}
+                            />
+                            <Button type="submit" primary>
+                                Submit
+                            </Button>
+                        </form>
+                    )}
+                </ReactFinalForm.Form>
+            </div>
+        )
+    }
+
+
 }

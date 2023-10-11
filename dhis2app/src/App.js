@@ -1,11 +1,9 @@
 import React from "react";
 import classes from "./App.module.css";
 import { useState } from "react";
-
 import { Browse } from "./Browse";
 import { Insert } from "./Insert";
 import { Datasets } from "./Datasets";
-
 import { Navigation } from "./Navigation";
 
 function MyApp() {
