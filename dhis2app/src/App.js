@@ -2,12 +2,15 @@ import React from "react";
 import classes from "./App.module.css";
 import { useState } from "react";
 import { Browse } from "./Browse";
+import { StartIt } from "./StartIt";
 import { Insert } from "./Insert";
 import { Datasets } from "./Datasets";
 import { Navigation } from "./Navigation";
 
 function MyApp() {
-  const [activePage, setActivePage] = useState("Browse");
+  const [activePage, setActivePage] = useState("StartIt");
+  const [activeOrgUnit, setActiveOrgUnit] = useState("");
+
 
   function activePageHandler(page) {
     setActivePage(page);
@@ -21,13 +24,23 @@ function MyApp() {
           activePageHandler={activePageHandler}
         />
       </div>
+  
       <div className={classes.right}>
-        {activePage === "Browse" && <Browse />}
+        {activePage === "StartIt" ? (
+          <StartIt
+            setActivePage={setActivePage}
+            setActiveOrgUnit={setActiveOrgUnit}
+          />
+        ) : activePage === "Browse" ? (
+          <Browse orgUnit={activeOrgUnit} />
+        ) : null}
+  
         {activePage === "Insert" && <Insert />}
         {activePage === "Datasets" && <Datasets />}
       </div>
     </div>
   );
+
 }
 
 export default MyApp;

@@ -12,44 +12,48 @@ import {
     TableRowHead,
 } from '@dhis2/ui'
 
-const dataQuery = {
-  dataValues: {
-    resource: "/dataValueSets",
-    params: {
-    //TODO: make a option to choose orgunit and period
-      orgUnit: "plnHVbJR6p4",
-      period: "202209",
-      dataSet: "ULowA8V3ucd",
-    },
-  },
-  dataElements: {
-    resource: "/dataElements",
-    params: {
-      fields: ["id", "displayName"],
-      //all Commodities starts with Commodities, filter after that
-      filter: "displayName:like:Commodities",
-    },
-  },
-};
 
 function mergeData(data) {
     let mergedData = data.dataElements.dataElements.map(d => {
-        let matchedValue = data.dataValues.dataValues.find(dataValue => {
-            return dataValue.dataElement == d.id;
-        })
+      let matchedValue = data.dataValues.dataValues.find(dataValue => {
+        return dataValue.dataElement == d.id;
+      });
+  
+      return {
+        displayName: d.displayName,
+        id: d.id,
+        value: matchedValue ? matchedValue.value : 0, /* Add null check */
+      };
+    });
+    return mergedData;
+  }
+    
 
-        return {
-            displayName: d.displayName,
-            id: d.id,
-            value: matchedValue.value,
-        }
-    })
-    return mergedData
-}
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = `${today.getMonth() + 1}`.padStart(2, "0");
+  const formattedDate = `${year}${month}`;
 
-
-
-export function Browse() {
+export function Browse({ orgUnit }) {
+    const dataQuery = {
+        dataValues: {
+          resource: "/dataValueSets",
+          params: {
+          //TODO: make a option to choose orgunit and period
+            orgUnit,
+            period: formattedDate,
+            dataSet: "ULowA8V3ucd",
+          },
+        },
+        dataElements: {
+          resource: "/dataElements",
+          params: {
+            fields: ["id", "displayName"],
+            //all Commodities starts with Commodities, filter after that
+            filter: "displayName:like:Commodities",
+          },
+        },
+      };
     const { loading, error, data } = useDataQuery(dataQuery)
     if (error) {
         return <span>ERROR: {error.message}</span>
@@ -74,7 +78,9 @@ export function Browse() {
                 </TableHead>
                 <TableBody>
                     {mergedData.map(row => {
+                        console.log(row.value);
                         return (
+                            
                             <TableRow key={row.id}>
                                 <TableCell>{row.displayName}</TableCell>
                                 <TableCell>{row.value}</TableCell>
