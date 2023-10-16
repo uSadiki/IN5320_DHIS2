@@ -26,6 +26,7 @@ const OrgUnitQuery = {
       resource: "/organisationUnits",
       params: {
         fields: ['id', 'displayName'],
+        paging: "false",
       },
     }
   }
@@ -48,8 +49,10 @@ export function StartIt(props) {
   // This effect runs when the searchQuery changes
     useEffect(() => {
     if(data) {
+      //Finds units that starts with the same you are searching for
       const filtered = data.orgUnits.organisationUnits.filter(unit => 
-        unit.displayName && unit.displayName.toLowerCase().includes(searchQuery.toLowerCase())
+        unit.displayName && unit.displayName.toLowerCase().startsWith(searchQuery.toLowerCase())
+
       );
       setFilteredUnits(filtered);
     }
@@ -89,18 +92,17 @@ return (
             </div>
             <div className="content" style={{display: 'flex', flexWrap: 'wrap'}}>
                 
-                {filteredUnits.map(({ id, displayName }) => (
-                    <div 
-                        className="menu-item" 
-                        key={id} 
-                        style={{ flex: '1 0 30%', border: '1px solid gray', margin: '10px', padding: '10px' }} 
-                        onClick={() => handleClickForData(id)}
-                    >
-                        {displayName}
-                    </div>
+            {filteredUnits.slice(0, 27).map(({ id, displayName }) => (
+                        <div
+                            className="menu-item"
+                            key={id}
+                            style={{ flex: '1 0 30%', border: '1px solid gray', margin: '10px', padding: '10px' }}
+                            onClick={() => handleClickForData(id)}
+                        >
+                            {displayName}
+                        </div>
+                    ))}
 
-                    
-                ))}
                  {filteredUnits.length === 1 && (
                     <img src='test.jpg' alt='clinicalPhoto' style={{ width: '100%', marginTop: '20px' }}/>
                  )}
