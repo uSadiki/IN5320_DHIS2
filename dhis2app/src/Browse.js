@@ -14,20 +14,36 @@ import {
 
 
 function mergeData(data) {
+    // Define an array of categoryOptionCombos you want to retrieve
+    const categoryOptionCombosToRetrieve = ["HllvX50cXC0", "J2Qf1jtZuj8", "rQLFnNXXIL0","KPP63zJPkOu"];
+  
     let mergedData = data.dataElements.dataElements.map(d => {
-      let matchedValue = data.dataValues.dataValues.find(dataValue => {
-        return dataValue.dataElement == d.id;
-      });
+      // Initialize an object to store values for different categoryOptionCombos
+      const categoryOptionComboValues = {};
+  
+      // Iterate through each categoryOptionCombo
+      for (const categoryOptionCombo of categoryOptionCombosToRetrieve) {
+        // Find the matched value for the data element and current categoryOptionCombo
+        const matchedValue = data.dataValues.dataValues.find(dataValue => {
+          return dataValue.dataElement === d.id && dataValue.categoryOptionCombo === categoryOptionCombo;
+        });
+  
+        // Store the value or assign -1 if no match is found
+        categoryOptionComboValues[categoryOptionCombo] = matchedValue ? matchedValue.value : null;
+      }
   
       return {
         displayName: d.displayName,
         id: d.id,
-        value: matchedValue ? matchedValue.value : 0, /* Add null check */
+        values: categoryOptionComboValues,
       };
     });
+  
     return mergedData;
   }
-    
+  
+ 
+  
 
   const today = new Date();
   const year = today.getFullYear();
@@ -43,6 +59,8 @@ export function Browse({ orgUnit }) {
             orgUnit,
             period: formattedDate,
             dataSet: "ULowA8V3ucd",
+            fields: ["id"],
+
           },
         },
         dataElements: {
@@ -64,32 +82,38 @@ export function Browse({ orgUnit }) {
     }
 
     if (data) {
-        console.log("stuff starts here")
+    
         let mergedData = mergeData(data)
-        console.log(mergedData)
+        
         return (
             <Table>
-                <TableHead>
-                    <TableRowHead>
-                        <TableCellHead>Commodities</TableCellHead>
-                        <TableCellHead>Value</TableCellHead>
-                        <TableCellHead>ID</TableCellHead>
-                    </TableRowHead>
-                </TableHead>
-                <TableBody>
-                    {mergedData.map(row => {
-                        console.log(row.value);
-                        return (
-                            
-                            <TableRow key={row.id}>
-                                <TableCell>{row.displayName}</TableCell>
-                                <TableCell>{row.value}</TableCell>
-                                <TableCell>{row.id}</TableCell>
-                            </TableRow>
-                        )
-                    })}
-                </TableBody>
+              <TableHead>
+                <TableRowHead>
+                  <TableCellHead>Commodities</TableCellHead>
+                  <TableCellHead>Administered</TableCellHead>
+                  <TableCellHead>End Balance</TableCellHead>
+                  <TableCellHead>Consumption</TableCellHead>
+                  <TableCellHead>Quantity to be ordered</TableCellHead>
+                  <TableCellHead>ID</TableCellHead>
+                </TableRowHead>
+              </TableHead>
+              <TableBody>
+                {mergedData.map(row => {
+                  console.log(row.values);
+                  return (
+                    <TableRow key={row.id}>
+                      <TableCell>{row.displayName}</TableCell>
+                      <TableCell>{row.values["HllvX50cXC0"] === null ? 'Needs Update' : row.values["HllvX50cXC0"]}</TableCell>
+                      <TableCell>{row.values["J2Qf1jtZuj8"] === null ? 'Needs Update' : row.values["J2Qf1jtZuj8"]}</TableCell>
+                      <TableCell>{row.values["rQLFnNXXIL0"] === null ? 'Needs Update' : row.values["rQLFnNXXIL0"]}</TableCell>
+                      <TableCell>{row.values["KPP63zJPkOu"] === null ? 'Needs Update' : row.values["KPP63zJPkOu"]}</TableCell>
+                      <TableCell>{row.id}</TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
             </Table>
-        )
+          );
+        
     }
 }

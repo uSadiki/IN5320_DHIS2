@@ -7,6 +7,9 @@ import { Insert } from "./Insert";
 import { Datasets } from "./Datasets";
 import { Navigation } from "./Navigation";
 
+import { Analysis_dashboard } from "./Analysis_dashboard";
+
+
 function MyApp() {
   const [activePage, setActivePage] = useState("StartIt");
   const [activeOrgUnit, setActiveOrgUnit] = useState("");
