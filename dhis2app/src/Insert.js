@@ -1,52 +1,41 @@
-import React from 'react'
+import React, { useState } from 'react';
 import {
     ReactFinalForm,
-    InputFieldFF,
     Button,
-    SingleSelectFieldFF,
-    hasValue,
-    number,
-    composeValidators,
-} from '@dhis2/ui'
+} from '@dhis2/ui';
 
-import { useDataMutation } from '@dhis2/app-runtime'
-import { useDataQuery } from '@dhis2/app-runtime'
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableCellHead,
+    TableHead,
+    TableRow,
+    TableRowHead,
+} from '@dhis2/ui';
 
-const dataQuery = {
-  dataValues: {
-    resource: "/dataValueSets",
-    params: {
-    //todo make a option to choose orgunit and period
-      orgUnit: "plnHVbJR6p4",
-      period: "202209",
-      dataSet: "ULowA8V3ucd",
-    },
-  },
-  dataElements: {
-    resource: "/dataElements",
-    params: {
-      fields: ["id", "displayName"],
-      //all Commodities starts with Commodities, filter after that
-      filter: "displayName:like:Commodities",
-    },
-  },
-};
+import { useDataMutation } from '@dhis2/app-runtime';
+import { useDataQuery } from '@dhis2/app-runtime';
 
 function mergeData(data) {
     let mergedData = data.dataElements.dataElements.map(d => {
         let matchedValue = data.dataValues.dataValues.find(dataValue => {
-            return dataValue.dataElement == d.id;
-        })
+            return dataValue.dataElement === d.id;
+        });
 
         return {
             displayName: d.displayName,
             id: d.id,
             value: matchedValue.value,
-        }
-    })
-    return mergedData
+        };
+    });
+    return mergedData;
 }
 
+const today = new Date();
+const year = today.getFullYear();
+const month = `${today.getMonth() + 1}`.padStart(2, '0');
+const formattedDate = `${year}${month}`;
 
 const dataMutationQuery = {
     resource: 'dataValueSets',
@@ -62,63 +51,117 @@ const dataMutationQuery = {
             },
         ],
     }),
-}
+};
 
-export function Insert(props) {
-    const [mutate, { loading, error }] = useDataMutation(dataMutationQuery)
-    const { data } = useDataQuery(dataQuery)
+export function Insert({ orgUnit }) {
+    const dataQuery = {
+        dataValues: {
+            resource: '/dataValueSets',
+            params: {
+                orgUnit,
+                period: formattedDate,
+                dataSet: 'ULowA8V3ucd',
+            },
+        },
+        dataElements: {
+            resource: '/dataElements',
+            params: {
+                fields: ['id', 'displayName'],
+                filter: 'displayName:like:Commodities',
+            },
+        },
+    };
 
-    function onSubmit(formInput) {
+    const [mutate] = useDataMutation(dataMutationQuery);
+    const { data } = useDataQuery(dataQuery);
+
+    function onSubmit() {
         if (data) {
             let mergedData = mergeData(data);
-            
-            const originalValue = mergedData.find(commoditie => commoditie.id === formInput.dataElement).value || 0;
-            const newValue = originalValue - formInput.value;
 
-            console.log(formInput)
-            mutate({
-                value: newValue,
-                dataElement: formInput.dataElement,
-                period: '202209',
-                orgUnit: 'plnHVbJR6p4',
-            })
+            mergedData.forEach(row => {
+                const dispenseInput = dispenseInputValues[row.id];
+                const addStockInput = addStockInputValues[row.id];
+
+                const originalValue = row.value;
+                const dispenseValue = parseFloat(dispenseInput) || 0;
+                const addStockValue = parseFloat(addStockInput) || 0;
+                const newValue = originalValue - dispenseValue + addStockValue;
+
+                console.log(row.id, newValue);
+                mutate({
+                    value: newValue,
+                    dataElement: row.id,
+                    period: formattedDate,
+                    orgUnit
+                });
+            });
         }
     }
 
-    if(data){
-        let mergedData = mergeData(data)
-        
-        return (
-            <div>
-                <ReactFinalForm.Form onSubmit={onSubmit}>
-                    {({ handleSubmit }) => (
-                        <form onSubmit={handleSubmit} autoComplete="off">
-                            <ReactFinalForm.Field
-                                component={SingleSelectFieldFF}
-                                name="dataElement"
-                                label="Select commoditie"
-                                initialValue={mergedData[0].id}
-                                options={mergedData.map(item => ({
-                                    label: item.displayName,
-                                    value: item.id,
-                                }))}  
-                            />
-                            <ReactFinalForm.Field
-                                name="value"
-                                label="Dispensed"
-                                placeholder="Enter the ammount dispensed"
-                                component={InputFieldFF}
-                                validate={composeValidators(hasValue, number)}
-                            />
-                            <Button type="submit" primary>
-                                Submit
-                            </Button>
-                        </form>
-                    )}
-                </ReactFinalForm.Form>
-            </div>
-        )
+    if (data == null) {
+        return null;
     }
+    let mergedData = mergeData(data);
 
+    const [dispenseInputValues, setDispenseInputValues] = useState({});
+    const [addStockInputValues, setAddStockInputValues] = useState({});
 
+    const handleDispenseChange = (e, id) => {
+        const updatedInputValues = { ...dispenseInputValues };
+        updatedInputValues[id] = e.target.value;
+        setDispenseInputValues(updatedInputValues);
+    };
+
+    const handleAddStockChange = (e, id) => {
+        const updatedInputValues = { ...addStockInputValues };
+        updatedInputValues[id] = e.target.value;
+        setAddStockInputValues(updatedInputValues);
+    };
+
+    return (
+        <div>
+            <ReactFinalForm.Form onSubmit={onSubmit}>
+                {({ handleSubmit }) => (
+                    <form onSubmit={handleSubmit} autoComplete="off">
+                        <Table>
+                            <TableHead>
+                                <TableRowHead>
+                                    <TableCellHead>Commodities</TableCellHead>
+                                    <TableCellHead>Value</TableCellHead>
+                                    <TableCellHead>Dispense</TableCellHead>
+                                    <TableCellHead>Add Stock</TableCellHead>
+                                </TableRowHead>
+                            </TableHead>
+                            <TableBody>
+                                {mergedData.map(row => (
+                                    <TableRow key={row.id}>
+                                        <TableCell>{row.displayName}</TableCell>
+                                        <TableCell>{row.value}</TableCell>
+                                        <TableCell>
+                                            <input
+                                                name="dispense"
+                                                type="text"
+                                                onChange={(e) => handleDispenseChange(e, row.id)}
+                                            />
+                                        </TableCell>
+                                        <TableCell>
+                                            <input
+                                                name="add"
+                                                type="text"
+                                                onChange={(e) => handleAddStockChange(e, row.id)}
+                                            />
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                        <Button type="submit" primary>
+                            Submit
+                        </Button>
+                    </form>
+                )}
+            </ReactFinalForm.Form>
+        </div>
+    );
 }

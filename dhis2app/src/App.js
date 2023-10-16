@@ -35,7 +35,7 @@ function MyApp() {
           <Browse orgUnit={activeOrgUnit} />
         ) : null}
   
-        {activePage === "Insert" && <Insert />}
+        {activePage === "Insert" && <Insert orgUnit={activeOrgUnit} />}
         {activePage === "Datasets" && <Datasets />}
       </div>
     </div>
