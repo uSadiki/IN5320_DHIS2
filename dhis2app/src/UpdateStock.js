@@ -37,17 +37,11 @@ const month = `${today.getMonth() + 1}`.padStart(2, "0");
 const formattedDate = `${year}${month}`;
 
 export function UpdateStock({ orgUnit, mergedDataInput }) {
-  const endBalanceCategory = "J2Qf1jtZuj8";
-
-  const administered = "HllvX50cXC0";
-  const consumption = "rQLFnNXXIL0";
-  const quantityToBeOrdered = "KPP63zJPkOu";
-
+  
 
 
   const [mutate] = useDataMutation(dataMutationQuery);
 
-  const [dispenseInputValues, setDispenseInputValues] = useState({});
   const [administeredInput, setAdministeredInput] = useState({});
   const [endBalanceInput, setEndBalanceInput] = useState({});
   const [consumptionInput, setConsumptionInput] = useState({});
@@ -144,17 +138,6 @@ export function UpdateStock({ orgUnit, mergedDataInput }) {
     setQuantityToBeOrderedInput(updatedInputValues);
   };
 
-
-  const handleDispenseChange = (e, id) => {
-    const updatedInputValues = { ...dispenseInputValues };
-    updatedInputValues[id] = e.target.value;
-    setDispenseInputValues(updatedInputValues);
-  };
-  const handleAddStockChange = (e, id) => {
-    const updatedInputValues = { ...addStockInputValues };
-    updatedInputValues[id] = e.target.value;
-    setAddStockInputValues(updatedInputValues);
-  };
 
   return (
     <div>
