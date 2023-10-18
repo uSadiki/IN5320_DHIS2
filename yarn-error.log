@@ -1,0 +1,26 @@
+Arguments: 
+  /usr/local/bin/node /usr/local/bin/yarn global add dhis-portal
+
+PATH: 
+  /opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:/usr/local/mysql/bin:~/.dotnet/tools:/Library/Apple/usr/bin:/opt/anaconda3/envs/in3050/bin:/opt/anaconda3/condabin:/opt/homebrew/bin:/opt/homebrew/sbin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  18.17.1
+
+Platform: 
+  darwin arm64
+
+Trace: 
+  Error: EACCES: permission denied, mkdir '/Users/ilmijusufi/.config/yarn'
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
