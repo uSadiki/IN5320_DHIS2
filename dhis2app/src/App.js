@@ -5,6 +5,7 @@ import { StartIt } from "./StartIt";
 import { Insert } from "./Insert";
 import { Datasets } from "./Datasets";
 import { Navigation } from "./Navigation";
+import { UpdateStock } from "./UpdateStock";
 
 import { Analysis_dashboard } from "./Analysis_dashboard";
 
@@ -43,7 +44,9 @@ function MyApp() {
         ) : null}
   
   {activePage === "Insert" && <Insert orgUnit={activeOrgUnit} mergedDataInput={mergedData} />}
-        {activePage === "Datasets" && <Datasets />}
+  
+  {activePage === "UpdateStock" && <UpdateStock orgUnit={activeOrgUnit} mergedDataInput={mergedData} />}
+        
       </div>
     </div>
   );
