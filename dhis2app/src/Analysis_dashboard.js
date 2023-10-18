@@ -1,6 +1,8 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import { useDataQuery } from '@dhis2/app-runtime'
 import { CircularLoader } from '@dhis2/ui'
+import { Insert } from "./Insert";
+
 
 import {
     Table,
@@ -50,7 +52,7 @@ function mergeData(data) {
   const month = `${today.getMonth() + 1}`.padStart(2, "0");
   const formattedDate = `${year}${month}`;
 
-export function Analysis_dashboard({ orgUnit }) {
+export function Analysis_dashboard({ orgUnit,setMergedData,mergedData2 }) {
     const dataQuery = {
         dataValues: {
           resource: "/dataValueSets",
@@ -73,6 +75,33 @@ export function Analysis_dashboard({ orgUnit }) {
         },
       };
     const { loading, error, data } = useDataQuery(dataQuery)
+      
+    //Vi må bruke useEffect, eller så rendrer den alt for mange ganger pga dataQuery
+    useEffect(() => {
+        if (data) {
+            
+            
+            let array = [];
+            
+            let mergedData = mergeData(data)
+            mergedData.map(row => {
+                array.push({
+                  id: row.id,
+                  displayName: row.displayName,
+                  administered : row.values["HllvX50cXC0"],
+                  endBalance: row.values["J2Qf1jtZuj8"],
+                  consumption:row.values["rQLFnNXXIL0"] ,
+                  quantityToBeOrdered:row.values["KPP63zJPkOu"]
+                });
+
+
+              });
+
+             
+            setMergedData(array); 
+        }
+    }, [data]);  
+  
     if (error) {
         return <span>ERROR: {error.message}</span>
     }
@@ -81,39 +110,38 @@ export function Analysis_dashboard({ orgUnit }) {
         return <CircularLoader large />
     }
 
-    if (data) {
-    
-        let mergedData = mergeData(data)
+
+ return (
+    <Table>
+          <TableHead>
+            <TableRowHead>
+              <TableCellHead>Commodities</TableCellHead>
+              <TableCellHead>Administered</TableCellHead>
+              <TableCellHead>End Balance</TableCellHead>
+              <TableCellHead>Consumption</TableCellHead>
+              <TableCellHead>Quantity to be ordered</TableCellHead>
+              <TableCellHead>ID</TableCellHead>
+            </TableRowHead>
+          </TableHead>
+          <TableBody>
+          {mergedData2.length === 0 ? (
+      null  // First render where we have not set the values 
+    ) : (
+        mergedData2.map((item) => (
+            <TableRow key={item.id}>
+              <TableCell>{item.displayName}</TableCell>
+              <TableCell>{item.administered === null ? 'Needs Update' : item.administered}</TableCell>
+              <TableCell>{item.endBalance === null ? 'Needs Update' : item.endBalance}</TableCell>
+              <TableCell>{item.consumption === null ? 'Needs Update' : item.consumption}</TableCell>
+              <TableCell>{item.quantityToBeOrdered === null ? 'Needs Update' : item.quantityToBeOrdered}</TableCell>
+              <TableCell>{item.id}</TableCell>
+            </TableRow>
+          ))
+        )}
+       
+    </TableBody>
+  </Table>
         
-        return (
-            <Table>
-              <TableHead>
-                <TableRowHead>
-                  <TableCellHead>Commodities</TableCellHead>
-                  <TableCellHead>Administered</TableCellHead>
-                  <TableCellHead>End Balance</TableCellHead>
-                  <TableCellHead>Consumption</TableCellHead>
-                  <TableCellHead>Quantity to be ordered</TableCellHead>
-                  <TableCellHead>ID</TableCellHead>
-                </TableRowHead>
-              </TableHead>
-              <TableBody>
-                {mergedData.map(row => {
-                  console.log(row.values);
-                  return (
-                    <TableRow key={row.id}>
-                      <TableCell>{row.displayName}</TableCell>
-                      <TableCell>{row.values["HllvX50cXC0"] === null ? 'Needs Update' : row.values["HllvX50cXC0"]}</TableCell>
-                      <TableCell>{row.values["J2Qf1jtZuj8"] === null ? 'Needs Update' : row.values["J2Qf1jtZuj8"]}</TableCell>
-                      <TableCell>{row.values["rQLFnNXXIL0"] === null ? 'Needs Update' : row.values["rQLFnNXXIL0"]}</TableCell>
-                      <TableCell>{row.values["KPP63zJPkOu"] === null ? 'Needs Update' : row.values["KPP63zJPkOu"]}</TableCell>
-                      <TableCell>{row.id}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          );
-        
+);
+
     }
-}
