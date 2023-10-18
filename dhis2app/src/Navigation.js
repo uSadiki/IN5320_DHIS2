@@ -15,9 +15,9 @@ export function Navigation(props) {
         onClick={() => props.activePageHandler("Insert")}
       />
       <MenuItem
-        label="Datasets"
-        active={props.activePage == "Datasets"}
-        onClick={() => props.activePageHandler("Datasets")}
+        label="Update Stock"
+        active={props.activePage == "UpdateStock"}
+        onClick={() => props.activePageHandler("UpdateStock")}
       />
     </Menu>
   );
