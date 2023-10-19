@@ -36,7 +36,7 @@ const year = today.getFullYear();
 const month = `${today.getMonth() + 1}`.padStart(2, "0");
 const formattedDate = `${year}${month}`;
 
-export function UpdateStock({ orgUnit, mergedDataInput }) {
+export function UpdateStock({ orgUnit, commodityData }) {
   
 
 
@@ -46,11 +46,11 @@ export function UpdateStock({ orgUnit, mergedDataInput }) {
   const [endBalanceInput, setEndBalanceInput] = useState({});
   const [consumptionInput, setConsumptionInput] = useState({});
   const [quantityToBeOrderedInput, setQuantityToBeOrderedInput] = useState({});
-  const [mergedData, setMergedData] = useState(mergedDataInput);
+  const [mergedData, setMergedData] = useState(commodityData);
 
 
   const onSubmit = () => {
-    if (mergedDataInput) {
+    if (commodityData) {
       mergedData.forEach(item => {
         const administeredInputValue = parseInt(administeredInput[item.id]) || -1;
         const consumptionInputValue = parseInt(consumptionInput[item.id]) || -1;
@@ -153,7 +153,7 @@ export function UpdateStock({ orgUnit, mergedDataInput }) {
         </TableHead>
         <TableBody>
         {
-        mergedDataInput.map((item) => (
+        commodityData.map((item) => (
             <TableRow key={item.id}>
               <TableCell>{item.displayName}</TableCell>
 

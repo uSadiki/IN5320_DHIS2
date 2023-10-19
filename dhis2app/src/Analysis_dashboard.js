@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDataQuery } from '@dhis2/app-runtime';
 import { CircularLoader,Button,Modal,ModalContent,ModalActions,ButtonStrip } from '@dhis2/ui';
-import { Insert } from "./Insert";
+import * as CommonUtils from './CommonUtils';
+
 
 import {
     Table,
@@ -13,6 +14,7 @@ import {
     TableRowHead,
 } from '@dhis2/ui';
 
+//Method for getting data for each commodity and CatOptCombo
 function mergeData(data) {
     // Define an array of categoryOptionCombos you want to retrieve
     const categoryOptionCombosToRetrieve = ["HllvX50cXC0", "J2Qf1jtZuj8", "rQLFnNXXIL0", "KPP63zJPkOu"];
@@ -42,19 +44,15 @@ function mergeData(data) {
     return mergedData;
 }
 
-const today = new Date();
-const year = today.getFullYear();
-const month = `${today.getMonth() + 1}`.padStart(2, "0");
-const formattedDate = `${year}${month}`;
+export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData, setActivePage }) {
 
-export function Analysis_dashboard({ orgUnit, setMergedData, mergedData2,setActivePage }) {
+    //Query to get commodity data
     const dataQuery = {
         dataValues: {
             resource: "/dataValueSets",
             params: {
-                // TODO: make an option to choose orgunit and period
                 orgUnit,
-                period: formattedDate,
+                period: CommonUtils.getFormattedDate(),
                 dataSet: "ULowA8V3ucd",
                 fields: ["id"],
             },
@@ -63,16 +61,19 @@ export function Analysis_dashboard({ orgUnit, setMergedData, mergedData2,setActi
             resource: "/dataElements",
             params: {
                 fields: ["id", "displayName"],
-                // all Commodities start with Commodities, filter after that
                 filter: "displayName:like:Commodities",
             },
         },
     };
-    const { loading, error, data } = useDataQuery(dataQuery);
-    let dataMissing = false;
 
-    // Vi må bruke useEffect, eller så rendrer den alt for mange ganger pga dataQuery
+    // var for checking if clinic is missing endBalance value
+    let dataMissing = false;
+    const { loading, error, data } = useDataQuery(dataQuery);
+
+    // Using useEffect since without it would render for each commodity found..
     useEffect(() => {
+        
+        //Here we store data in an array that holds a dict, easier for access and will set state value for final commodity data
         if (data) {
             let array = [];
             let mergedData = mergeData(data);
@@ -92,22 +93,28 @@ export function Analysis_dashboard({ orgUnit, setMergedData, mergedData2,setActi
                 }
             });
 
-            setMergedData(array);
+            setCommodityData(array);
         }
     }, [data]);
 
+    //Error handling
     if (error) {
         return <span>ERROR: {error.message}</span>;
     }
 
+    //Loading handling
     if (loading) {
         return <CircularLoader large />;
     }
 
-    
-    const handleClickForData = () => {
-      setActivePage("UpdateStock");
-  };
+    //Handle click method for changing activePage
+    const handleClickForUpdateStock = () => {
+        setActivePage("UpdateStock");
+     };
+
+    const handleClickForStartIt = () => {
+        setActivePage("StartIt");
+     };
     
     return (
       
@@ -123,12 +130,14 @@ export function Analysis_dashboard({ orgUnit, setMergedData, mergedData2,setActi
                         <TableCellHead>ID</TableCellHead>
                     </TableRowHead>
                 </TableHead>
+
                 <TableBody>
-                    {mergedData2.length === 0 ? (
+                    {commodityData.length === 0 ? (
                           null // First render where we have not set the values
                       ) : (
-                          mergedData2.map(item => {
-                             
+                        commodityData.map(item => {
+                                
+                              //If data is missing we will notify the user
                               if (item.endBalance === null ) {
                                   dataMissing = true;
                               }
@@ -141,28 +150,34 @@ export function Analysis_dashboard({ orgUnit, setMergedData, mergedData2,setActi
                                       <TableCell>{item.quantityToBeOrdered === null ? 'Needs Update' : item.quantityToBeOrdered}</TableCell>
                                       <TableCell>{item.id}</TableCell>
                                   </TableRow>
-                              );
-                          })
+                                    );
+                                })
                       )}
 
                 </TableBody>
             </Table>
-            {dataMissing && 
-<Modal small>
-    <ModalContent>
-This clinic has null value for endBalance, please fill in endBalance value before continuing              </ModalContent>
-              <ModalActions>
-                  <ButtonStrip end>
-                      
-                      <Button onClick={handleClickForData} primary>
-Correct data                      </Button>
-                  </ButtonStrip>
-              </ModalActions>
-          </Modal>
+            
+            
+            {dataMissing && //Message to user if data is missing
+                            <Modal small>
+                                <ModalContent>
+                                    This clinic has null value for endBalance, please fill in endBalance value before continuing              
+                                </ModalContent>
 
+                                     <ModalActions>
+                                        <ButtonStrip end>
+                                            <Button onClick={handleClickForStartIt} primary>
+                                                 Change clinic                     
+                                            </Button>
+                                                
+                                            <Button onClick={handleClickForUpdateStock} primary>
+                                                 Correct data                      
+                                            </Button>
+                                        </ButtonStrip>
+                                     </ModalActions>
 
-
- }
+                            </Modal>
+            }
         </div>
     );
 }

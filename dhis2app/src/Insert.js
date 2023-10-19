@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDataQuery } from '@dhis2/app-runtime'
 import { CircularLoader } from '@dhis2/ui';
 import { useDataMutation } from '@dhis2/app-runtime';
-
+import * as CommonUtils from './CommonUtils';
 import {
   Table,
   TableBody,
@@ -22,7 +22,7 @@ import {
 } from '@dhis2/ui'
 
 
-
+//Data mutation query
 const dataMutationQuery = {
   resource: 'dataValueSets',
   type: 'create',
@@ -40,79 +40,77 @@ const dataMutationQuery = {
   }),
 };
 
-const today = new Date();
-const year = today.getFullYear();
-const month = `${today.getMonth() + 1}`.padStart(2, "0");
-const formattedDate = `${year}${month}`;
-
 //TODO: Find a name for representing dispense and add to stock
-export function Insert({ orgUnit, mergedDataInput,setActivePage }) {
+export function Insert({ orgUnit, commodityData,setActivePage }) {
+
   const endBalanceCategory = "J2Qf1jtZuj8";
   const consumptionCategory = "rQLFnNXXIL0";
 
+  //Declare states
   const [mutate] = useDataMutation(dataMutationQuery);
-
   const [inputValues, setinputValues] = useState({});
-  const [mergedData, setMergedData] = useState(mergedDataInput);
+  const [mergedData, setMergedData] = useState(commodityData);
   const [confirmationWindow, setConfirmationWindow] = useState(false);
   const [alert, setAlert] = useState(false);
   const [stockOut, setStockOut] = useState(false);
   const [invalidInp, setInvalidInp] = useState(false);
-
   const [dispensing, setDispensing] = useState(true);
 
-
+  
   const confirm = () => {
-    if (mergedDataInput) {
-      let empty = false;
-        const updatedMergedData = mergedData.map(item => {
-          const dispenseInput = inputValues[item.id];
-      
-          const originalValue = parseInt(item.endBalance)|| 0;
-          const dispenseValue = parseInt(dispenseInput) || 0;
+    
+    if (commodityData) {
+          let empty = false;
 
-          //check if despensing or adding
-          let newValue; 
-          if (dispensing){
-            newValue = originalValue - dispenseValue
-          }
-          else{
-            newValue = originalValue + dispenseValue
-          }
-          
-          if (newValue < 0){
-            empty = true;
-          }
-
-          //only mutate if the value is changed
-          if (Number(originalValue) !== Number(newValue) && !empty){
-            item.endBalance = newValue;
-            console.log("MUTATE SKJER DA")
-            //update End Balance value
-            mutate({
-              value: item.endBalance,
-              dataElement: item.id,
-              period: formattedDate,
-              orgUnit,
-              categoryOptionCombo: endBalanceCategory,
-            });
-
-            //only update consumption if dispensing
-            if (dispensing){
-              item.consumption = Number(item.consumption) + Number(dispenseValue); 
+          const updatedMergedData = mergedData.map(item => {
               
-              //update consumption value
-              mutate({
-                value: item.consumption,
-                dataElement: item.id,
-                period: formattedDate,
-                orgUnit,
-                categoryOptionCombo: consumptionCategory,
-              });
-            }
-          }
-          return item;
-        });
+              //Get input value based on item id, so we know how much we are dispensing/stocking for each commodity
+              const dispenseInput = inputValues[item.id];
+              const originalValue = parseInt(item.endBalance)|| 0;
+              const dispenseValue = parseInt(dispenseInput) || 0;
+
+              //check if despensing or adding
+              let newValue; 
+              if (dispensing){
+                newValue = originalValue - dispenseValue
+              }
+              else{
+                newValue = originalValue + dispenseValue
+              }
+              
+              if (newValue < 0){
+                empty = true;
+              }
+
+              //only mutate if the value is changed
+              if (Number(originalValue) !== Number(newValue) && !empty){
+                item.endBalance = newValue;
+                console.log("MUTATE SKJER DA")
+                //update End Balance value
+                mutate({
+                  value: item.endBalance,
+                  dataElement: item.id,
+                  period: CommonUtils.getFormattedDate(),
+                  orgUnit,
+                  categoryOptionCombo: endBalanceCategory,
+                });
+
+                //only update consumption if dispensing
+                if (dispensing){
+                  item.consumption = Number(item.consumption) + Number(dispenseValue); 
+                  
+                  //update consumption value
+                  mutate({
+                    value: item.consumption,
+                    dataElement: item.id,
+                    period: CommonUtils.getFormattedDate(),
+                    orgUnit,
+                    categoryOptionCombo: consumptionCategory,
+                  });
+                }
+              }
+              return item;
+            });
 
         if (empty){
           console.log("NOT ENOUGHT STOCK")
@@ -210,7 +208,7 @@ let dataMissing = false;
         </TableRowHead>
       </TableHead>
       <TableBody>
-        {mergedDataInput.map((item) => {
+        {commodityData.map((item) => {
           // Check if endBalance is null and set dataMissing to true
           if (item.endBalance === null) {
             dataMissing = true;
@@ -247,7 +245,7 @@ let dataMissing = false;
           <ModalContent>
               <p>Commodities about to be {dispensing ? "Dispensed" : "Added to Stock"}:</p>
               <ul>
-                {mergedDataInput.map((item) => {
+                {commodityData.map((item) => {
                   const dispenseValue = parseInt(inputValues[item.id]) || 0;
                   if (dispenseValue > 0) {
                     return (
@@ -277,7 +275,7 @@ let dataMissing = false;
           <ModalTitle>Not enoguht stock</ModalTitle>
           <ModalContent>
               <ul>
-                {mergedDataInput.map((item) => {
+                {commodityData.map((item) => {
                   const dispenseValue = parseInt(inputValues[item.id]) || 0;
                   if (dispenseValue > item.endBalance) {
                     return (
