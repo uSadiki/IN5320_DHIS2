@@ -45,13 +45,13 @@ export function Insert({ orgUnit, commodityData,setActivePage }) {
 
   const endBalanceCategory = "J2Qf1jtZuj8";
   const consumptionCategory = "rQLFnNXXIL0";
+  const administeredCategory = "HllvX50cXC0";
 
   //Declare states
   const [mutate] = useDataMutation(dataMutationQuery);
   const [inputValues, setinputValues] = useState({});
   const [mergedData, setMergedData] = useState(commodityData);
   const [confirmationWindow, setConfirmationWindow] = useState(false);
-  const [alert, setAlert] = useState(false);
   const [stockOut, setStockOut] = useState(false);
   const [invalidInp, setInvalidInp] = useState(false);
   const [dispensing, setDispensing] = useState(true);
@@ -95,22 +95,34 @@ export function Insert({ orgUnit, commodityData,setActivePage }) {
                   categoryOptionCombo: endBalanceCategory,
                 });
 
-                //only update consumption if dispensing
-                if (dispensing){
-                  item.consumption = Number(item.consumption) + Number(dispenseValue); 
-                  
-                  //update consumption value
-                  mutate({
-                    value: item.consumption,
-                    dataElement: item.id,
-                    period: CommonUtils.getFormattedDate(),
-                    orgUnit,
-                    categoryOptionCombo: consumptionCategory,
-                  });
-                }
-              }
-              return item;
-            });
+            //only update consumption if dispensing
+            if (dispensing){
+              item.consumption = Number(item.consumption) + Number(dispenseValue); 
+              
+              //update consumption value
+              mutate({
+                value: item.consumption,
+                dataElement: item.id,
+                period: formattedDate,
+                orgUnit,
+                categoryOptionCombo: consumptionCategory,
+              });
+            }
+            else{
+              item.administered = Number(item.administered) + Number(dispenseValue); 
+
+              //update administered value
+              mutate({
+                value: item.administered,
+                dataElement: item.id,
+                period: formattedDate,
+                orgUnit,
+                categoryOptionCombo: administeredCategory,
+              });
+            }
+          }
+          return item;
+        });
 
         if (empty){
           console.log("NOT ENOUGHT STOCK")
@@ -272,7 +284,7 @@ let dataMissing = false;
       )}
       {stockOut && (
         <Modal>
-          <ModalTitle>Not enoguht stock</ModalTitle>
+          <ModalTitle>Not enough stock</ModalTitle>
           <ModalContent>
               <ul>
                 {commodityData.map((item) => {
@@ -287,36 +299,20 @@ let dataMissing = false;
                   return null;
                 })}
               </ul>
-                Wait until the 14 for restock
+                Wait until the 14 for restock or check for nearby clinics
           </ModalContent>
           <ModalActions>
             <ButtonStrip end>
               <Button secondary onClick={stock}>
-                Understand
+                I understand
+              </Button>
+              <Button primary onClick={stock}>
+                check clinics
               </Button>
             </ButtonStrip>
           </ModalActions>
         </Modal>
       )}
-      {alert && (
-        <AlertBar 
-          actions={[
-              { 
-                //TODO: make enarby clinics and redirect to this page, when pressed
-                  label: 'check nearby clinics',
-                  onClick:  cancel 
-              },
-              {
-                  label: 'Cancel',
-                  onClick:  cancel 
-              }
-          ]}
-          permanent critical
-        >
-        Not enought stock
-      </AlertBar>
-      )}
-
           {dataMissing && 
           <Modal small>
               <ModalContent>
