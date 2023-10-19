@@ -68,7 +68,7 @@ export function Insert({ orgUnit, commodityData,setActivePage }) {
 
   
   const confirm = () => {
-    if (mergedDataInput) {
+    if (commodityData) {
       let empty = false;
       
         const updatedMergedData = mergedData.map(item => {
