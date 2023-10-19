@@ -108,7 +108,10 @@ export function Browse({ orgUnit }) {
                       <TableCell>{row.values["rQLFnNXXIL0"] === null ? 'Needs Update' : row.values["rQLFnNXXIL0"]}</TableCell>
                       <TableCell>{row.values["KPP63zJPkOu"] === null ? 'Needs Update' : row.values["KPP63zJPkOu"]}</TableCell>
                       <TableCell>{row.id}</TableCell>
+                      
                     </TableRow>
+
+                    
                   );
                 })}
               </TableBody>

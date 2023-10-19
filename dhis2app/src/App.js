@@ -36,14 +36,21 @@ function MyApp() {
             setActiveOrgUnit={setActiveOrgUnit}
           />
         ) : activePage === "Browse" ? (
-          <Analysis_dashboard
-            orgUnit={activeOrgUnit}
-            setMergedData={setMergedData}
-            mergedData2={mergedData}
-          />
+          <div>
+            <Analysis_dashboard
+              orgUnit={activeOrgUnit}
+              setMergedData={setMergedData}
+              mergedData2={mergedData}
+              setActivePage={setActivePage}
+            />
+
+           
+
+          </div>
         ) : null}
+
   
-  {activePage === "Insert" && <Insert orgUnit={activeOrgUnit} mergedDataInput={mergedData} />}
+  {activePage === "Insert" && <Insert orgUnit={activeOrgUnit} mergedDataInput={mergedData}  setActivePage={setActivePage} />}
   
   {activePage === "UpdateStock" && <UpdateStock orgUnit={activeOrgUnit} mergedDataInput={mergedData} />}
         

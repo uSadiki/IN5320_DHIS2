@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDataQuery } from '@dhis2/app-runtime'
-import { CircularLoader } from '@dhis2/ui'
+import { CircularLoader } from '@dhis2/ui';
 import { useDataMutation } from '@dhis2/app-runtime';
 
 import {
@@ -46,7 +46,7 @@ const month = `${today.getMonth() + 1}`.padStart(2, "0");
 const formattedDate = `${year}${month}`;
 
 //TODO: Find a name for representing dispense and add to stock
-export function Insert({ orgUnit, mergedDataInput }) {
+export function Insert({ orgUnit, mergedDataInput,setActivePage }) {
   const endBalanceCategory = "J2Qf1jtZuj8";
   const consumptionCategory = "rQLFnNXXIL0";
 
@@ -176,7 +176,12 @@ export function Insert({ orgUnit, mergedDataInput }) {
       setDispensing(true) 
     }
   }
+  const handleClickForData = () => {
+    setActivePage("UpdateStock");
+};
   
+let dataMissing = false;
+
 
   return (
     <div>
@@ -196,35 +201,45 @@ export function Insert({ orgUnit, mergedDataInput }) {
       )}
       
       <Table>
-        <TableHead>
-          <TableRowHead>
-            <TableCellHead>Commodities</TableCellHead>
-            <TableCellHead>End Balance</TableCellHead>
-            <TableCellHead>Consumption</TableCellHead>
-            <TableCellHead>{dispensing ? "Dispense" : "Add Stock"}</TableCellHead>
-          </TableRowHead>
-        </TableHead>
-        <TableBody>
-        {
-        mergedDataInput.map((item) => (
+      <TableHead>
+        <TableRowHead>
+          <TableCellHead>Commodities</TableCellHead>
+          <TableCellHead>End Balance</TableCellHead>
+          <TableCellHead>Consumption</TableCellHead>
+          <TableCellHead>{dispensing ? "Dispense" : "Add Stock"}</TableCellHead>
+        </TableRowHead>
+      </TableHead>
+      <TableBody>
+        {mergedDataInput.map((item) => {
+          // Check if endBalance is null and set dataMissing to true
+          if (item.endBalance === null) {
+            dataMissing = true;
+          }
+
+          return (
             <TableRow key={item.id}>
               <TableCell>{item.displayName}</TableCell>
-              <TableCell>{item.endBalance === null ? 'Needs Update' : item.endBalance}</TableCell>
-              <TableCell>{item.consumption === null ? 'Needs Update' : item.consumption}</TableCell>
               <TableCell>
-                  <input
-                    name="dispense"
-                    type="number"
-                    min="0"
-                    onChange={e => handleDispenseChange(e, item.id)}
-                  />
-                </TableCell>             
+                {item.endBalance === null ? 'Needs Update' : item.endBalance}
+              </TableCell>
+              <TableCell>
+                {item.consumption === null ? 'Needs Update' : item.consumption}
+              </TableCell>
+              <TableCell>
+                <input
+                  name="dispense"
+                  type="number"
+                  min="0"
+                  onChange={(e) => handleDispenseChange(e, item.id)}
+                />
+              </TableCell>
             </TableRow>
-          ))
-        }
-          
-        </TableBody>
-      </Table>
+          );
+        })}
+      </TableBody>
+    </Table>
+
+
       <button onClick={showConfirmationWindow}>Update</button>
       {confirmationWindow && (
         <Modal>
@@ -303,6 +318,21 @@ export function Insert({ orgUnit, mergedDataInput }) {
         Not enought stock
       </AlertBar>
       )}
+
+          {dataMissing && 
+          <Modal small>
+              <ModalContent>
+              This clinic has null value for endBalance, please fill in endBalance value before continuing              
+              </ModalContent>
+                  <ModalActions>
+                    <ButtonStrip end>      
+                       <Button onClick={handleClickForData} primary>
+                        Correct data                     
+                        </Button>
+                    </ButtonStrip>
+                  </ModalActions>
+           </Modal> 
+           }
 
     </div>
   );
