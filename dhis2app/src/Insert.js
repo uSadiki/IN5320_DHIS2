@@ -18,6 +18,7 @@ import {
   ButtonStrip,
   Button,
   AlertBar,
+  SwitchField
 } from '@dhis2/ui'
 
 
@@ -44,39 +45,50 @@ const year = today.getFullYear();
 const month = `${today.getMonth() + 1}`.padStart(2, "0");
 const formattedDate = `${year}${month}`;
 
+//TODO: Find a name for representing dispense and add to stock
 export function Insert({ orgUnit, mergedDataInput }) {
   const endBalanceCategory = "J2Qf1jtZuj8";
   const consumptionCategory = "rQLFnNXXIL0";
 
   const [mutate] = useDataMutation(dataMutationQuery);
 
-  const [dispenseInputValues, setDispenseInputValues] = useState({});
+  const [inputValues, setinputValues] = useState({});
   const [mergedData, setMergedData] = useState(mergedDataInput);
   const [confirmationWindow, setConfirmationWindow] = useState(false);
   const [alert, setAlert] = useState(false);
   const [stockOut, setStockOut] = useState(false);
+  const [invalidInp, setInvalidInp] = useState(false);
+
+  const [dispensing, setDispensing] = useState(true);
 
 
   const confirm = () => {
     if (mergedDataInput) {
       let empty = false;
         const updatedMergedData = mergedData.map(item => {
-          const dispenseInput = dispenseInputValues[item.id];
+          const dispenseInput = inputValues[item.id];
       
-          const originalValue = item.endBalance;
+          const originalValue = parseInt(item.endBalance)|| 0;
           const dispenseValue = parseInt(dispenseInput) || 0;
-          const newValue = originalValue - dispenseValue
+
+          //check if despensing or adding
+          let newValue; 
+          if (dispensing){
+            newValue = originalValue - dispenseValue
+          }
+          else{
+            newValue = originalValue + dispenseValue
+          }
           
-          if (dispenseValue > originalValue){
+          if (newValue < 0){
             empty = true;
           }
 
           //only mutate if the value is changed
           if (Number(originalValue) !== Number(newValue) && !empty){
             item.endBalance = newValue;
-            item.consumption = Number(item.consumption) + Number(dispenseValue); 
             console.log("MUTATE SKJER DA")
-            //update dispense value
+            //update End Balance value
             mutate({
               value: item.endBalance,
               dataElement: item.id,
@@ -84,24 +96,30 @@ export function Insert({ orgUnit, mergedDataInput }) {
               orgUnit,
               categoryOptionCombo: endBalanceCategory,
             });
-            //update consumption value
-            mutate({
-              value: item.consumption,
-              dataElement: item.id,
-              period: formattedDate,
-              orgUnit,
-              categoryOptionCombo: consumptionCategory,
-            });
+
+            //only update consumption if dispensing
+            if (dispensing){
+              item.consumption = Number(item.consumption) + Number(dispenseValue); 
+              
+              //update consumption value
+              mutate({
+                value: item.consumption,
+                dataElement: item.id,
+                period: formattedDate,
+                orgUnit,
+                categoryOptionCombo: consumptionCategory,
+              });
+            }
           }
           return item;
         });
+
         if (empty){
           console.log("NOT ENOUGHT STOCK")
           setAlert(true);
           setStockOut(true)
         }
         else{
-          console.log("plz dont skje")
           setMergedData(updatedMergedData);
         }
 
@@ -111,13 +129,27 @@ export function Insert({ orgUnit, mergedDataInput }) {
   
 
   const handleDispenseChange = (e, id) => {
-    const updatedInputValues = { ...dispenseInputValues };
+    const updatedInputValues = { ...inputValues };
     updatedInputValues[id] = e.target.value;
-    setDispenseInputValues(updatedInputValues);
+    setinputValues(updatedInputValues);
   };
 
   function showConfirmationWindow(){
-    setConfirmationWindow(true);
+    let negativeInp = false
+    //check if all input are positive
+    mergedData.forEach((item) => {
+      const dispenseInput = inputValues[item.id];
+      console.log(dispenseInput)
+      if (Number(dispenseInput) < 0){
+        negativeInp = true;
+      }
+    });
+    if (negativeInp === false){
+      setConfirmationWindow(true);
+    }
+    else{
+      setInvalidInp(true);
+    }
   }
 
   function decline(){
@@ -131,17 +163,45 @@ export function Insert({ orgUnit, mergedDataInput }) {
   function stock(){
     setStockOut(false)
   }
+
+  function alertNegativInp(){
+    setInvalidInp(false);
+  }
+
+  function switchDispenseOrAdd(){
+    if (dispensing){
+      setDispensing(false);
+    }
+    else{
+      setDispensing(true) 
+    }
+  }
   
 
   return (
     <div>
+      <SwitchField
+      checked={dispensing}
+        helpText={dispensing ? "You are currently dispensing. Press/switch to add stock" : "You are currently adding stock. Press/switch to dispense"}
+        label="Dispense"
+        onChange={switchDispenseOrAdd}
+        name="switchName"
+        value="defaultValue"
+      />
+
+      {invalidInp && (
+        <AlertBar duration={2000} onHidden={alertNegativInp}>
+        Invalid input
+      </AlertBar>
+      )}
+      
       <Table>
         <TableHead>
           <TableRowHead>
             <TableCellHead>Commodities</TableCellHead>
             <TableCellHead>End Balance</TableCellHead>
             <TableCellHead>Consumption</TableCellHead>
-            <TableCellHead>Dispense</TableCellHead>
+            <TableCellHead>{dispensing ? "Dispense" : "Add Stock"}</TableCellHead>
           </TableRowHead>
         </TableHead>
         <TableBody>
@@ -168,16 +228,16 @@ export function Insert({ orgUnit, mergedDataInput }) {
       <button onClick={showConfirmationWindow}>Update</button>
       {confirmationWindow && (
         <Modal>
-          <ModalTitle>Confirm Dispense:</ModalTitle>
+          <ModalTitle>{dispensing ? "Confirm dispense" : "Confirm Add to Stock"}</ModalTitle>
           <ModalContent>
-              <p>Commodities about to be dispensed:</p>
+              <p>Commodities about to be {dispensing ? "Dispensed" : "Added to Stock"}:</p>
               <ul>
                 {mergedDataInput.map((item) => {
-                  const dispenseValue = parseInt(dispenseInputValues[item.id]) || 0;
+                  const dispenseValue = parseInt(inputValues[item.id]) || 0;
                   if (dispenseValue > 0) {
                     return (
                       <li key={item.id}>
-                        {item.displayName} - Dispense: {dispenseValue}
+                        {item.displayName} - {dispensing ? "Dispense" : "Add"}: {dispenseValue}
                       </li>
                     );
                   }
@@ -203,7 +263,7 @@ export function Insert({ orgUnit, mergedDataInput }) {
           <ModalContent>
               <ul>
                 {mergedDataInput.map((item) => {
-                  const dispenseValue = parseInt(dispenseInputValues[item.id]) || 0;
+                  const dispenseValue = parseInt(inputValues[item.id]) || 0;
                   if (dispenseValue > item.endBalance) {
                     return (
                       <li key={item.id}>
@@ -243,6 +303,7 @@ export function Insert({ orgUnit, mergedDataInput }) {
         Not enought stock
       </AlertBar>
       )}
+
     </div>
   );
 }
