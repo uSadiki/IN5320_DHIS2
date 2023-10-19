@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useDataQuery } from '@dhis2/app-runtime'
-import { CircularLoader } from '@dhis2/ui';
+import React, { useState } from 'react';
 import { useDataMutation } from '@dhis2/app-runtime';
 
 import {
@@ -10,11 +8,17 @@ import {
   TableCellHead,
   TableHead,
   TableRow,
-  TableRowHead,
+  TableRowHead
+} from '@dhis2/ui'
+
+import { 
   Modal,
   ModalTitle,
   ModalContent,
-  ModalActions,
+  ModalActions
+} from '@dhis2/ui'
+
+import { 
   ButtonStrip,
   Button,
   AlertBar,
@@ -52,22 +56,28 @@ export function Insert({ orgUnit, mergedDataInput,setActivePage }) {
   const administeredCategory = "HllvX50cXC0";
 
   const [mutate] = useDataMutation(dataMutationQuery);
-
+  //state with dict of all input values (key=id, value=input)
   const [inputValues, setinputValues] = useState({});
   const [mergedData, setMergedData] = useState(mergedDataInput);
   const [confirmationWindow, setConfirmationWindow] = useState(false);
-  const [stockOut, setStockOut] = useState(false);
-  const [invalidInp, setInvalidInp] = useState(false);
 
+  //check if dispense > end balance: true if so
+  const [stockOut, setStockOut] = useState(false);
+  //state for invalid input
+  const [invalidInp, setInvalidInp] = useState(false);
+  
+  //switch between dispense and add
   const [dispensing, setDispensing] = useState(true);
 
 
   const confirm = () => {
     if (mergedDataInput) {
       let empty = false;
+      
         const updatedMergedData = mergedData.map(item => {
           const dispenseInput = inputValues[item.id];
-      
+          
+          //if value is undefined set to 0
           const originalValue = parseInt(item.endBalance)|| 0;
           const dispenseValue = parseInt(dispenseInput) || 0;
 
@@ -80,6 +90,7 @@ export function Insert({ orgUnit, mergedDataInput,setActivePage }) {
             newValue = originalValue + dispenseValue
           }
           
+          //check if dispense value > end balance
           if (newValue < 0){
             empty = true;
           }
@@ -87,7 +98,6 @@ export function Insert({ orgUnit, mergedDataInput,setActivePage }) {
           //only mutate if the value is changed
           if (Number(originalValue) !== Number(newValue) && !empty){
             item.endBalance = newValue;
-            console.log("MUTATE SKJER DA")
             //update End Balance value
             mutate({
               value: item.endBalance,
@@ -110,6 +120,7 @@ export function Insert({ orgUnit, mergedDataInput,setActivePage }) {
                 categoryOptionCombo: consumptionCategory,
               });
             }
+            //only update administered when adding
             else{
               item.administered = Number(item.administered) + Number(dispenseValue); 
 
@@ -125,37 +136,37 @@ export function Insert({ orgUnit, mergedDataInput,setActivePage }) {
           }
           return item;
         });
-
+        
         if (empty){
           console.log("NOT ENOUGHT STOCK")
-          setAlert(true);
           setStockOut(true)
         }
+        //update the table if enough stock to dispense
         else{
           setMergedData(updatedMergedData);
         }
-
     }
     setConfirmationWindow(false);
   };
   
-
-  const handleDispenseChange = (e, id) => {
+  const handleInputChange = (event, id) => {
     const updatedInputValues = { ...inputValues };
-    updatedInputValues[id] = e.target.value;
+    updatedInputValues[id] = event.target.value;
     setinputValues(updatedInputValues);
   };
 
+//called when pressing update
+//checks for valid input and calls/shows the confirmation window if success
   function showConfirmationWindow(){
     let negativeInp = false
     //check if all input are positive
     mergedData.forEach((item) => {
       const dispenseInput = inputValues[item.id];
-      console.log(dispenseInput)
       if (Number(dispenseInput) < 0){
         negativeInp = true;
       }
     });
+    
     if (negativeInp === false){
       setConfirmationWindow(true);
     }
@@ -168,18 +179,17 @@ export function Insert({ orgUnit, mergedDataInput,setActivePage }) {
     setConfirmationWindow(false);
   }
 
-  function cancel(){
-    setAlert(false)
-  }
-
+  //used for removing modular showing not enough stock
   function stock(){
     setStockOut(false)
   }
 
+  //remove invalid inp alert
   function alertNegativInp(){
     setInvalidInp(false);
   }
 
+  //called when the switch is pressed between dispense and add
   function switchDispenseOrAdd(){
     if (dispensing){
       setDispensing(false);
@@ -242,7 +252,7 @@ let dataMissing = false;
                   name="dispense"
                   type="number"
                   min="0"
-                  onChange={(e) => handleDispenseChange(e, item.id)}
+                  onChange={(e) => handleInputChange(e, item.id)}
                 />
               </TableCell>
             </TableRow>
@@ -329,7 +339,6 @@ let dataMissing = false;
                   </ModalActions>
            </Modal> 
            }
-
     </div>
   );
 }
