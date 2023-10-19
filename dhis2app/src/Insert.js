@@ -182,8 +182,8 @@ export function Insert({ orgUnit, mergedDataInput }) {
     <div>
       <SwitchField
       checked={dispensing}
-        helpText={dispensing ? "You are currently dispensing. Press/switch to add stock" : "You are currently adding stock. Press/switch to dispense"}
-        label="Dispense"
+        helpText={dispensing ? "You are currently dispensing. Press/switch to add stock" : "You are currently adding to stock. Press/switch to dispense"}
+        label={dispensing ? "Dispense": "Add to Stock"}
         onChange={switchDispenseOrAdd}
         name="switchName"
         value="defaultValue"
