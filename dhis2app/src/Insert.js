@@ -99,7 +99,7 @@ export function Insert({ orgUnit, commodityData,setActivePage }) {
             mutate({
               value: item.endBalance,
               dataElement: item.id,
-              period: formattedDate,
+              period: CommonUtils.getFormattedDate(),
               orgUnit,
               categoryOptionCombo: endBalanceCategory,
             });
@@ -112,7 +112,7 @@ export function Insert({ orgUnit, commodityData,setActivePage }) {
               mutate({
                 value: item.consumption,
                 dataElement: item.id,
-                period: formattedDate,
+                period: CommonUtils.getFormattedDate(),
                 orgUnit,
                 categoryOptionCombo: consumptionCategory,
               });
@@ -125,7 +125,7 @@ export function Insert({ orgUnit, commodityData,setActivePage }) {
               mutate({
                 value: item.administered,
                 dataElement: item.id,
-                period: formattedDate,
+                period: CommonUtils.getFormattedDate(),
                 orgUnit,
                 categoryOptionCombo: administeredCategory,
               });
