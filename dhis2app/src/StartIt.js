@@ -67,7 +67,7 @@ export function StartIt(props) {
   const handleClickForData = (orgUnitId,displayName) => {
   props.setActiveOrgUnit(orgUnitId);
   props.setActiveOrgUnitName(displayName);
-  props.setActivePage("Browse");
+  props.setActivePage("Dashboard");
 };
 
 return (

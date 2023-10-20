@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import classes from "./App.module.css";
 import { StartIt } from "./StartIt";
-import { Insert } from "./Insert";
 import { Navigation } from "./Navigation";
-import { UpdateStock } from "./UpdateStock";
 import { Analysis_dashboard } from "./Analysis_dashboard";
-import { Browse } from "./Browse";
-import { Datasets } from "./Datasets";
+import { DataManagement } from "./DataManagement";
+import { CorrectData } from "./CorrectData";
 
 function MyApp() {
 
@@ -35,7 +33,7 @@ function MyApp() {
 
        {activeOrgUnitName === "" ? null : <h1>Current Clinic: {activeOrgUnitName}</h1>}
 
-       {activePage === "Insert" && <Insert 
+       {activePage === "UpdateData" && <DataManagement 
                                            orgUnit={activeOrgUnit} 
                                            commodityData={commodityData}  
                                            setActivePage={setActivePage} />}
@@ -45,12 +43,13 @@ function MyApp() {
                                               setActiveOrgUnit={setActiveOrgUnit}
                                               setActiveOrgUnitName={setActiveOrgUnitName} />}
 
-      {activePage === "UpdateStock" && <UpdateStock 
+       {activePage === "DataCorrection" && <CorrectData 
                                                    orgUnit={activeOrgUnit} 
-                                                   commodityData={commodityData} />}
+                                                   commodityData={commodityData} 
+                                                   setActivePage={setActivePage} />}
        
 
-       {activePage === "Browse" &&  <Analysis_dashboard 
+       {activePage === "Dashboard" &&  <Analysis_dashboard 
                                                         orgUnit={activeOrgUnit} 
                                                         setCommodityData={setCommodityData}
                                                         commodityData={commodityData} 

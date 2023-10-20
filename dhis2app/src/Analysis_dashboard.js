@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDataQuery } from '@dhis2/app-runtime';
-import { CircularLoader,Button,Modal,ModalContent,ModalActions,ButtonStrip } from '@dhis2/ui';
+import { CircularLoader,} from '@dhis2/ui';
 import * as CommonUtils from './CommonUtils';
-
-
+import DataMissing from './Notification/DataMissing';
 import {
     Table,
     TableBody,
@@ -109,7 +108,7 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData, s
 
     //Handle click method for changing activePage
     const handleClickForUpdateStock = () => {
-        setActivePage("UpdateStock");
+        setActivePage("DataCorrection");
      };
 
     const handleClickForStartIt = () => {
@@ -158,25 +157,8 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData, s
             </Table>
             
             
-            {dataMissing && //Message to user if data is missing
-                            <Modal small>
-                                <ModalContent>
-                                    This clinic has null value for endBalance, please fill in endBalance value before continuing              
-                                </ModalContent>
-
-                                     <ModalActions>
-                                        <ButtonStrip end>
-                                            <Button onClick={handleClickForStartIt} primary>
-                                                 Change clinic                     
-                                            </Button>
-                                                
-                                            <Button onClick={handleClickForUpdateStock} primary>
-                                                 Correct data                      
-                                            </Button>
-                                        </ButtonStrip>
-                                     </ModalActions>
-
-                            </Modal>
+            {dataMissing && 
+            <DataMissing handleClickForCorrection={handleClickForUpdateStock} />
             }
         </div>
     );
