@@ -5,14 +5,17 @@ import { Navigation } from "./Navigation";
 import { Analysis_dashboard } from "./Analysis_dashboard";
 import { DataManagement } from "./DataManagement";
 import { CorrectData } from "./CorrectData";
+import { NearByUnits } from "./NearByUnits";
 
 function MyApp() {
 
   //State, hold current page, orgUnit and the data
-  const [activePage, setActivePage] = useState("StartIt");
-  const [activeOrgUnit, setActiveOrgUnit] = useState("");
-  const [activeOrgUnitName, setActiveOrgUnitName] = useState("");
+  const [activePage, setActivePage] = useState("Dashboard");
+  const [activeOrgUnit, setActiveOrgUnit] = useState("FNnj3jKGS7i");
+  const [activeOrgUnitName, setActiveOrgUnitName] = useState("Bandajuma Clinic CHC");
   const [commodityData, setCommodityData] = useState([]);
+  const [activeOrgUnitParent, setActiveOrgUnitParent] = useState("NqWaKXcg01b");
+  const [{activeOrgUnitNameParent}, setActiveOrgUnitNameParent] = useState("Sowa");
 
   //Set method for active page
   function activePageHandler(page) {
@@ -38,22 +41,34 @@ function MyApp() {
                                            commodityData={commodityData}  
                                            setActivePage={setActivePage} />}
 
-       {activePage === "StartIt" &&  <StartIt 
-                                              setActivePage={setActivePage} 
-                                              setActiveOrgUnit={setActiveOrgUnit}
-                                              setActiveOrgUnitName={setActiveOrgUnitName} />}
-
        {activePage === "DataCorrection" && <CorrectData 
                                                    orgUnit={activeOrgUnit} 
                                                    commodityData={commodityData} 
                                                    setActivePage={setActivePage} />}
        
-
+       
        {activePage === "Dashboard" &&  <Analysis_dashboard 
                                                         orgUnit={activeOrgUnit} 
                                                         setCommodityData={setCommodityData}
                                                         commodityData={commodityData} 
                                                         setActivePage={setActivePage} />}
+
+
+        
+       {activePage === "StartIt" &&  <StartIt  //WILL BE REMOVED
+                                              setActivePage={setActivePage} 
+                                              setActiveOrgUnit={setActiveOrgUnit}
+                                              setActiveOrgUnitName={setActiveOrgUnitName}
+                                              activeOrgUnitParent ={activeOrgUnitParent}
+                                              activeOrgUnitNameParent={activeOrgUnitNameParent} />}
+                                              
+
+        {activePage === "NearbyUnits" &&  <NearByUnits 
+                                                       setActivePage={setActivePage} 
+                                                       setActiveOrgUnit={setActiveOrgUnit}
+                                                       setActiveOrgUnitName={setActiveOrgUnitName}
+                                                       activeOrgUnitParent ={activeOrgUnitParent}
+                                                       activeOrgUnitNameParent={activeOrgUnitNameParent}  />}
       
       </div>
     </div>

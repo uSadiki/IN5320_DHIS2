@@ -19,6 +19,12 @@ export function Navigation(props) {
         active={props.activePage == "DataCorrection"}
         onClick={() => props.activePageHandler("DataCorrection")}
       />
+
+      <MenuItem
+        label="Nearby Units"
+        active={props.activePage == "NearbyUnits"}
+        onClick={() => props.activePageHandler("NearbyUnits")}
+      />
     </Menu>
   );
 }

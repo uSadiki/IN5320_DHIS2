@@ -64,10 +64,9 @@ export function StartIt(props) {
   if (error) return <span>ERROR: {error.message}</span>
 
 
-  const handleClickForData = (orgUnitId,displayName) => {
+  const handleClickForData = orgUnitId => {
   props.setActiveOrgUnit(orgUnitId);
-  props.setActiveOrgUnitName(displayName);
-  props.setActivePage("Dashboard");
+  props.setActivePage("Browse");
 };
 
 return (
@@ -98,7 +97,7 @@ return (
                             className="menu-item"
                             key={id}
                             style={{ flex: '1 0 30%', border: '1px solid gray', margin: '10px', padding: '10px' }}
-                            onClick={() => handleClickForData(id,displayName)}
+                            onClick={() => handleClickForData(id)}
                         >
                             {displayName}
                         </div>
