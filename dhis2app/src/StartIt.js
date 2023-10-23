@@ -7,6 +7,7 @@ import "./start.css"; // Import the CSS file
 
 
 
+
 import {
     Menu,
     MenuItem,
@@ -97,8 +98,8 @@ return (
                             className="menu-item"
                             key={id}
                             style={{ flex: '1 0 30%', border: '1px solid gray', margin: '10px', padding: '10px' }}
-                            onClick={() => handleClickForData(id)}
-                        >
+
+                            >
                             {displayName}
                         </div>
                     ))}
