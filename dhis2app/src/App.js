@@ -6,6 +6,7 @@ import { Analysis_dashboard } from "./Analysis_dashboard";
 import { DataManagement } from "./DataManagement";
 import { CorrectData } from "./CorrectData";
 import { NearByUnits } from "./NearByUnits";
+import { History }  from "./History"; // Importing History component
 
 function MyApp() {
 
@@ -55,7 +56,7 @@ function MyApp() {
 
 
         
-       {activePage === "StartIt" &&  <StartIt  //WILL BE REMOVED
+       {activePage === "StartIt" &&  <StartIt  
                                               setActivePage={setActivePage} 
                                               setActiveOrgUnit={setActiveOrgUnit}
                                               setActiveOrgUnitName={setActiveOrgUnitName}
@@ -69,6 +70,8 @@ function MyApp() {
                                                        setActiveOrgUnitName={setActiveOrgUnitName}
                                                        activeOrgUnitParent ={activeOrgUnitParent}
                                                        activeOrgUnitNameParent={activeOrgUnitNameParent}  />}
+
+        {activePage === "History" && <History />}
       
       </div>
     </div>
