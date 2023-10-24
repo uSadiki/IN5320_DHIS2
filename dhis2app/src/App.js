@@ -16,18 +16,22 @@ function MyApp() {
   const [activeOrgUnitName, setActiveOrgUnitName] = useState("Bandajuma Clinic CHC");
   const [commodityData, setCommodityData] = useState([]);
   const [activeOrgUnitParent, setActiveOrgUnitParent] = useState("NqWaKXcg01b");
-  const [{activeOrgUnitNameParent}, setActiveOrgUnitNameParent] = useState("Sowa");
+  const [activeOrgUnitNameParent, setActiveOrgUnitNameParent] = useState("Sowa");
 
   //Set method for active page
   function activePageHandler(page) {
     setActivePage(page);
   }
 
+
   return (
+    
     
      //Site content, depending on which is the active page, different data are being sent as props and data is shown
     <div className={classes.container}>
 
+
+      
       <div className={classes.left}>
         <Navigation activePage={activePage} activePageHandler={activePageHandler} />
       </div>
@@ -65,13 +69,9 @@ function MyApp() {
                                               
 
         {activePage === "NearbyUnits" &&  <NearByUnits 
-                                                       setActivePage={setActivePage} 
-                                                       setActiveOrgUnit={setActiveOrgUnit}
-                                                       setActiveOrgUnitName={setActiveOrgUnitName}
-                                                       activeOrgUnitParent ={activeOrgUnitParent}
-                                                       activeOrgUnitNameParent={activeOrgUnitNameParent}  />}
-
-        {activePage === "History" && <History />}
+                                                      activeOrgUnitParent ={activeOrgUnitParent}
+                                                      
+                                                         />}
       
       </div>
     </div>
