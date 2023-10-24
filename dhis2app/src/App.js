@@ -72,6 +72,8 @@ function MyApp() {
                                                       activeOrgUnitParent ={activeOrgUnitParent}
                                                       
                                                          />}
+        {activePage === "History" &&  <History/>}
+                                                        
       
       </div>
     </div>
