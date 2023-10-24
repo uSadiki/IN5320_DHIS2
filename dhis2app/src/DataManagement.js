@@ -4,6 +4,8 @@ import DispenseStockOut from './Notification/DispenseStockOut';
 import DataMissing from './Notification/DataMissing';
 import ConfirmationWindow from './Notification/ConfirmationWindow';
 import { UpdateConfirmLogic } from './DataHandlingHelper/UpdateConfirmLogic';
+import { getUserName } from './DataHandlingHelper/UserName';
+import { getTransactions } from './DataHandlingHelper/Transactions';
 import {
   Table,
   TableBody,
@@ -20,10 +22,13 @@ import {
 export function DataManagement({ orgUnit, commodityData,setActivePage }) {
 
   //    !!!    STATE declaration    !!!
-  const { updateEndBalance, updateConsumption,updateAdministered } = useMutation();
+  const { updateEndBalance, updateConsumption,updateAdministered, createTransaction } = useMutation();
 
   //state with dict of all input values (key=id, value=input)
   const [inputValues, setinputValues] = useState({});
+  const [dispensedToInput, setDispensedToInput] = useState("");
+  
+
   const [confirmationWindow, setConfirmationWindow] = useState(false);
 
   //check if dispense > end balance: true if so
@@ -31,15 +36,17 @@ export function DataManagement({ orgUnit, commodityData,setActivePage }) {
   //state for invalid input
   const [invalidInp, setInvalidInp] = useState(false);
   
+  
   //switch between dispense and add
   const [dispensing, setDispensing] = useState(true);
 
   //Check for missing data
   let dataMissing = false;
-
   //Confirms if input values are valid and if enough stock
+  let username = getUserName();
+  let transactions = getTransactions();
   const confirm = () => {
-    UpdateConfirmLogic(commodityData, inputValues, dispensing, setStockOut, updateEndBalance, updateConsumption, updateAdministered, orgUnit, setConfirmationWindow);
+    UpdateConfirmLogic(commodityData, inputValues, dispensedToInput , dispensing, setStockOut, updateEndBalance, updateConsumption, updateAdministered, orgUnit, setConfirmationWindow, username, transactions, createTransaction);
     };
 
   //called when pressing update, checks for valid input and calls/shows the confirmation window if success
@@ -90,6 +97,12 @@ export function DataManagement({ orgUnit, commodityData,setActivePage }) {
     setinputValues(updatedInputValues);
   };
 
+  //Handling onchange data for input value under dispensed to
+  const handleDispenseToInputChange = (event) => {
+    console.log(event.target.value);
+    setDispensedToInput(event.target.value);
+  };
+
   const handleClickForCorrection = () => {
     setActivePage("DataCorrection");
   };
@@ -105,6 +118,13 @@ export function DataManagement({ orgUnit, commodityData,setActivePage }) {
         value="defaultValue"
       />
 
+      {dispensing?
+            <input
+            name="dispense to"
+            type="text"
+            onChange={(e) => handleDispenseToInputChange(e)}
+            />: ""
+      } 
       {invalidInp && (
         <AlertBar duration={2000} onHidden={alertNegativInp}>
         Invalid input
@@ -112,6 +132,7 @@ export function DataManagement({ orgUnit, commodityData,setActivePage }) {
       )}
       
     <Table>
+      
         <TableHead>
             <TableRowHead>
             <TableCellHead>Commodities</TableCellHead>
@@ -122,6 +143,7 @@ export function DataManagement({ orgUnit, commodityData,setActivePage }) {
         </TableHead>
 
         <TableBody>
+          
             {commodityData.map((item) => {
            
            // Check if endBalance is null and set dataMissing to true
@@ -145,6 +167,7 @@ export function DataManagement({ orgUnit, commodityData,setActivePage }) {
                     onChange={(e) => handleInputChange(e, item.id)}
                     />
                 </TableCell>
+                
                 </TableRow>
             );
             })}
