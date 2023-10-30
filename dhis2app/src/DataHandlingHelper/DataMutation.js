@@ -21,17 +21,26 @@ const dataMutationQuery = {
   }),
 };
 
-const datastoreQuery = {
+const TransactionsQuery = {
   resource: '/dataStore/IN5320-<18>/Transactions',
   type: 'update',
   data: transactions => transactions,
+};
+
+const RecipientsQuery = {
+  resource: '/dataStore/IN5320-<18>/Recipients',
+  type: 'update',
+  data: Recipients => Recipients,
 };
 
 //Main method holder
 export const useMutation = () => {
   const [mutate] = useDataMutation(dataMutationQuery);
 
-  const [datastore] = useDataMutation(datastoreQuery);
+  const [datastore] = useDataMutation(TransactionsQuery);
+
+  const [mutateRecipients] = useDataMutation(RecipientsQuery);
+
 
   //Id for different categories
   const endBalanceCategory = "J2Qf1jtZuj8";
@@ -88,13 +97,17 @@ export const useMutation = () => {
   
 };
 
-const createTransaction = (transactions) => {
+const pushTransaction = (transactions) => {
   datastore(transactions);
+};
+
+const pushRecipients = (Recipients) => {
+  mutateRecipients(Recipients);
 };
 
 
 
 
   //Export methods
-  return { updateEndBalance, updateConsumption ,updateAdministered,updateQuantityToBeOrdered, createTransaction};
+  return { updateEndBalance, updateConsumption ,updateAdministered,updateQuantityToBeOrdered, pushTransaction, pushRecipients};
 };

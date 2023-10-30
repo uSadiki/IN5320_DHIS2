@@ -1,17 +1,28 @@
 //This method will handle update logic, it will handle input for each commidity data, and update only those which has input
 //Deppending on dispensing or stocking it will update different CoCatOption values
-export function UpdateConfirmLogic(commodityData, inputValues, dispensedToValues ,dispensing, setStockOut, updateEndBalance, updateConsumption, updateAdministered, orgUnit, setConfirmationWindow, username, transactions, createTransaction) {
+//import { getFormattedDate } from './CommonUtils'
+
+import { createTransaction, createRecipient } from "../DatastorePush";
+
+export function UpdateConfirmLogic(commodityData, inputValues, dispensedToValues ,dispensing, setStockOut, updateEndBalance, updateConsumption, updateAdministered, orgUnit, setConfirmationWindow, username, transactions, pushTransaction, period, recipients, pushRecipients, department) {
     if (commodityData) {
         let empty = false;
-        console.log(username)
-        console.log(transactions)
         let transactionArray = []
         let existingTransactions = transactions || {};
+        let existingRecipients = recipients || {};
+
+        let recipientStored = false; 
+        const dispensedTo = dispensedToValues;
+        for (const key in existingRecipients) {
+            if (existingRecipients[key].name === dispensedTo) {
+                recipientStored = true;
+                break;
+            }
+        }
 
         
         commodityData.map(item => {
             const userInput = inputValues[item.id];
-            const dispensedTo = dispensedToValues;
             // if value is undefined set to 0
             const originalValue = parseInt(item.endBalance) || 0;
             const inputValue = parseInt(userInput) || 0;
@@ -40,10 +51,9 @@ export function UpdateConfirmLogic(commodityData, inputValues, dispensedToValues
                     updateConsumption(item, orgUnit);
 
                     const newTransaction = {
-                        dispensedTo: dispensedTo,
-                        dispensedBy: username,
                         commodityID: item.id,
                         value: inputValue,
+                        commodity: item.displayName,
                     };
 
                     transactionArray.push(newTransaction)
@@ -55,25 +65,19 @@ export function UpdateConfirmLogic(commodityData, inputValues, dispensedToValues
             }
             return item;
         });
-        
-        if (transactions !== null){
-            console.log("exist transaction");
-            if (Object.keys(existingTransactions).length > 0) {
-                let transactionName = Object.keys(existingTransactions)[Object.keys(existingTransactions).length - 1];
-                console.log("TRANSACTION", transactionName);
 
-                let transactionNumber = Number(transactionName.split(":")[1]);
-                let newTransactionName = `Transaction:${transactionNumber+=1}`;
-                console.log("newName", newTransactionName);
+        //setup transaction on format {"Transaction:1": {"Commodities": [{}],},...}
+        existingTransactions = createTransaction(transactions, username, dispensedTo, period, transactionArray, existingTransactions);
+        pushTransaction(existingTransactions);
 
-                existingTransactions[newTransactionName] = transactionArray;
-            }
-        }else{
-            console.log("TRANS shit DHBH", transactionArray)
-            existingTransactions["Transaction:1"] = transactionArray
+        //setup recipient on format {"Recipient:1": {},...}
+        //create and push recipient if not stored in datastore
+        if (recipientStored === false) {
+            existingRecipients = createRecipient(recipients, department, dispensedTo, existingRecipients);
+            pushRecipients(existingRecipients);
         }
-        createTransaction(existingTransactions);
-
+        
+        
         if (empty) {
             setStockOut(true);
         } 

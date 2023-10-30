@@ -6,6 +6,9 @@ import ConfirmationWindow from './Notification/ConfirmationWindow';
 import { UpdateConfirmLogic } from './DataHandlingHelper/UpdateConfirmLogic';
 import { getUserName } from './DataHandlingHelper/UserName';
 import { getTransactions } from './DataHandlingHelper/Transactions';
+import * as CommonUtils from './CommonUtils';
+import { getData } from './DatastorePull';
+
 import {
   Table,
   TableBody,
@@ -15,18 +18,17 @@ import {
   TableRow,
   TableRowHead,
   AlertBar,
-  SwitchField
+  SwitchField,
 } from '@dhis2/ui'
 
 //TODO: Find a name for representing dispense and add to stock
 export function DataManagement({ orgUnit, commodityData,setActivePage }) {
 
   //    !!!    STATE declaration    !!!
-  const { updateEndBalance, updateConsumption,updateAdministered, createTransaction } = useMutation();
+  const { updateEndBalance, updateConsumption,updateAdministered, pushTransaction, pushRecipients } = useMutation();
 
   //state with dict of all input values (key=id, value=input)
   const [inputValues, setinputValues] = useState({});
-  const [dispensedToInput, setDispensedToInput] = useState("");
   
 
   const [confirmationWindow, setConfirmationWindow] = useState(false);
@@ -40,13 +42,22 @@ export function DataManagement({ orgUnit, commodityData,setActivePage }) {
   //switch between dispense and add
   const [dispensing, setDispensing] = useState(true);
 
+  const [department, setDepartment] = useState("Department 1");
+  const departments = ['Department 2', 'Department 3'];
+
+  
+  const [recipientInput, setRecipientInput] = useState('');
+
+
   //Check for missing data
   let dataMissing = false;
   //Confirms if input values are valid and if enough stock
   let username = getUserName();
   let transactions = getTransactions();
+  let recipients = getData("Recipients");
   const confirm = () => {
-    UpdateConfirmLogic(commodityData, inputValues, dispensedToInput , dispensing, setStockOut, updateEndBalance, updateConsumption, updateAdministered, orgUnit, setConfirmationWindow, username, transactions, createTransaction);
+    let period =  CommonUtils.getDateAndTime();
+    UpdateConfirmLogic(commodityData, inputValues, recipientInput , dispensing, setStockOut, updateEndBalance, updateConsumption, updateAdministered, orgUnit, setConfirmationWindow, username, transactions, pushTransaction, period, recipients, pushRecipients, department);
     };
 
   //called when pressing update, checks for valid input and calls/shows the confirmation window if success
@@ -89,6 +100,10 @@ export function DataManagement({ orgUnit, commodityData,setActivePage }) {
       setDispensing(true) 
     }
   }
+  
+  const changeDepartment = (event) => {
+    setDepartment(event.target.value);
+  };
 
   //Handling onchange data for inputs
   const handleInputChange = (event, id) => {
@@ -97,15 +112,22 @@ export function DataManagement({ orgUnit, commodityData,setActivePage }) {
     setinputValues(updatedInputValues);
   };
 
-  //Handling onchange data for input value under dispensed to
-  const handleDispenseToInputChange = (event) => {
-    console.log(event.target.value);
-    setDispensedToInput(event.target.value);
-  };
-
   const handleClickForCorrection = () => {
     setActivePage("DataCorrection");
   };
+
+  const handleRecipientInputChange = (event) => {
+    setRecipientInput(event.target.value);
+  };
+
+  let recipientOptions = [];
+
+  if (recipients) {
+    recipientOptions = Object.keys(recipients).map((key) => (
+      <option key={key} value={recipients[key].name} />
+    ));
+  }
+  
   
   return (
     <div>
@@ -118,14 +140,41 @@ export function DataManagement({ orgUnit, commodityData,setActivePage }) {
         value="defaultValue"
       />
 
-      {dispensing?
-            <input
-            name="dispense to"
-            type="text"
-            onChange={(e) => handleDispenseToInputChange(e)}
-            />: ""
-      } 
-      {invalidInp && (
+
+    {dispensing && (
+      <div>
+        <label>
+          Choose a recipient:
+          <input
+            list="recipientOptions"
+            name="recipientInput"
+            value={recipientInput}
+            onChange={handleRecipientInputChange}
+          />
+        </label>
+
+        <datalist id="recipientOptions">
+          {recipientOptions}
+        </datalist>
+
+    
+        <label htmlFor="department">Department:</label>
+        <select
+          name="department"
+          value={department}
+          onChange={changeDepartment}
+        >
+          <option value="Department 1">Department 1</option>
+          {departments.map((department) => (
+            <option key={department} value={department}>
+              {department}
+            </option>
+          ))}
+        </select>
+      </div>
+    )}
+       
+    {invalidInp && (
         <AlertBar duration={2000} onHidden={alertNegativInp}>
         Invalid input
         </AlertBar>

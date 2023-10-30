@@ -11,9 +11,7 @@ export function getTransactions(){
     const { data } = useDataQuery(transactionQuery);
     let transaction;
     if (data) {
-        console.log("data", data);
         transaction = data.request0;
-        console.log("TRANSSNSN" ,Object.keys(transaction).length);
         if (Object.keys(transaction).length > 0){
             return transaction
         }
@@ -23,3 +21,4 @@ export function getTransactions(){
     }
     return null;
 }
+
