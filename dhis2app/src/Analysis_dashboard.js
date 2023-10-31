@@ -13,6 +13,47 @@ import {
     TableRowHead,
 } from '@dhis2/ui';
 
+function calculateAverageConsumption(data) {
+    // Define the categoryOptionCombo and periods you want to retrieve
+    const categoryOptionComboToRetrieve = "rQLFnNXXIL0";
+    const periodsToRetrieve = ["202308", "202309"];
+
+    const averageConsumptionData = {};
+
+    // Iterate through the data for each commodity
+    data.dataElements.dataElements.forEach(d => {
+        // Initialize variables to store total consumption and the count of periods with data
+        let totalConsumption = 0;
+        let periodCount = 0;
+
+        // Iterate through the specified periods
+        for (const period of periodsToRetrieve) {
+            // Find the matched value for the data element, categoryOptionCombo, and period
+            const matchedValue = data.dataValues.dataValues.find(dataValue => {
+                return (
+                    dataValue.dataElement === d.id &&
+                    dataValue.categoryOptionCombo === categoryOptionComboToRetrieve &&
+                    dataValue.period === period
+                );
+            });
+
+            if (matchedValue && matchedValue.value !== null) {
+                totalConsumption += parseFloat(matchedValue.value);
+                periodCount++;
+            }
+        }
+
+        // Calculate the average consumption for the commodity
+        const averageConsumption = periodCount > 0 ? totalConsumption / periodCount : null;
+
+        // Store the average consumption in the result object with the commodity's display name as the key
+        averageConsumptionData[d.displayName] = averageConsumption;
+    });
+
+    return averageConsumptionData;
+}
+
+
 //Method for getting data for each commodity and CatOptCombo
 function mergeData(data) {
     // Define an array of categoryOptionCombos you want to retrieve
@@ -24,9 +65,13 @@ function mergeData(data) {
 
         // Iterate through each categoryOptionCombo
         for (const categoryOptionCombo of categoryOptionCombosToRetrieve) {
-            // Find the matched value for the data element and current categoryOptionCombo
+            // Find the matched value for the data element, current categoryOptionCombo, and period '202310'
             const matchedValue = data.dataValues.dataValues.find(dataValue => {
-                return dataValue.dataElement === d.id && dataValue.categoryOptionCombo === categoryOptionCombo;
+                return (
+                    dataValue.dataElement === d.id &&
+                    dataValue.categoryOptionCombo === categoryOptionCombo &&
+                    dataValue.period === '202310'
+                );
             });
 
             // Store the value or assign -1 if no match is found
@@ -43,7 +88,7 @@ function mergeData(data) {
     return mergedData;
 }
 
-export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData, setActivePage }) {
+export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData, setActivePage,setAverageConsumption }) {
 
     //Query to get commodity data
     const dataQuery = {
@@ -51,7 +96,7 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData, s
             resource: "/dataValueSets",
             params: {
                 orgUnit,
-                period: CommonUtils.getFormattedDate(),
+                period: CommonUtils.getFormattedDate()+",202309,202308",
                 dataSet: "ULowA8V3ucd",
                 fields: ["id"],
             },
@@ -59,7 +104,7 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData, s
         dataElements: {
             resource: "/dataElements",
             params: {
-                fields: ["id", "displayName"],
+                fields: ["id", "displayName","period"],
                 filter: "displayName:like:Commodities",
             },
         },
@@ -68,6 +113,8 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData, s
     // var for checking if clinic is missing endBalance value
     let dataMissing = false;
     const { loading, error, data } = useDataQuery(dataQuery);
+   
+   
 
     // Using useEffect since without it would render for each commodity found..
     useEffect(() => {
@@ -76,6 +123,9 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData, s
         if (data) {
             let array = [];
             let mergedData = mergeData(data);
+            setAverageConsumption(calculateAverageConsumption(data))
+          
+   
 
             mergedData.map(row => {
                 array.push({

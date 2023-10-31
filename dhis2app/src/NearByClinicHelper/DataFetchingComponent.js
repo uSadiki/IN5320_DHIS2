@@ -8,7 +8,7 @@ import {
     ButtonStrip,
     Button,
     TableHead,DataTable,DataTableRow,DataTableColumnHeader,TableBody,DataTableCell,
-    AlertBar,AlertStack
+
   } from '@dhis2/ui'
   
 
@@ -43,34 +43,6 @@ function mergeData(data) {
 
 function DataFetchingComponent({   data, orgUnitName, setSelectedOrgUnit, setRequested }) {
   let mergedData2 = mergeData(data);
-  const [inputValues, setinputValues] = useState({});
-  const [confirmationWindow, setConfirmationWindow] = useState(false);
-
-
-
-  const handleInputChange = (event, id) => {
-    const updatedInputValues = { ...inputValues };
-    updatedInputValues[id] = event.target.value;
-    setinputValues(updatedInputValues);
-  };
-
-  function showConfirmationWindow(){
-    let negativeInp = false
-    //check if all input are positive
-    mergedData2.forEach((item) => {
-      const dispenseInput = inputValues[item.id];
-      if (Number(dispenseInput) < 0){
-        negativeInp = true;
-      }
-    });
-
-    if (negativeInp === false){
-      setConfirmationWindow(true);
-    }
-    else{
-      setInvalidInp(true);
-    }
-  }
 
     function onCancleClick (){
   
@@ -80,21 +52,13 @@ function DataFetchingComponent({   data, orgUnitName, setSelectedOrgUnit, setReq
       
       ;}
 
-      function request (){
-  
-        return (
-          setRequested(true),
-          setSelectedOrgUnit(null)
-          
-      )
-        
-        ;}
   return (
     <>
       <Modal>
-        
+     
         <ModalTitle>{orgUnitName}</ModalTitle>
         <ModalContent>
+          Information: Number, location
           <DataTable>
             <TableHead>
               <DataTableRow>
@@ -112,11 +76,7 @@ function DataFetchingComponent({   data, orgUnitName, setSelectedOrgUnit, setReq
                   End Balance
                 </DataTableColumnHeader>
 
-                <DataTableColumnHeader
-                 
-                 >
-                   Amount
-                 </DataTableColumnHeader>
+             
                 </DataTableRow>
             </TableHead>
             <TableBody>
@@ -125,14 +85,7 @@ function DataFetchingComponent({   data, orgUnitName, setSelectedOrgUnit, setReq
                 <DataTableRow key={item.id}>
                   <DataTableCell>{item.displayName.replace('Commodities - ', '')}</DataTableCell>
                   <DataTableCell>{item.values['J2Qf1jtZuj8']}</DataTableCell>
-                  <DataTableCell>
-                    <input
-                    name="dispense"
-                    type="number"
-                    min="0"
-                    onChange={(e) => handleInputChange(e, item.id)}
-                    />
-                </DataTableCell>
+                
                 </DataTableRow>
               ))}
             </TableBody>
@@ -143,51 +96,14 @@ function DataFetchingComponent({   data, orgUnitName, setSelectedOrgUnit, setReq
               <Button secondary onClick={onCancleClick}>
                 Cancle
               </Button>
-              <Button primary onClick={showConfirmationWindow}>
-                Request amount
-              </Button>
+          
             </ButtonStrip>
           </ModalActions>
       </Modal>
        
      
 
-      {confirmationWindow && (
-        <>
-        <Modal>
-          <ModalTitle>{"Request"}</ModalTitle>
-          <ModalContent>
-            <p>Commodities about to be requested:</p>
-            <ul>
-
-              {mergedData2.map((item) => {
-                const dispenseValue = parseInt(inputValues[item.id]) || 0;
-                if (dispenseValue > 0) {
-                  return (
-                    <li key={item.id}>
-                      {item.displayName +" : "+ dispenseValue}
-                    </li>
-                  );
-                }
-                return null;
-              })}
-
-
-            </ul>
-          </ModalContent>
-          <ModalActions>
-            <ButtonStrip end>
-              <Button secondary onClick={onCancleClick}>
-                Decline
-              </Button>
-              <Button primary onClick={request}>
-                Confirm
-              </Button>
-            </ButtonStrip>
-          </ModalActions>
-        </Modal>
-           </>
-     )}
+  
 
     </>
   );
