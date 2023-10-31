@@ -44,6 +44,7 @@ export function DataManagement({ orgUnit, commodityData,setActivePage }) {
 
   const [department, setDepartment] = useState("Department 1");
   const departments = ['Department 2', 'Department 3'];
+  
 
   
   const [recipientInput, setRecipientInput] = useState('');
