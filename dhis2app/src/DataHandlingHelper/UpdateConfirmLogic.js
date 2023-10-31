@@ -1,6 +1,8 @@
 //This method will handle update logic, it will handle input for each commidity data, and update only those which has input
 //Deppending on dispensing or stocking it will update different CoCatOption values
 export function UpdateConfirmLogic(commodityData, inputValues, dispensedToValues ,dispensing, setStockOut, updateEndBalance, updateConsumption, updateAdministered, orgUnit, setConfirmationWindow, username, transactions, createTransaction) {
+    const currentDateTime = new Date();
+const formattedDateTime = currentDateTime.toLocaleString();
     if (commodityData) {
         let empty = false;
         console.log(username)
@@ -44,6 +46,7 @@ export function UpdateConfirmLogic(commodityData, inputValues, dispensedToValues
                         dispensedBy: username,
                         commodityID: item.id,
                         value: inputValue,
+                        date:formattedDateTime
                     };
 
                     transactionArray.push(newTransaction)

@@ -7,6 +7,9 @@ import { DataManagement } from "./DataManagement";
 import { CorrectData } from "./CorrectData";
 import { NearByUnits } from "./NearByUnits";
 import { History }  from "./History"; // Importing History component
+import { StockRecount }  from "./StockRecount";
+import { getUserName } from './DataHandlingHelper/UserName'; 
+
 
 function MyApp() {
 
@@ -17,7 +20,9 @@ function MyApp() {
   const [commodityData, setCommodityData] = useState([]);
   const [activeOrgUnitParent, setActiveOrgUnitParent] = useState("NqWaKXcg01b");
   const [activeOrgUnitNameParent, setActiveOrgUnitNameParent] = useState("Sowa");
+  const [averageConsumption, setAverageConsumption] = useState();
 
+  const name = getUserName()
   //Set method for active page
   function activePageHandler(page) {
     setActivePage(page);
@@ -44,19 +49,21 @@ function MyApp() {
        {activePage === "UpdateData" && <DataManagement 
                                            orgUnit={activeOrgUnit} 
                                            commodityData={commodityData}  
-                                           setActivePage={setActivePage} />}
-
+                                           setActivePage={setActivePage} 
+                                           averageConsumption={averageConsumption} />}
+     
        {activePage === "DataCorrection" && <CorrectData 
                                                    orgUnit={activeOrgUnit} 
                                                    commodityData={commodityData} 
-                                                   setActivePage={setActivePage} />}
-       
-       
+                                                   setActivePage={setActivePage}
+                                                  />}
+    
        {activePage === "Dashboard" &&  <Analysis_dashboard 
                                                         orgUnit={activeOrgUnit} 
                                                         setCommodityData={setCommodityData}
                                                         commodityData={commodityData} 
-                                                        setActivePage={setActivePage} />}
+                                                        setActivePage={setActivePage}
+                                                        setAverageConsumption={setAverageConsumption} />}
 
 
         
@@ -72,6 +79,14 @@ function MyApp() {
                                                       activeOrgUnitParent ={activeOrgUnitParent}
                                                       
                                                          />}
+        
+        {activePage === "StockRecount" && <StockRecount 
+                                                   orgUnit={activeOrgUnit} 
+                                                   commodityData={commodityData} 
+                                                   setActivePage={setActivePage}
+                                                   user = {name} />}                                               
+
+                                                        
         {activePage === "History" &&  <History/>}
                                                         
       

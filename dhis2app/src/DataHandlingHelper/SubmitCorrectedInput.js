@@ -48,5 +48,5 @@ export function submitCorrectedInput(
           }
         }
       });
-    } setActivePage("Dashboard")
+    } 
   }

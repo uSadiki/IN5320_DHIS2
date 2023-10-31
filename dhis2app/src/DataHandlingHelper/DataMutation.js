@@ -27,11 +27,18 @@ const datastoreQuery = {
   data: transactions => transactions,
 };
 
+const datastoreQuery2 = {
+  resource: '/dataStore/IN5320-<18>/Recounts',
+  type: 'update',
+  data: transactions => transactions,
+};
+
 //Main method holder
 export const useMutation = () => {
   const [mutate] = useDataMutation(dataMutationQuery);
 
   const [datastore] = useDataMutation(datastoreQuery);
+  const [datastore2] = useDataMutation(datastoreQuery2);
 
   //Id for different categories
   const endBalanceCategory = "J2Qf1jtZuj8";
@@ -92,9 +99,12 @@ const createTransaction = (transactions) => {
   datastore(transactions);
 };
 
+const createTransaction2 = (transactions) => {
+  datastore2(transactions);
+};
 
 
 
   //Export methods
-  return { updateEndBalance, updateConsumption ,updateAdministered,updateQuantityToBeOrdered, createTransaction};
+  return { updateEndBalance, updateConsumption ,updateAdministered,updateQuantityToBeOrdered, createTransaction,createTransaction2};
 };
