@@ -1,9 +1,6 @@
 import { useDataQuery } from '@dhis2/app-runtime';
 
 export function getData(dataStoreKey){
-
-    //GET transactions
-    
     
 
     const dataKeyQuery = {
@@ -12,17 +9,10 @@ export function getData(dataStoreKey){
         }
     } 
 
-    const { loading, error, data } = useDataQuery(dataKeyQuery)
-    if (error) {
-        return <span>ERROR: {error.message}</span>
-    }
-
-    if (loading) {
-        return <span>Loading...</span>
-    }
+    const { data } = useDataQuery(dataKeyQuery)
 
     if (data) {
-        return data
+        return data.request0
     }
 
  
