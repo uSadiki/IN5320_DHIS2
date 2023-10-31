@@ -64,9 +64,7 @@ export function DataManagement({ orgUnit, commodityData,setActivePage ,averageCo
 
 
 
-//Confirms if input values are valid and if enough stock
-let username = getUserName();
-let transactions = getTransactions();
+
 
 // CODE TO GET NUMBER OF TRANSACTIONS MADE TODAY
 const today = new Date();

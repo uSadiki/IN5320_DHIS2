@@ -51,7 +51,7 @@ export const useMutation = () => {
   const [mutateRecipients] = useDataMutation(RecipientsQuery);
 
 
-  const [datastore] = useDataMutation(TransactionsQuery);
+
   const [datastore2] = useDataMutation(datastoreQuery2);
 
 
