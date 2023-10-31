@@ -1,29 +1,36 @@
 import React, { useState } from 'react';
 import { getData } from './DatastorePull';
-import { CircularLoader, Table, TableHead, TableRowHead, TableCellHead, TableBody, TableRow, TableCell } from '@dhis2/ui';
+import { CircularLoader, Table, TableHead, TableRowHead, TableCellHead, TableBody, TableRow, TableCell, SwitchField } from '@dhis2/ui';
 
 export function History() {
-  const [showTransactions, setShowTransactions] = useState(false);
+  const [showTransactions, setShowTransactions] = useState(true);
   const transactionsData = getData("Transactions");
   const recountsData = getData("Recounts");
+
+  console.log(transactionsData);
+  console.log(recountsData);
 
   if (transactionsData == null || recountsData == null) {
     return <CircularLoader />;
   }
-  console.log("transactionsData:", transactionsData.request0);
-  console.log("recountsData:", recountsData);
-  
+
+  const onSwitchChange = () => {
+    setShowTransactions(!showTransactions);
+  };
+
   const data = showTransactions ? transactionsData : recountsData;
   const headers = showTransactions
-    ? ['Date','Commodities', 'Values', 'Dispensed By', 'Dispensed To']
-    : ['Commodities', 'Changed By', 'From Value', 'To Value'];
+    ? ['Date', 'Commodities', 'Values', 'Dispensed By', 'Dispensed To']
+    : ['Date', 'Commodities', 'Changed By', 'From Value', 'To Value'];
 
   return (
     <div>
       <h1>{showTransactions ? 'Transactions' : 'Recounts'} History</h1>
-      <button onClick={() => setShowTransactions(!showTransactions)}>
-        {showTransactions ? 'Show Recounts' : 'Show Transactions'}
-      </button>
+      <SwitchField 
+        checked={showTransactions}
+        onChange={onSwitchChange}
+        label={`Show ${showTransactions ? 'Transactions' : 'Recounts'}`}
+      />
       <Table>
         <TableHead>
           <TableRowHead>
@@ -50,14 +57,16 @@ export function History() {
                       </TableRow>
                     ))
                   ) 
-                  
-                  
-                  
                   : (
                     <>
-                      {item.Commodities && // Add the check for item.Commodities being defined
-                        Object.entries(item.Commodities).map(([commodityId, commodity]) => (
+                      {item.Commodities && 
+                        Object.entries(item.Commodities).map(([commodityId, commodity], index) => (
                           <TableRow key={`${id}-${commodityId}`}>
+                            {index === 0 ? (
+                              <TableCell rowSpan={Object.entries(item.Commodities).length}>
+                                {item.Date}
+                              </TableCell>
+                            ) : null}
                             <TableCell>{commodityId}</TableCell>
                             <TableCell>{item.ChangedBy}</TableCell>
                             <TableCell>{commodity.fromValue}</TableCell>
