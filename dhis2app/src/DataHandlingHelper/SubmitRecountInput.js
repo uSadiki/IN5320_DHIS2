@@ -1,16 +1,16 @@
 import { getData } from '../DatastorePull';
-const currentDateTime = new Date();
-const formattedDateTime = currentDateTime.toLocaleString();
+import * as CommonUtils from '../CommonUtils';
+
 
 
 export function SubmitRecountInput(commodityData, inputValues,updateEndBalance,orgUnit,createTransaction2,user,earlierTranactions) {
 
-  const recountKeys = Object.keys(earlierTranactions.request0);
+  const recountKeys = Object.keys(earlierTranactions);
   const recountCount = recountKeys.length;
 
   const newRecountData = {
     ChangedBy: user, // Provide a valid value for 'user'
-    Date: formattedDateTime, // Provide a valid value for 'date'
+    Date:  CommonUtils.getDateAndTime(), // Provide a valid value for 'date'
     Commodities: {},
   };
 
@@ -37,9 +37,9 @@ export function SubmitRecountInput(commodityData, inputValues,updateEndBalance,o
   }
   
   // Add the new recount entry with the incremented number
-  earlierTranactions.request0["Recount:"+Number(recountCount+1)] = newRecountData;
+  earlierTranactions["Recount:"+Number(recountCount+1)] = newRecountData;
   
 
-      createTransaction2(earlierTranactions.request0)
+      createTransaction2(earlierTranactions)
   }
  

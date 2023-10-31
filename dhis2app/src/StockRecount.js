@@ -8,6 +8,11 @@ import {  Table,  TableBody,  TableCell,  TableCellHead,  TableHead,  TableRow, 
 //TODO: Find a name for representing dispense and add to stock
 export function StockRecount({ orgUnit, commodityData,setActivePage,user }) {
   let earlierTranactions =getData("Recounts")
+  console.log("her")
+  console.log(earlierTranactions)
+  console.log("her")
+
+
 
   //    !!!    STATE declaration    !!!
   const { updateEndBalance,createTransaction2 } = useMutation();

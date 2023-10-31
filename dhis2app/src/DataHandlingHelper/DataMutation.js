@@ -129,7 +129,7 @@ const createTransaction2 = (transactions) => {
 
   //Export methods
 
-  return { updateEndBalance, updateConsumption ,updateAdministered,updateQuantityToBeOrdered, pushTransaction, pushRecipients};
+  return { updateEndBalance, updateConsumption ,updateAdministered,updateQuantityToBeOrdered, pushTransaction, pushRecipients,createTransaction2};
 
 
 };

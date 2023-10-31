@@ -65,7 +65,7 @@ export function DataManagement({ orgUnit, commodityData,setActivePage ,averageCo
 
 
 
-
+/*
 // CODE TO GET NUMBER OF TRANSACTIONS MADE TODAY
 const today = new Date();
 today.setHours(0, 0, 0, 0); // Set the time to midnight for comparison
@@ -118,7 +118,7 @@ for (const key in transactions) {
   }
 }
 
-
+*/
   const confirm = () => {
     let period =  CommonUtils.getDateAndTime();
     UpdateConfirmLogic(commodityData, inputValues, recipientInput , dispensing, setStockOut, updateEndBalance, updateConsumption, updateAdministered, orgUnit, setConfirmationWindow, username, transactions, pushTransaction, period, recipients, pushRecipients, department);
