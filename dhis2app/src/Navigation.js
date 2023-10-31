@@ -15,12 +15,6 @@ export function Navigation(props) {
         onClick={() => props.activePageHandler("UpdateData")}
       />
       <MenuItem
-        label="Stock Correction"
-        active={props.activePage == "DataCorrection"}
-        onClick={() => props.activePageHandler("DataCorrection")}
-      />
-
-      <MenuItem
         label="Nearby Units"
         active={props.activePage == "NearbyUnits"}
         onClick={() => props.activePageHandler("NearbyUnits")}
@@ -31,6 +25,21 @@ export function Navigation(props) {
       active={props.activePage == "History"}
       onClick={() => props.activePageHandler("History")}
       />
+
+      <MenuItem
+        label="Stock Recount"
+        active={props.activePage == "StockRecount"}
+        onClick={() => props.activePageHandler("StockRecount")}
+      />
+
+      <MenuItem
+        label="Stock Correction"
+        active={props.activePage == "DataCorrection"}
+        onClick={() => props.activePageHandler("DataCorrection")}
+      />
+
+
+
     </Menu>
   );
 }
