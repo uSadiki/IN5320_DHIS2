@@ -5,7 +5,6 @@ import DataFetchingComponent from './DataFetchingComponent';
 import { CircularLoader } from '@dhis2/ui';
 
 
-
 function MainFetchComponent({ orgUnit,orgUnitName,setSelectedOrgUnit,setRequested}) {
   const dataQuery = {
     dataValues: {
@@ -40,7 +39,6 @@ function MainFetchComponent({ orgUnit,orgUnitName,setSelectedOrgUnit,setRequeste
 
   // Data handling
   if (data) {
-    console.log("hei");
     return (
       <div>
         <DataFetchingComponent  data={data} orgUnitName={orgUnitName} setSelectedOrgUnit={setSelectedOrgUnit}  setRequested={setRequested} />

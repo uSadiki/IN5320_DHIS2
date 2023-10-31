@@ -1,0 +1,72 @@
+.input-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .alert-message {
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 90%;
+    transform: translateX(-50%);
+    width: 120px;
+    padding: 5px;
+    background-color: orange;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.6s;
+  }
+  
+  .alert-message::after { /* arrow */
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: orange transparent transparent transparent;
+  }
+  
+
+  .stockout-accordion {
+    text-align: right;
+    padding: 20px;
+}
+
+.stockout-category {
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.stockout-category-details {
+    display: none;
+}
+
+.stockout-category-details.show {
+    display: block;
+}
+
+
+.risk.low {
+  color: green;
+}
+
+.risk.moderate {
+  color: yellow;
+}
+
+.risk.high {
+  color: orange;
+}
+
+.risk.critical {
+  color: red;
+}
+
+.risk.green {
+  color: green;
+}
