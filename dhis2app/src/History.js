@@ -40,7 +40,7 @@ export function History() {
           </TableRowHead>
         </TableHead>
         <TableBody>
-          {Object.entries(data.request0).map(([id, item]) => (
+          {Object.entries(data).map(([id, item]) => (
             <React.Fragment key={id}>
               {item && (
                 <>
