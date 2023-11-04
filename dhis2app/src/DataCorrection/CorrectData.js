@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useMutation } from './DataHandlingHelper/DataMutation';
-import { submitCorrectedInput } from './DataHandlingHelper/SubmitCorrectedInput'; 
+import { useMutation } from '../DataHandlingHelper/DataMutation';
+import { submitCorrectedInput } from './SubmitCorrectedInput'; 
 import {
   Table,
   TableBody,
@@ -12,7 +12,6 @@ import {
 } from '@dhis2/ui'
 
 export function CorrectData({ orgUnit, commodityData,setActivePage  }) {
-  
   //State Declaration 
   const { updateEndBalance, updateConsumption,updateAdministered,updateQuantityToBeOrdered } = useMutation();
   const [administeredInput, setAdministeredInput] = useState({});

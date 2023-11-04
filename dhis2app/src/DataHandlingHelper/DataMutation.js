@@ -46,13 +46,11 @@ export const useMutation = () => {
   const [mutate] = useDataMutation(dataMutationQuery);
 
 
-  const [datastore] = useDataMutation(TransactionsQuery);
+  const [mutateTransaction] = useDataMutation(TransactionsQuery);
 
   const [mutateRecipients] = useDataMutation(RecipientsQuery);
 
-
-
-  const [datastore2] = useDataMutation(datastoreQuery2);
+  const [mutateRecounts] = useDataMutation(datastoreQuery2);
 
 
   //Id for different categories
@@ -111,7 +109,7 @@ export const useMutation = () => {
 };
 
 const pushTransaction = (transactions) => {
-  datastore(transactions);
+  mutateTransaction(transactions);
 };
 
 
@@ -120,8 +118,8 @@ const pushRecipients = (Recipients) => {
 };
 
 
-const createTransaction2 = (transactions) => {
-  datastore2(transactions);
+const pushRecount = (transactions) => {
+  mutateRecounts(transactions);
 };
 
 
@@ -129,7 +127,7 @@ const createTransaction2 = (transactions) => {
 
   //Export methods
 
-  return { updateEndBalance, updateConsumption ,updateAdministered,updateQuantityToBeOrdered, pushTransaction, pushRecipients,createTransaction2};
+  return { updateEndBalance, updateConsumption ,updateAdministered,updateQuantityToBeOrdered, pushTransaction, pushRecipients,pushRecount};
 
 
 };

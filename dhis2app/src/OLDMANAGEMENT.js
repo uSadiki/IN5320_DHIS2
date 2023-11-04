@@ -3,26 +3,16 @@ import { useMutation } from './DataHandlingHelper/DataMutation';
 import DispenseStockOut from './Notification/DispenseStockOut';
 import ConfirmationWindow from './Notification/ConfirmationWindow';
 import BalanceInfo from './Notification/BalanceInfo';
-import { UpdateConfirmLogic } from './DataHandlingHelper/UpdateConfirmLogic';
-import { getUserName } from './DataHandlingHelper/UserName';
-import { getTransactions } from './DataHandlingHelper/Transactions';
-
+import { UpdateConfirmLogic } from './StockManagement/UpdateConfirmLogic';
 import * as CommonUtils from './CommonUtils';
-import { getData } from './DatastorePull';
-
-
+import { getData } from './DataStoreUtils/DatastorePull';
 import { Table, TableBody, TableCell, TableCellHead, TableHead, TableRow, TableRowHead, AlertBar, SwitchField } from '@dhis2/ui'
 import './Css/CssTest.css';
-import {calculateDaysUntilNextMonth} from './CommonUtils'
+import {DataBody} from'./StockManagement/VisualContent/Databody'
 
 
 //TODO: Find a name for representing dispense and add to stock
-export function DataManagement({ orgUnit, commodityData,setActivePage ,averageConsumption}) {
-
- 
-  let daysUntilNextMonth = calculateDaysUntilNextMonth();
-  const numberOfDailyDispenses = 4;
-
+export function DataManagement({ orgUnit, commodityData,setActivePage ,averageConsumption,username}) {
   //    !!!    STATE declaration    !!!
   const { updateEndBalance, updateConsumption,updateAdministered, pushTransaction, pushRecipients } = useMutation();
 
@@ -43,26 +33,20 @@ export function DataManagement({ orgUnit, commodityData,setActivePage ,averageCo
   const [department, setDepartment] = useState("Department 1");
   const departments = ['Department 2', 'Department 3'];
   
-
-  
   const [recipientInput, setRecipientInput] = useState('');
 
-
-  //Check for missing data
-  let dataMissing = false;
-  //Confirms if input values are valid and if enough stock
-  let username = getUserName();
-  let transactions = getTransactions();
+  let transactions = getData("Transactions");
   let recipients = getData("Recipients");
 
   //New ones for prediction
+  let daysUntilNextMonth = CommonUtils.calculateDaysUntilNextMonth();
+  const numberOfDailyDispenses = 4;
+
   const [balanceInfo, setBalanceInfo] = useState(false);
   const [selectedCommodity, setSelectedCommodity] = useState(null);
   const [status, setStatus] = useState(null);
   const [toLargeDispense, setToLargeDispense] = useState(false);
   const [alerts, setAlerts] = useState({});
-
-
 
 
 /*
@@ -119,6 +103,7 @@ for (const key in transactions) {
 }
 
 */
+
   const confirm = () => {
     let period =  CommonUtils.getDateAndTime();
     UpdateConfirmLogic(commodityData, inputValues, recipientInput , dispensing, setStockOut, updateEndBalance, updateConsumption, updateAdministered, orgUnit, setConfirmationWindow, username, transactions, pushTransaction, period, recipients, pushRecipients, department);
@@ -155,6 +140,7 @@ for (const key in transactions) {
 
   //   !!!   State handling methods  !!!
   function decline(){
+    setBalanceInfo(false);
     setConfirmationWindow(false);
   }
 
@@ -166,6 +152,7 @@ for (const key in transactions) {
     setBalanceInfo(false);
     setActivePage("NearbyUnits")
   }
+
   const showBalanceInfo = (commodity,status) => {
     // Set the selected commodity and show the balance info modal
     setSelectedCommodity(commodity);
@@ -178,6 +165,7 @@ for (const key in transactions) {
   function stock(){
     setStockOut(false)
   }
+
   //remove invalid inp alert
   function alertNegativInp(){
     setInvalidInp(false);
@@ -237,10 +225,6 @@ for (const key in transactions) {
       }, 3000); // 2000 milliseconds (2 seconds)
   }
 };
-
-  const handleClickForCorrection = () => {
-    setActivePage("DataCorrection");
-  };
 
   const handleRecipientInputChange = (event) => {
     setRecipientInput(event.target.value);
@@ -326,6 +310,7 @@ for (const key in transactions) {
         Invalid input
         </AlertBar>
       )}
+
       {toLargeDispense && (
         <AlertBar duration={2000} onHidden={alertLargeDispense}>
         Trying to dispense more than balance
@@ -333,7 +318,6 @@ for (const key in transactions) {
       )}
 
       
-   
       
     <Table>
       
@@ -385,6 +369,8 @@ for (const key in transactions) {
 
             //Shows commodity data
             return (
+              
+              
                 <TableRow key={item.id}>
                 <TableCell>{item.displayName.replace('Commodities - ', '')}</TableCell>
                 <TableCell>
@@ -471,7 +457,7 @@ for (const key in transactions) {
         selectedCommodity={selectedCommodity}
         averageConsumption={averageConsumption[selectedCommodity.displayName]}
         status={status}
-        decline={decline2}
+        decline={decline}
         confirm={sendToNearbyClinic}
        />
      )}

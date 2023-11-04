@@ -2,44 +2,29 @@ import React from "react";
 import { Menu, MenuItem } from "@dhis2/ui";
 
 export function Navigation(props) {
+  const menuItems = [
+    { label: "Dashboard", page: "Dashboard" },
+    { label: "Dispense/Stock up", page: "UpdateData" },
+    { label: "Nearby Units", page: "NearbyUnits" },
+    { label: "History", page: "History" },
+    { label: "Stock Recount", page: "StockRecount" },
+    { label: "Stock Correction", page: "DataCorrection" }
+  ];
+
+  const handleClick = page => {
+    props.activePageHandler(page);
+  };
+
   return (
     <Menu>
-      <MenuItem
-        label="Dashboard"
-        active={props.activePage == "Dashboard"}
-        onClick={() => props.activePageHandler("Dashboard")}
-      />
-      <MenuItem
-        label="Dispense/Stock up"
-        active={props.activePage == "UpdateData"}
-        onClick={() => props.activePageHandler("UpdateData")}
-      />
-      <MenuItem
-        label="Nearby Units"
-        active={props.activePage == "NearbyUnits"}
-        onClick={() => props.activePageHandler("NearbyUnits")}
-      />
-
-      <MenuItem
-      label="History"
-      active={props.activePage == "History"}
-      onClick={() => props.activePageHandler("History")}
-      />
-
-      <MenuItem
-        label="Stock Recount"
-        active={props.activePage == "StockRecount"}
-        onClick={() => props.activePageHandler("StockRecount")}
-      />
-
-      <MenuItem
-        label="Stock Correction"
-        active={props.activePage == "DataCorrection"}
-        onClick={() => props.activePageHandler("DataCorrection")}
-      />
-
-
-
+      {menuItems.map(item => (
+        <MenuItem
+          key={item.page}
+          label={item.label}
+          active={props.activePage === item.page}
+          onClick={() => handleClick(item.page)}
+        />
+      ))}
     </Menu>
   );
 }

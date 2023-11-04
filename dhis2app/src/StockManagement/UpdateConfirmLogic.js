@@ -1,9 +1,7 @@
 //This method will handle update logic, it will handle input for each commidity data, and update only those which has input
 //Deppending on dispensing or stocking it will update different CoCatOption values
 
-//import { getFormattedDate } from './CommonUtils'
-
-import { createTransaction, createRecipient } from "../DatastorePush";
+import { createTransaction, createRecipient } from "../DataStoreUtils/TransactionAndRecipientBody";
 
 export function UpdateConfirmLogic(commodityData, inputValues, dispensedToValues ,dispensing, setStockOut, updateEndBalance, updateConsumption, updateAdministered, orgUnit, setConfirmationWindow, username, transactions, pushTransaction, period, recipients, pushRecipients, department) {
 
