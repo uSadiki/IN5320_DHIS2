@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 import classes from "./App.module.css";
-import { StartIt } from "./StartIt";
 import { Navigation } from "./Navigation";
-import { Analysis_dashboard } from "./Analysis_dashboard";
-import { DataManagement } from "./DataManagement";
-import { CorrectData } from "./CorrectData";
-import { NearByUnits } from "./NearByUnits";
-import { History }  from "./History"; // Importing History component
-import { StockRecount }  from "./StockRecount";
-import { getUserName } from './DataHandlingHelper/UserName'; 
-
+import { Analysis_dashboard } from "./Dashboard/Analysis_dashboard";
+import { ManagementMain } from "./StockManagement/ManagementMain";
+import { CorrectData } from "./DataCorrection/CorrectData";
+import { NearByUnits } from "./NearByUnits/NearByUnits";
+import { History }  from "./LogedData/History"; 
+import * as CommonUtils from './CommonUtils';
+import { RecountMain } from './Recount/RecountMain';  
 
 function MyApp() {
 
@@ -22,12 +20,12 @@ function MyApp() {
   const [activeOrgUnitNameParent, setActiveOrgUnitNameParent] = useState("Sowa");
   const [averageConsumption, setAverageConsumption] = useState();
 
-  const name = getUserName()
   //Set method for active page
   function activePageHandler(page) {
     setActivePage(page);
   }
-
+  
+  const name = CommonUtils.getUserName()
 
   return (
     
@@ -44,18 +42,18 @@ function MyApp() {
     
       <div className={classes.right}>
 
-       {activeOrgUnitName === "" ? null : <h1>Current Clinic: {activeOrgUnitName}</h1>}
-
-       {activePage === "UpdateData" && <DataManagement 
+       {activePage === "UpdateData" && <ManagementMain 
                                            orgUnit={activeOrgUnit} 
                                            commodityData={commodityData}  
                                            setActivePage={setActivePage} 
-                                           averageConsumption={averageConsumption} />}
+                                           averageConsumption={averageConsumption}
+                                           username={name}/>}
      
        {activePage === "DataCorrection" && <CorrectData 
                                                    orgUnit={activeOrgUnit} 
                                                    commodityData={commodityData} 
                                                    setActivePage={setActivePage}
+                                                  
                                                   />}
     
        {activePage === "Dashboard" &&  <Analysis_dashboard 
@@ -64,31 +62,27 @@ function MyApp() {
                                                         commodityData={commodityData} 
                                                         setActivePage={setActivePage}
                                                         setAverageConsumption={setAverageConsumption} />}
-
-
+                                                    
         
-       {activePage === "StartIt" &&  <StartIt  
-                                              setActivePage={setActivePage} 
-                                              setActiveOrgUnit={setActiveOrgUnit}
-                                              setActiveOrgUnitName={setActiveOrgUnitName}
-                                              activeOrgUnitParent ={activeOrgUnitParent}
-                                              activeOrgUnitNameParent={activeOrgUnitNameParent} />}
-                                              
-
-        {activePage === "NearbyUnits" &&  <NearByUnits 
-                                                      activeOrgUnitParent ={activeOrgUnitParent}
-                                                      
-                                                         />}
-        
-        {activePage === "StockRecount" && <StockRecount 
+        {activePage === "StockRecount" && <RecountMain 
                                                    orgUnit={activeOrgUnit} 
                                                    commodityData={commodityData} 
-                                                   setActivePage={setActivePage}
-                                                   user = {name} />}                                               
+                                                   user = {name}
+                                                    />}     
+
+        
+    
+                                              
+
+        {activePage === "NearbyUnits" &&  <NearByUnits />}
+        {activePage === "History" &&  <History/>}
+                                                    
+        
+       
+                                                                                        
 
                                                         
-        {activePage === "History" &&  <History/>}
-                                                        
+            
       
       </div>
     </div>
