@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
 import { getData } from '../DataStoreUtils/DatastorePull';
-import { CircularLoader, Table, TableHead, TableRowHead, TableCellHead, TableBody, TableRow, TableCell, SwitchField } from '@dhis2/ui';
+import { CircularLoader, Table, TableHead, TableRowHead, TableCellHead, TableBody, TableRow, TableCell, SwitchField,ButtonStrip,Button } from '@dhis2/ui';
 
 //Function to show transaction history and recount history
 export function History() {
 
   const [showTransactions, setShowTransactions] = useState(true);
+  const [dateFilter, setDateFilter] = useState(""); // Initial filter value
+  
+  const handleDateFilterChange = (event) => {
+    setDateFilter(event.target.value);
+  }
+  
+
 
   //Get data for both transaction and recounts
   const transactionsData = getData("Transactions");
@@ -19,14 +26,44 @@ export function History() {
     setShowTransactions(!showTransactions);
   };
 
+
+
+
   const data = showTransactions ? transactionsData : recountsData;
+
+
+  const filteredData = Object.entries(data)
+  .filter(([, item]) => {
+    let date, time;
+
+    if (showTransactions) {
+      [date, time] = item.date.split(', ');
+    } else {
+      [date, time] = item.Date.split(', ');
+    }
+    const [day, month, year] = date.split('/');
+    const formattedItemDate = `${year}-${month}-${day}`;
+
+    // Check if showTransaction is true and the date matches the filter
+    return  (!dateFilter || formattedItemDate === dateFilter);
+  });
+
+  
+
   const headers = showTransactions
     ? ['Date', 'Commodities', 'Values', 'Dispensed By', 'Dispensed To']
     : ['Date', 'Commodities', 'Changed By', 'From Value', 'To Value'];
 
     return (
+      
       <div>
+          
+        
         <h1>{showTransactions ? 'Transactions' : 'Recounts'} History</h1>
+
+
+        Filter By date <input type="date" value={dateFilter} onChange={handleDateFilterChange} />
+
 
         <SwitchField 
           checked={showTransactions}
@@ -46,7 +83,7 @@ export function History() {
           </TableHead>
           
           <TableBody>
-            {Object.entries(data).map(([id, item]) => (
+            {filteredData.map(([id, item]) => (
               <React.Fragment key={id}>
                 {item && (
                   <>
@@ -88,6 +125,7 @@ export function History() {
             ))}
           </TableBody>
         </Table>
+       
       </div>
     );
   }
