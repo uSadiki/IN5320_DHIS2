@@ -6,7 +6,7 @@ import BalanceInfo from '../Notification/BalanceInfo';
 import { UpdateConfirmLogic } from './UpdateConfirmLogic';
 import * as CommonUtils from '../CommonUtils';
 import { getData } from '../DataStoreUtils/DatastorePull';
-import { Table, TableBody, TableCellHead, TableHead, TableRowHead, AlertBar, SwitchField } from '@dhis2/ui'
+import { Table, TableBody, TableCellHead, TableHead, TableRowHead, AlertBar, SwitchField, InputField } from '@dhis2/ui'
 import '../Css/CssTest.css';
 import {DataBody} from'./VisualContent/Databody'
 import RecipientForm from './VisualContent/RecipientForm';
@@ -17,10 +17,11 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
   //    !!!    STATE declaration    !!!
   const { updateEndBalance, updateConsumption,updateAdministered, pushTransaction, pushRecipients } = useMutation();
 
+  //search filter state
+  const [searchInput, setSearchInput] = useState('');
+
   //state with dict of all input values (key=id, value=input)
   const [inputValues, setinputValues] = useState({});
-
-  const [dispensedToInput, setDispensedToInput] = useState("");
 
   const [confirmationWindow, setConfirmationWindow] = useState(false);
 
@@ -28,11 +29,16 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
   const [stockOut, setStockOut] = useState(false);
   //state for invalid input
   const [invalidInp, setInvalidInp] = useState(false);
+  //state for empty recipient or not choosen department
+  const [missingInfo, setMissingInfo] = useState(false);
   //switch between dispense and add
   const [dispensing, setDispensing] = useState(true);
 
-  const [department, setDepartment] = useState("Department 1");
-  const departments = ['Department 2', 'Department 3'];
+  const [department, setDepartment] = useState("Select department");
+  const departments = ['Department 1' ,'Department 2', 'Department 3'];
+
+  const [hasDepartment, setHasDepartment] = useState(false);
+
   
   const [recipientInput, setRecipientInput] = useState('');
 
@@ -57,6 +63,20 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
 
   //called when pressing update, checks for valid input and calls/shows the confirmation window if success
   function showConfirmationWindow(){
+    //TODO: make alert if not choosen department
+    if (department === "Select department"){
+      setMissingInfo(true);
+      console.log("CHOOSE DEPART");
+      return;
+    }
+
+    //TODO: make alert if not choosen recipient
+    if (recipientInput === ""){
+      setMissingInfo(true);
+      console.log("CHOOSE A RECIPIENT");
+      return;
+    }
+
     let negativeInp = false
     let moredispense = false
 
@@ -110,7 +130,9 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
   //remove invalid inp alert
   function alertNegativInp(){
     setInvalidInp(false);
+    setMissingInfo(false);
   }
+
 
   function alertLargeDispense(){
     setToLargeDispense(false);
@@ -138,7 +160,9 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
 };
 
   const handleRecipientInputChange = (event) => {
-    setRecipientInput(event.target.value);
+    const recipientName = event.target.value;
+    setRecipientInput(recipientName);
+    setDepartmentForRecipient(recipientName);
   };
 
   let recipientOptions = [];
@@ -148,6 +172,29 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
       <option key={key} value={recipients[key].name} />
     ));
   }
+
+  const setDepartmentForRecipient = (recipientName) => {
+    setHasDepartment(false);
+    let department = "Select department";
+    for (const recipientKey in recipients) {
+      if (recipients[recipientKey].name === recipientName) {
+        department = recipients[recipientKey].department;
+        setHasDepartment(true);
+        break;
+      }
+    }
+    setDepartment(department);
+  };
+
+  //filter commodities
+  const filteredCommodities = commodityData.filter(item =>
+    item.displayName.toLowerCase().startsWith(`commodities - ${searchInput.toLowerCase()}`)
+  );
+  
+
+  const handleSearchChange = (event) => {
+    setSearchInput(event.value);
+  };
   
 
   return (
@@ -169,6 +216,15 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
         </div>
     </div>
 
+    <InputField
+        type="text"
+        id="search"
+        label="Search Commodities"
+        placeholder="Type to search..."
+        value={searchInput}
+        onChange={(value) => handleSearchChange(value)}
+      />
+
       <SwitchField
         checked={dispensing}
         helpText={dispensing ? "You are currently dispensing. Press/switch to add stock" : "You are currently adding to stock. Press/switch to dispense"}
@@ -186,13 +242,21 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
         recipientOptions={recipientOptions}
         department={department}
         changeDepartment={changeDepartment}
-        departments={departments} />
+        departments={departments}
+        hasDepartment={hasDepartment} />
        
     {invalidInp && (
         <AlertBar duration={2000} onHidden={alertNegativInp}>
         Invalid input
         </AlertBar>
       )}
+
+    {missingInfo && (
+        <AlertBar duration={2000} onHidden={alertNegativInp}>
+        Invalid: choose recipient and department
+        </AlertBar>
+      )}
+
 
     {toLargeDispense && (
         <AlertBar duration={2000} onHidden={alertLargeDispense}>
@@ -219,7 +283,7 @@ Days until stock in {daysUntilNextMonth}
 
         <TableBody>
                 <DataBody
-                    commodityData={commodityData}
+                    commodityData={filteredCommodities}
                     averageConsumption={averageConsumption}
                     handleInputChange={handleInputChange}
                     daysUntilNextMonth={daysUntilNextMonth}

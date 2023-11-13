@@ -8,6 +8,8 @@ function RecipientForm({
   department,
   changeDepartment,
   departments,
+  hasDepartment,
+  
 }) {
   return (
     dispensing && (
@@ -25,8 +27,8 @@ function RecipientForm({
         <datalist id="recipientOptions">{recipientOptions}</datalist>
 
         <label htmlFor="department">Department:</label>
-        <select name="department" value={department} onChange={changeDepartment}>
-          <option value="Department 1">Department 1</option>
+        <select name="department" value={department} onChange={changeDepartment} disabled={hasDepartment}>
+          <option value="">Select department</option>
           {departments.map((department) => (
             <option key={department} value={department}>
               {department}
