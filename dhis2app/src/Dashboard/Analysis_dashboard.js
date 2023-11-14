@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDataQuery } from '@dhis2/app-runtime';
 import { CircularLoader,} from '@dhis2/ui';
 import * as CommonUtils from '../CommonUtils';
-import { Table, TableBody, TableCell, TableCellHead, TableHead, TableRow, TableRowHead,} from '@dhis2/ui';
+import { Table, TableBody, TableCell, TableCellHead, TableHead, TableRow, TableRowHead, InputField} from '@dhis2/ui';
 import calculateAverageConsumption from './HelperMethods/CalculateAverageConsumption';
 
  //Query to get commodity data
@@ -63,6 +63,20 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,se
         }
     }, [data]);
 
+
+    //search filter state
+    const [searchInput, setSearchInput] = useState('');
+
+    //filter commodities
+    const filteredCommodities = commodityData.filter(item =>
+        item.displayName.toLowerCase().startsWith(`commodities - ${searchInput.toLowerCase()}`)
+    );
+    
+
+    const handleSearchChange = (event) => {
+        setSearchInput(event.value);
+    };
+
     //Error handling
     if (error) {
         return <span>ERROR: {error.message}</span>;
@@ -75,6 +89,16 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,se
     
     return (
         <div>
+            <InputField
+            type="text"
+            id="search"
+            label="Search Commodities"
+            placeholder="Type to search..."
+            value={searchInput}
+            onChange={(value) => handleSearchChange(value)}
+            />
+
+
             <Table>
                 <TableHead>
                     <TableRowHead>
@@ -88,7 +112,7 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,se
                 </TableHead>
     
                 <TableBody>
-                    {commodityData.map(item => (
+                    {filteredCommodities.map(item => (
                         <TableRow key={item.id}>
                             <TableCell>{item.displayName}</TableCell>
                             <TableCell>
