@@ -2,8 +2,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-
-
   }
   
   .inputContainer {
@@ -11,7 +9,7 @@
     justify-content: center;
     margin-top: 20px;
   }
-  
+
   .inputField {
     padding: 10px;
   }
@@ -66,4 +64,8 @@
     background-color: #467fcf;
     transform: scale(1.1);
     cursor: pointer;
+}
+
+.segControl{
+  padding-bottom: 20px;
 }
