@@ -114,7 +114,7 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,se
                 <TableBody>
                     {filteredCommodities.map(item => (
                         <TableRow key={item.id}>
-                            <TableCell>{item.displayName}</TableCell>
+                            <TableCell>{item.displayName.replace('Commodities - ', '')}</TableCell>
                             <TableCell>
                                 {item.administered}
                             </TableCell>

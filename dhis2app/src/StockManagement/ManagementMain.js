@@ -8,6 +8,7 @@ import * as CommonUtils from '../CommonUtils';
 import { getData } from '../DataStoreUtils/DatastorePull';
 import { Table, TableBody, TableCellHead, TableHead, TableRowHead, AlertBar, SwitchField, InputField } from '@dhis2/ui'
 import '../Css/CssTest.css';
+import '../Css/dataMan.css';
 import {DataBody} from'./VisualContent/Databody'
 import RecipientForm from './VisualContent/RecipientForm';
 
@@ -41,20 +42,19 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
 
   
   const [recipientInput, setRecipientInput] = useState('');
+  const [showTooltip, setShowTooltip] = useState(false);
+
 
   let transactions = getData("Transactions");
   let recipients = getData("Recipients");
 
   //New ones for prediction
   let daysUntilNextMonth = CommonUtils.calculateDaysUntilNextMonth();
-  const numberOfDailyDispenses = 4;
 
   const [balanceInfo, setBalanceInfo] = useState(false);
   const [selectedCommodity, setSelectedCommodity] = useState(null);
   const [status, setStatus] = useState(null);
   const [toLargeDispense, setToLargeDispense] = useState(false);
-  const [alerts, setAlerts] = useState({});
-
 
   const confirm = () => {
     let period =  CommonUtils.getDateAndTime();
@@ -64,16 +64,14 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
   //called when pressing update, checks for valid input and calls/shows the confirmation window if success
   function showConfirmationWindow(){
     //TODO: make alert if not choosen department
-    if (department === "Select department"){
+    if (dispensing && department === "Select department"){
       setMissingInfo(true);
-      console.log("CHOOSE DEPART");
       return;
     }
 
     //TODO: make alert if not choosen recipient
-    if (recipientInput === ""){
+    if (dispensing && recipientInput === ""){
       setMissingInfo(true);
-      console.log("CHOOSE A RECIPIENT");
       return;
     }
 
@@ -84,7 +82,7 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
     commodityData.forEach((item) => {
        const dispenseInput = inputValues[item.id];
        
-       if ( Number(dispenseInput) > item.endBalance){
+       if (Number(dispenseInput) > item.endBalance){
         moredispense = false;
       } 
       if (Number(dispenseInput) < 0){
@@ -190,33 +188,54 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
   const filteredCommodities = commodityData.filter(item =>
     item.displayName.toLowerCase().startsWith(`commodities - ${searchInput.toLowerCase()}`)
   );
-  
 
   const handleSearchChange = (event) => {
     setSearchInput(event.value);
   };
   
-
   return (
     
-    <div> 
-    <div className="stockout-container">
-        <h2>Stockout Categories</h2>
-        <div className="stockout-category">
-            <strong>Purple:</strong> When item end balance is less than days until next month.
-        </div>
-        <div className="stockout-category">
-            <strong>Red:</strong> When current average is less than or equal to 50% of historical average.
-        </div>
-        <div className="stockout-category">
-            <strong>Green:</strong> When the item's end balance is greater than or equal to the product of historical average and days until next month, or when historical average and current average are the same.
-        </div>
-        <div className="stockout-category">
-            <strong>Orange:</strong> When current average is greater than 50% of historical average.
-        </div>
-    </div>
+    <div className='container'> 
+   
+   <div className="right-container">
+      <div className="switch-field-container">
+        <SwitchField
+          checked={dispensing}
+          helpText={dispensing ? "You are currently dispensing. Press/switch to add stock" : "You are currently adding to stock. Press/switch to dispense"}
+          label={dispensing ? "Dispense": "Add to Stock"}
+          onChange={switchDispenseOrAdd}
+          name="switchName"
+          value="defaultValue"
+        />
+      </div>
 
-    <InputField
+      <div className="recipient-form-container">
+        <RecipientForm
+          dispensing={dispensing}
+          recipientInput={recipientInput}
+          handleRecipientInputChange={handleRecipientInputChange}
+          recipientOptions={recipientOptions}
+          department={department}
+          changeDepartment={changeDepartment}
+          departments={departments}
+          hasDepartment={hasDepartment}
+        />
+      </div>
+
+      <div className="days-info-container">
+        <br />
+        Days until stock in {daysUntilNextMonth}
+      </div>
+      <button className="update-button" onClick={showConfirmationWindow}>
+        Update
+      </button>
+    
+    </div>
+    
+
+
+<div className="left-container">
+<InputField
         type="text"
         id="search"
         label="Search Commodities"
@@ -224,27 +243,65 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
         value={searchInput}
         onChange={(value) => handleSearchChange(value)}
       />
+    <Table>
+      
+        <TableHead>
+        
+            <TableRowHead>
+            <TableCellHead>Commodities</TableCellHead>
+            <TableCellHead>Balance</TableCellHead>
+            <TableCellHead>Consumption</TableCellHead>
+            <TableCellHead>{dispensing ? "Dispense" : "Add Stock"}</TableCellHead>      
 
-      <SwitchField
-        checked={dispensing}
-        helpText={dispensing ? "You are currently dispensing. Press/switch to add stock" : "You are currently adding to stock. Press/switch to dispense"}
-        label={dispensing ? "Dispense": "Add to Stock"}
-        onChange={switchDispenseOrAdd}
-        name="switchName"
-        value="defaultValue"
-      />
+            {dispensing ?  <TableCellHead>Balance Status
+              <div onClick={() => setShowTooltip(true)}
+                     onMouseLeave={() => setShowTooltip(false)}>?
+                     {showTooltip && 
+                     <div style={{
+                        position: 'absolute',
+                        backgroundColor: '#f5f5f5',
+                        color: 'black',
+                        borderRadius: '5px',
+                        padding: '5px',
+                        zIndex: '10'
+                     }}> <div className="stockout-container">
+                     <h2>Stockout Categories</h2>
+                     <div className="stockout-category">
+                         <strong>Purple:</strong> When item end balance is less than days until next month.
+                     </div>
+                     <div className="stockout-category">
+                         <strong>Red:</strong> When current average is less than or equal to 50% of historical average.
+                     </div>
+                     <div className="stockout-category">
+                         <strong>Green:</strong> When the item's end balance is greater than or equal to the product of historical average and days until next month, or when historical average and current average are the same.
+                     </div>
+                     <div className="stockout-category">
+                         <strong>Orange:</strong> When current average is greater than 50% of historical average.
+                     </div>
+                 </div>
+                 </div>}
+                </div>
+            </TableCellHead> :null}
+           
+            </TableRowHead>
+        </TableHead>
 
+        <TableBody>
+                <DataBody
+                    commodityData={filteredCommodities}
+                    averageConsumption={averageConsumption}
+                    handleInputChange={handleInputChange}
+                    daysUntilNextMonth={daysUntilNextMonth}
+                    dispensing={dispensing}
+                    showBalanceInfo={showBalanceInfo}
+                    
+                    />
+        </TableBody>
 
-     <RecipientForm
-        dispensing={dispensing}
-        recipientInput={recipientInput}
-        handleRecipientInputChange={handleRecipientInputChange}
-        recipientOptions={recipientOptions}
-        department={department}
-        changeDepartment={changeDepartment}
-        departments={departments}
-        hasDepartment={hasDepartment} />
-       
+    </Table>
+
+    </div>
+
     {invalidInp && (
         <AlertBar duration={2000} onHidden={alertNegativInp}>
         Invalid input
@@ -264,38 +321,6 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
         </AlertBar>
       )}
 
-      
-Days until stock in {daysUntilNextMonth}
-    <Table>
-      
-        <TableHead>
-        
-            <TableRowHead>
-            <TableCellHead>Commodities</TableCellHead>
-            <TableCellHead>Balance</TableCellHead>
-            <TableCellHead>Consumption</TableCellHead>
-            <TableCellHead>{dispensing ? "Dispense" : "Add Stock"}</TableCellHead>
-            {dispensing ?  <TableCellHead>Max recommended dispense amount</TableCellHead> :null}
-            {dispensing ?  <TableCellHead>Balance Status</TableCellHead> :null}
-           
-            </TableRowHead>
-        </TableHead>
-
-        <TableBody>
-                <DataBody
-                    commodityData={filteredCommodities}
-                    averageConsumption={averageConsumption}
-                    handleInputChange={handleInputChange}
-                    daysUntilNextMonth={daysUntilNextMonth}
-                    dispensing={dispensing}
-                    showBalanceInfo={showBalanceInfo}
-                    
-                    />
-        </TableBody>
-
-    </Table>
-
-    <button onClick={showConfirmationWindow}>Update</button>
      
     {balanceInfo && (
         <BalanceInfo
