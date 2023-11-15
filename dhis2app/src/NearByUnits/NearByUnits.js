@@ -1,8 +1,18 @@
 import React, { useState } from 'react';
 import { useDataQuery } from '@dhis2/app-runtime'
 import { CircularLoader } from '@dhis2/ui'
+import "../Css/nearbyUnits.css"; 
 import "../Css/start.css"; 
 import FetchNearbyData from './NearByClinicHelper/FetchNearbyData';
+
+import image1 from '../images/Geoma Jagor CHC.jpeg';
+import image2 from '../images/Upper Komende MCHP.jpeg';
+
+
+const imageMap = {
+    'Geoma Jagor CHC': image1,
+    'Upper Komende MCHP': image2,
+  };
 
 
 const OrgUnitQuery = {
@@ -37,9 +47,10 @@ export function NearByUnits() {
         const filteredOrganizationUnits = organizationUnits.filter(({ id }) => id !== 'FNnj3jKGS7i');
 
         return (
+            
             <div className="table-container" >
                 <div className="header">
-                    {/* Headr */}
+                    {<h1>Request From Nearby Units</h1>}
                 </div>
 
                
@@ -50,7 +61,8 @@ export function NearByUnits() {
                             key={id}
                             onClick={() => handleClickForData(id,name)}
                         >
-                            {name}
+                            <h4>{name}</h4>
+                            <img src={imageMap[name]} alt={name} />
                         </div>
                     ))}
 
