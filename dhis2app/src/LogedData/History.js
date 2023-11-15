@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { getData } from '../DataStoreUtils/DatastorePull';
-import '../CSS/App.css'
+import '../Css/start.css'
 import { CircularLoader, 
   Table, 
   TableHead, 
@@ -66,6 +66,7 @@ export function History() {
                 { value: 'transactions', label: 'Transactions' },
                 { value: 'recounts', label: 'Recounts' },
               ]}
+            class = "segControl"
           />
 
         Filter By date <input type="date" value={dateFilter} onChange={handleDateFilterChange} />
