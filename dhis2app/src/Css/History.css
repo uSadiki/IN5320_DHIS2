@@ -1,0 +1,49 @@
+.filter {
+  display: inline-block;
+  width: 200px;
+  height: 30px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #999;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+/* The following classes override the default DHIS2 styling */
+.segmented-control.jsx-2069710253 {
+  margin-bottom: 30px;
+  position: relative;
+  width: 400px;
+  height: 50px;
+}
+.segment.selected.jsx-2069710253 {
+  cursor: default;
+  font-weight: 600;
+  border: 1px solid rgb(23, 65, 98);
+  background: rgb(44, 102, 147);
+  color: white;
+}
+
+.segment.selected.jsx-2069710253:focus{
+  background: rgb(44, 102, 147);
+}
+
+.segment.jsx-2069710253 {
+  all: unset;
+  box-sizing: border-box;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+  width: 50%;
+  color: rgb(108, 119, 135);
+  border-width: 1px 0px 1px 1px;
+  border-style: solid;
+  border-color: rgb(213, 221, 229);
+  border-image: initial;
+  background: rgb(251, 252, 253);
+  padding: 8px 16px;
+  height: 40px;
+}
+
