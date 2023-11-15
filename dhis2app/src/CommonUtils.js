@@ -19,14 +19,22 @@ export const getFormattedDate = () => {
 
 
 // Calculate the number of days until the 14th of the next month
+
 export const calculateDaysUntilNextMonth = () => {
   const today = new Date();
   const nextMonth = new Date(today);
+
+  // If today is before the 14th of the month, calculate days until the 14th of the current month
+  if (today.getDate() < 14) {
+    nextMonth.setDate(14); // Set the day to the 14th of the current month
+    return Math.ceil((nextMonth - today) / (1000 * 60 * 60 * 24)) - 1;
+  }
+
+  // If today is on or after the 14th of the month, calculate days until the 14th of the next month
   nextMonth.setMonth(nextMonth.getMonth() + 1);
   nextMonth.setDate(14);
 
-  // Calculate the number of days until the 14th of the next month
-  return Math.ceil((nextMonth - today) / (1000 * 60 * 60 * 24)) - 1;
+  return Math.ceil((nextMonth - today) / (1000 * 60 * 60 * 24));
 };
 
 // Define the usernameQuery outside the component

@@ -14,6 +14,8 @@ import {calculateDaysUntilNextMonth} from '../CommonUtils'
 const ConfirmationWindow = ({ dispensing, commodityData, inputValues, decline, confirm ,averageConsumption}) => {
   let daysUntilNextMonth = calculateDaysUntilNextMonth();
 
+  
+
   return (
     <>
     <Modal>
@@ -23,31 +25,35 @@ const ConfirmationWindow = ({ dispensing, commodityData, inputValues, decline, c
 
         <ul>
         {commodityData.map((item) => {
+
           const dispenseValue = parseInt(inputValues[item.id]) || 0;
+         
+         
           const avg = Math.ceil(averageConsumption[item.displayName] / 30);
           const currentAvg = (item.endBalance - dispenseValue) / daysUntilNextMonth;
           const prevAvg = item.endBalance / daysUntilNextMonth;
 
+          let xGreen = Math.ceil(Math.max(item.endBalance - avg * daysUntilNextMonth, 0))+1;
+          let xOrange = Math.max(0, (item.endBalance- avg*daysUntilNextMonth*0.5 )) || 0;
+
           let icon = "";
           let recommendation = "";
 
-          if (item.endBalance - dispenseValue < daysUntilNextMonth && item.endBalance >= daysUntilNextMonth) {
-            icon = "🟣"; // Red exclamation mark
-            recommendation = "This will move to PURPLE";
-          } else if (currentAvg <= 0.5 * avg && prevAvg > 0.5 * avg) {
-            icon = "❗"; // Red exclamation mark
-            recommendation = "This will move to RED";
+
+          if (currentAvg <= 0.5 * avg && prevAvg > 0.5 * avg) {
+            icon = "❗"; 
+            recommendation = "Max recommended : "+ (xOrange - 1);
           } else if (currentAvg > 0.5 * avg && currentAvg < avg && (prevAvg <= 0.5 * avg || prevAvg >= avg)) {
-            icon = "🔶"; // Yellow exclamation mark
-            recommendation = "This will move to YELLOW";
+            icon = "❗"; 
+            recommendation = "Max recommended : "+ (xGreen - 1);
           }
 
           return dispenseValue > 0 ? (
             <li key={item.id}>
               <span>
                 {dispensing
-                  ? `${item.displayName.replace('Commodities - ', '')} - Dispense: ${dispenseValue} ${recommendation} ${icon}`
-                  : `${item.displayName.replace('Commodities - ', '')} - Add: ${dispenseValue}`}
+                  ? `${item.displayName.replace('Commodities - ', '')} : ${dispenseValue} units  ${icon} ${recommendation} ${icon}`
+                  : `${item.displayName.replace('Commodities - ', '')} : ${dispenseValue} units`}
               </span>
             </li>
           ) : null;
