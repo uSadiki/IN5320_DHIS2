@@ -158,6 +158,7 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,se
             placeholder="Type to search..."
             value={searchInput}
             onChange={(value) => handleSearchChange(value)}
+            className="input-field"
             />
 
             <CommoditiesTable filteredCommodities={filteredCommodities} />

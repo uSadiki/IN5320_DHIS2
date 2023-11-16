@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation } from '../../DataHandlingHelper/DataMutation'; 
 import { UpdateRecount } from './UpdateRecount';
-import {  Table,  TableBody,  TableCell,  TableCellHead,  TableHead,  TableRow,  TableRowHead,  AlertBar} from '@dhis2/ui'
+import {  Table,  TableBody,  TableCell,  TableCellHead,  TableHead,  TableRow,  TableRowHead,  AlertBar, InputField} from '@dhis2/ui'
 
 //Manages the inputs for recounts
 export function RecountManager({ orgUnit, commodityData,user,earlierRecounts }) {
@@ -11,6 +11,8 @@ export function RecountManager({ orgUnit, commodityData,user,earlierRecounts }) 
   //States and methods
   const [inputValues, setinputValues] = useState({});
   const [invalidInput, setInvalidInput] = useState(false);
+  //search filter state
+  const [searchInput, setSearchInput] = useState('');
 
   //Crated for AlertBar
   function alertNegativInp(){
@@ -24,6 +26,19 @@ export function RecountManager({ orgUnit, commodityData,user,earlierRecounts }) 
     updatedInputValues[id] = event.target.value;
     setinputValues(updatedInputValues);
   };
+
+
+  //filter commodities
+  const filteredCommodities = commodityData.filter(item =>
+      item.displayName.toLowerCase().startsWith(`commodities - ${searchInput.toLowerCase()}`)
+  );
+  
+
+  const handleSearchChange = (event) => {
+      setSearchInput(event.value);
+  };
+
+
 
     //Method to sumbitRecount inputs
     const confirm = () => {
@@ -41,6 +56,20 @@ export function RecountManager({ orgUnit, commodityData,user,earlierRecounts }) 
 
    
         <div> 
+          <h1>Stock Recount</h1>
+
+          <InputField
+            type="text"
+            id="search"
+            label="Search Commodities"
+            placeholder="Type to search..."
+            value={searchInput}
+            onChange={(value) => handleSearchChange(value)}
+            className="input-field"
+            />
+
+
+          
           {invalidInput && (
             <AlertBar duration={2000} onHidden={alertNegativInp}>
             Invalid input
@@ -59,7 +88,7 @@ export function RecountManager({ orgUnit, commodityData,user,earlierRecounts }) 
     
             <TableBody>
               
-                {commodityData.map((item) => {
+                {filteredCommodities.map((item) => {
                
                 //Shows commodity data
                 return (
@@ -85,7 +114,7 @@ export function RecountManager({ orgUnit, commodityData,user,earlierRecounts }) 
             </TableBody>
         </Table>
     
-        <button onClick={confirm}>Update</button>
+        <button className="update-button" onClick={confirm}>Update</button>
          
         </div>
       );
