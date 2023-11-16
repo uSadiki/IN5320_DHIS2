@@ -4,7 +4,7 @@ import { CircularLoader,} from '@dhis2/ui';
 import * as CommonUtils from '../CommonUtils';
 import { Table, TableBody, TableCell, TableCellHead, TableHead, TableRow, TableRowHead, InputField} from '@dhis2/ui';
 import calculateAverageConsumption from './HelperMethods/CalculateAverageConsumption';
-import "../Css/main.css"; 
+import "../Css/Dashboard.css"; 
 
 
  //Query to get commodity data
