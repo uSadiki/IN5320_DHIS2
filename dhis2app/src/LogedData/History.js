@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { getData } from '../DataStoreUtils/DatastorePull';
-import '../Css/start.css'
+import '../Css/History.css'
 import { CircularLoader, 
   Table, 
   TableHead, 
@@ -57,19 +57,23 @@ export function History() {
 
   return (
       <div>
-        <h1>{showTransactions ? 'Transactions' : 'Recounts'} History</h1>
+        <h1>{showTransactions ? 'Transaction' : 'Recount'} History</h1>
 
-         <SegmentedControl 
-            selected={showTransactions ? 'transactions' : 'recounts'}
-            onChange={({value}) => setShowTransactions(value==='transactions')}
-            options={[
-                { value: 'transactions', label: 'Transactions' },
-                { value: 'recounts', label: 'Recounts' },
-              ]}
-            class = "segControl"
-          />
+        <SegmentedControl
+          selected={showTransactions ? 'transactions' : 'recounts'}
+          onChange={({ value }) => setShowTransactions(value === 'transactions')}
+          options={[
+            { value: 'transactions', label: 'Transactions' },
+            { value: 'recounts', label: 'Recounts' },
+          ]}
+        />
 
-        Filter By date <input type="date" value={dateFilter} onChange={handleDateFilterChange} />
+        Filter by Date: <br></br>
+        <input 
+          type="date" 
+          value={dateFilter} 
+          onChange={handleDateFilterChange} 
+          className='filter'/>
 
 
         <Table>
@@ -90,7 +94,7 @@ export function History() {
                       item.Commodities?.map((commodity, index) => (
                         <TableRow key={`${id}-${index}`}>
                           {index === 0 ? (
-                            <TableCell rowSpan={`${item.Commodities.length}`}>{item.date}</TableCell>
+                            <TableCell rowSpan={`${item.Commodities.length}`}>{item.date.split(",")[0]}</TableCell>
                           ) : null}
                           <TableCell>{commodity.commodity.substring(13)}</TableCell>
                           <TableCell>{commodity.value}</TableCell>
@@ -105,7 +109,7 @@ export function History() {
                           Object.entries(item.Commodities).map(([commodityName, commodity], index) => (
                             <TableRow key={`${id}-${commodityName}`}>
                               {index === 0 ? (
-                                <TableCell rowSpan={String(Object.entries(item.Commodities).length)}>{item.Date}</TableCell>
+                                <TableCell rowSpan={String(Object.entries(item.Commodities).length)}>{item.Date.split(",")[0]}</TableCell>
                               ) : null}
                               <TableCell>{commodityName}</TableCell>
                               <TableCell>{item.ChangedBy}</TableCell>
