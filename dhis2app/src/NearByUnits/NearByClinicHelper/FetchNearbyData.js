@@ -42,7 +42,7 @@ function FetchNearbyData({ orgUnit, orgUnitName, setSelectedOrgUnit }) {
 
   // Loading handling
   if (loading) {
-    return <CircularLoader large />;
+    return <CircularLoader large className="loading-circle"/>;
   }
 
   // Data handling

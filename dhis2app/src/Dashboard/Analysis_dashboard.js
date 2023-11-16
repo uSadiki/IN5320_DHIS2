@@ -4,7 +4,7 @@ import { CircularLoader,} from '@dhis2/ui';
 import * as CommonUtils from '../CommonUtils';
 import { Table, TableBody, TableCell, TableCellHead, TableHead, TableRow, TableRowHead, InputField} from '@dhis2/ui';
 import calculateAverageConsumption from './HelperMethods/CalculateAverageConsumption';
-import "../Css/Dashboard.css"; 
+import "../Css/main.css"; 
 
 
  //Query to get commodity data
@@ -98,6 +98,7 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,se
             placeholder="Type to search..."
             value={searchInput}
             onChange={(value) => handleSearchChange(value)}
+            className="input-field"
             />
 
 
