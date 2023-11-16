@@ -47,3 +47,41 @@
   height: 40px;
 }
 
+
+
+/* Your existing CSS styles */
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination-button {
+  background-color: #4caf50; /* Green background color */
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.pagination-button:disabled {
+  background-color: #dddddd; /* Grey background color when disabled */
+  color: #666666; /* Dark grey text color when disabled */
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  margin: 0 10px;
+  font-size: 16px;
+  color: #333333;
+}
+
+/* Your other existing CSS styles */

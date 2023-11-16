@@ -46,12 +46,12 @@ function DisplayNearbyData({ data, orgUnitName, setSelectedOrgUnit }) {
         </ModalContent>
 
         <ModalActions>
-            <ButtonStrip end>
+           
               <Button secondary onClick={onCancleClick}>
                 Cancle
               </Button>
           
-            </ButtonStrip>
+            
         </ModalActions>
       </Modal>
        

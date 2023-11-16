@@ -101,7 +101,9 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,se
         <div>
          <div className="boxes-container">
           <div className="box" id="leftbox">
-            <h2>Welcome {name.split(' ')[0]}</h2>
+          {name && (
+        <h2>Welcome {name.split(' ')[0]}</h2>
+      )}
           
             <img src={StoreManager} alt="Store Manager" />
             Have a nice day at work!

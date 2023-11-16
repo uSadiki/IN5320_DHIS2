@@ -30,8 +30,9 @@ export function History() {
   const data = showTransactions ? transactionsData : recountsData;
 
   let filteredData = [];
-  
+
   if (data) {
+
     filteredData = Object.entries(data).filter(
       ([, item]) => {
         let date, time;
@@ -55,6 +56,16 @@ export function History() {
     ? ['Date', 'Commodities', 'Values', 'Dispensed By', 'Dispensed To']
     : ['Date', 'Commodities', 'Changed By', 'From Value', 'To Value'];
 
+    const itemsPerPage = 5; // Adjust the number of items per page as needed
+const [currentPage, setCurrentPage] = useState(1);
+
+// Calculate the index range for the current page
+const startIndex = (currentPage - 1) * itemsPerPage;
+const endIndex = startIndex + itemsPerPage;
+  
+    const paginatedData = Object.entries(data).slice(startIndex, endIndex);
+    
+    console.log(paginatedData)
   return (
       <div>
         <h1>{showTransactions ? 'Transaction' : 'Recount'} History</h1>
@@ -86,45 +97,116 @@ export function History() {
           </TableHead>
           
           <TableBody>
-            {filteredData.map(([id, item]) => (
-              <React.Fragment key={id}>
-                {item && (
-                  <>
-                    {showTransactions ? (
-                      item.Commodities?.map((commodity, index) => (
-                        <TableRow key={`${id}-${index}`}>
-                          {index === 0 ? (
-                            <TableCell rowSpan={`${item.Commodities.length}`}>{item.date.split(",")[0]}</TableCell>
-                          ) : null}
-                          <TableCell>{commodity.commodity.substring(13)}</TableCell>
-                          <TableCell>{commodity.value}</TableCell>
-                          <TableCell>{item.dispensedBy}</TableCell>
-                          <TableCell>{item.dispensedTo}</TableCell>
-                        </TableRow>
-                      ))
-                    ) 
-                    : (
+
+            
+           {dateFilter !== "" ? (
+                // Render content when dateFilter has a value
+                filteredData.map(([id, item]) => (
+                  <React.Fragment key={id}>
+                    {item && (
                       <>
-                        {item.Commodities && 
-                          Object.entries(item.Commodities).map(([commodityName, commodity], index) => (
-                            <TableRow key={`${id}-${commodityName}`}>
+                        {showTransactions ? (
+                          item.Commodities?.map((commodity, index) => (
+                            <TableRow key={`${id}-${index}`}>
                               {index === 0 ? (
-                                <TableCell rowSpan={String(Object.entries(item.Commodities).length)}>{item.Date.split(",")[0]}</TableCell>
+                                <TableCell rowSpan={`${item.Commodities.length}`}>{item.date.split(",")[0]}</TableCell>
                               ) : null}
-                              <TableCell>{commodityName}</TableCell>
-                              <TableCell>{item.ChangedBy}</TableCell>
-                              <TableCell>{commodity.fromValue}</TableCell>
-                              <TableCell>{commodity.toValue}</TableCell>
+                              <TableCell>{commodity.commodity.substring(13)}</TableCell>
+                              <TableCell>{commodity.value}</TableCell>
+                              <TableCell>{item.dispensedBy}</TableCell>
+                              <TableCell>{item.dispensedTo}</TableCell>
                             </TableRow>
-                          ))}
+                          ))
+                        ) : (
+                          <>
+                            {item.Commodities &&
+                              Object.entries(item.Commodities).map(([commodityName, commodity], index) => (
+                                <TableRow key={`${id}-${commodityName}`}>
+                                  {index === 0 ? (
+                                    <TableCell rowSpan={String(Object.entries(item.Commodities).length)}>{item.Date.split(",")[0]}</TableCell>
+                                  ) : null}
+                                  <TableCell>{commodityName}</TableCell>
+                                  <TableCell>{item.ChangedBy}</TableCell>
+                                  <TableCell>{commodity.fromValue}</TableCell>
+                                  <TableCell>{commodity.toValue}</TableCell>
+                                </TableRow>
+                              ))}
+                          </>
+                        )}
                       </>
                     )}
-                  </>
-                )}
-              </React.Fragment>
-            ))}
+                  </React.Fragment>
+                ))
+              ) : (
+                <>
+                {paginatedData.map(([transactionKey, transaction], index) => (
+                   <React.Fragment key={transactionKey}>
+                    {transaction && (
+                      <>
+                        {showTransactions ? (
+                          transaction.Commodities?.map((commodity, commodityIndex) => (
+                            <TableRow key={`${transactionKey}-${commodityIndex}`}>
+                              {commodityIndex === 0 ? (
+                                <TableCell rowSpan={`${transaction.Commodities.length}`}>{transaction.date.split(",")[0]}</TableCell>
+                              ) : null}
+                              <TableCell>{commodity.commodity.substring(13)}</TableCell>
+                              <TableCell>{commodity.value}</TableCell>
+                              <TableCell>{transaction.dispensedBy}</TableCell>
+                              <TableCell>{transaction.dispensedTo}</TableCell>
+                            </TableRow>
+                          ))
+                        ) : (
+                          <>
+                            {transaction.Commodities &&
+                              Object.entries(transaction.Commodities).map(([commodityName, commodity], commodityIndex) => (
+                                <TableRow key={`${transactionKey}-${commodityName}`}>
+                                  {commodityIndex === 0 ? (
+                                    <TableCell rowSpan={String(Object.entries(transaction.Commodities).length)}>{transaction.date.split(",")[0]}</TableCell>
+                                  ) : null}
+                                  <TableCell>{commodityName}</TableCell>
+                                  <TableCell>{transaction.ChangedBy}</TableCell>
+                                  <TableCell>{commodity.fromValue}</TableCell>
+                                  <TableCell>{commodity.toValue}</TableCell>
+                                </TableRow>
+                              ))}
+                          </>
+                        )}
+                      </>
+                    )}
+                  </React.Fragment>
+                  
+                ))}
+                 
+              </>
+
+              ) }
+
+
           </TableBody>
         </Table>
+
+        <>  
+        
+        {dateFilter == "" && (
+          <div className="pagination-container">
+            <button
+              className="pagination-button"
+              onClick={() => setCurrentPage(prevPage => Math.max(prevPage - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
+            <span className="pagination-info">Page {currentPage} of {Math.ceil(Object.entries(data).length / itemsPerPage)}</span>
+            <button
+              className="pagination-button"
+              onClick={() => setCurrentPage(prevPage => Math.min(prevPage + 1, Math.ceil(Object.entries(data).length / itemsPerPage)))}
+              disabled={currentPage === Math.ceil(Object.entries(data).length / itemsPerPage)}
+            >
+              Next
+            </button>
+          </div>
+        )}
+        </>
       </div>
   );
 }

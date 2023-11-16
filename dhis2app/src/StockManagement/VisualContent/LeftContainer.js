@@ -33,6 +33,7 @@ const LeftContainer = ({
             placeholder="Type to search..."
             value={searchInput}
             onChange={(value) => handleSearchChange(value)}
+            className="input-field"
           />
       
     <Table>
