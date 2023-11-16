@@ -124,11 +124,11 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,se
     } else if (avg * daysUntilNextMonth <= item.endBalance || avg === currentAvg) {
       check = "green";
     } else if (currentAvg > 0.5 * avg) {
-      check = "orange";
+      check = "yellow";
     }
 
     // Display items with red or orange check
-    if (check === "red" || check === "orange") {
+    if (check === "red" || check === "yellow") {
       return (
         <div key={item.id}>
           <p>Display Name: {item.displayName}</p>
