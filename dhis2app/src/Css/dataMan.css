@@ -1,29 +1,51 @@
 
 
-.container {
-    display: flex;
-    flex-direction: row;   /* default, added for clarity */
-  }
-  .left-container {
-    flex: 70;
-  }
-  .right-container {
-    flex: 30;
-  }
-  
-  .switch-field-container {
-    margin-bottom: 20px;
-  }
-  
-  .recipient-form-container {
-    margin-bottom: 20px;
-  }
-  
-  .days-info-container {
-    font-size: 16px;
-    color: #333;
-  }
-  
+
+    #container {
+      display: flex;
+      height: 100%;
+    }
+
+    #left-container, #right-container {
+      overflow: auto;
+      
+      box-sizing: border-box;
+    }
+
+    #left-container {
+      flex: 2; /* Initial width ratio for left container */
+    }
+
+    #right-container {
+      flex: 1;
+    }
+ 
+    #sub-box {
+      padding: 20px;
+      background-color: #f7f7f7;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .switch-field-container,
+    .recipient-form-container,
+    .days-info-container,
+    .update-button {
+      margin-bottom: 15px;
+    }
+
+    .switch-field-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .switch-field-container label {
+      margin-right: 10px;
+    }
+
+   
   /* Add more styles as needed */
   .update-button {
     background-color: #4caf50; /* Green background color */
@@ -38,6 +60,44 @@
   .update-button:hover {
     background-color: #45a049; /* Darker green on hover */
   }
+
+  .tooltip-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .clickable-symbol {
+    font-size: 18px;
+    margin-right: 5px;
+  }
+  
+  .tooltip-content {
+    position: absolute;
+    top: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    background-color: #ffffff;
+    color: #333333;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    max-height: 250px;
+    overflow-y: auto;
+  }
+  
+  .stockout-container {
+    max-width: 100%;
+  }
+  
+  .stockout-category {
+    margin-bottom: 8px;
+  }
+  
   
   /* Add more styles as needed */
     

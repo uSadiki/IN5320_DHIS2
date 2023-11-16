@@ -8,6 +8,8 @@ import { NearByUnits } from "./NearByUnits/NearByUnits";
 import { History }  from "./LogedData/History"; 
 import * as CommonUtils from './CommonUtils';
 import { RecountMain } from './Recount/RecountMain';  
+import { ManTest } from "./StockManagement/ManTest";
+
 
 function MyApp() {
 
@@ -42,7 +44,7 @@ function MyApp() {
     
       <div className={classes.right}>
 
-       {activePage === "UpdateData" && <ManagementMain 
+       {activePage === "UpdateData" && <ManTest 
                                            orgUnit={activeOrgUnit} 
                                            commodityData={commodityData}  
                                            setActivePage={setActivePage} 
