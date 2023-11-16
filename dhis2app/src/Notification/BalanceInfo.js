@@ -25,7 +25,7 @@ const BalanceInfo = ({ selectedCommodity,status,averageConsumption,decline, conf
 
     return (
 
-    <>
+    
     <Modal>
       <ModalTitle>{status=="NotSufficient" ? "Risk of Stock-out" : "Information about consumption"}</ModalTitle>
       <ModalContent>
@@ -38,7 +38,7 @@ const BalanceInfo = ({ selectedCommodity,status,averageConsumption,decline, conf
         )}       
       </ModalContent>
       <ModalActions>
-        <ButtonStrip end>
+      
             {status === "NotSufficient" ? (
             <Button primary onClick={confirm}>
                 Check nearby Clinics
@@ -53,10 +53,10 @@ const BalanceInfo = ({ selectedCommodity,status,averageConsumption,decline, conf
                 I understand
             </Button>
             )}
-        </ButtonStrip>
+        
         </ModalActions>
     </Modal>
-       </>
+       
   );
 };
 

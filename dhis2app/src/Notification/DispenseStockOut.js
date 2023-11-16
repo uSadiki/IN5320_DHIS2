@@ -32,14 +32,15 @@ const DispenseStockOut = ({ stockOut, commodityData, inputValues, stock }) => {
             Wait until the 14th for restock or check for nearby clinics
           </ModalContent>
           <ModalActions>
-            <ButtonStrip end>
-              <Button secondary onClick={stock}>
-                I understand
-              </Button>
+            
               <Button primary onClick={stock}>
                 Check clinics
               </Button>
-            </ButtonStrip>
+              <Button secondary onClick={stock}>
+                I understand
+              </Button>
+              
+            
           </ModalActions>
         </Modal>
       )}

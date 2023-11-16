@@ -61,14 +61,14 @@ const ConfirmationWindow = ({ dispensing, commodityData, inputValues, decline, c
       </ul>
       </ModalContent>
       <ModalActions>
-        <ButtonStrip end>
+        
           <Button secondary onClick={decline}>
             Decline
           </Button>
           <Button primary onClick={confirm}>
             Confirm
           </Button>
-        </ButtonStrip>
+        
       </ModalActions>
     </Modal>
        </>

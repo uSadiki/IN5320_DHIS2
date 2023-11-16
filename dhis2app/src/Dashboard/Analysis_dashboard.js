@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useDataQuery } from '@dhis2/app-runtime';
 import { CircularLoader,} from '@dhis2/ui';
 import * as CommonUtils from '../CommonUtils';
-import { Table, TableBody, TableCell, TableCellHead, TableHead, TableRow, TableRowHead, InputField} from '@dhis2/ui';
+import {Button, InputField} from '@dhis2/ui';
 import calculateAverageConsumption from './HelperMethods/CalculateAverageConsumption';
-import "../Css/Dashboard.css"; 
+import CommoditiesTable from './ComponentsDashboard/CommoditiesTable'
+import '../Css/Dashboard.css';
+import StoreManager from '../images/StoreManager.jpeg';
+
 
 
  //Query to get commodity data
@@ -30,7 +33,7 @@ import "../Css/Dashboard.css";
 };
 
 
-export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,setAverageConsumption }) {
+export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,setActivePage,setAverageConsumption,name, averageConsumption }) {
 
     const { loading, error, data } = useDataQuery(dataQuery, {
         variables: {
@@ -66,6 +69,7 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,se
     }, [data]);
 
 
+    let daysUntilNextMonth = CommonUtils.calculateDaysUntilNextMonth();
     //search filter state
     const [searchInput, setSearchInput] = useState('');
 
@@ -79,6 +83,10 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,se
         setSearchInput(event.value);
     };
 
+    function sendToNearbyClinic(){
+      setActivePage("NearbyUnits")
+    }
+  
     //Error handling
     if (error) {
         return <span>ERROR: {error.message}</span>;
@@ -91,6 +99,58 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,se
     
     return (
         <div>
+         <div className="boxes-container">
+          <div className="box" id="leftbox">
+            <h2>Welcome {name.split(' ')[0]}</h2>
+          
+            <img src={StoreManager} alt="Store Manager" />
+            Have a nice day at work!
+
+          </div>
+
+          <div className="box" id="middlebox">
+            <h2>Days until restock</h2>
+          
+            <p >{daysUntilNextMonth}</p>
+
+          </div>
+
+          <div className="box" id="rightbox">
+            <h2>Critical low stock on:</h2>
+            <ul className="risk-list">
+            {commodityData.map((item) => {
+              let daysUntilNextMonth = CommonUtils.calculateDaysUntilNextMonth();
+              let avg = Math.ceil(averageConsumption[item.displayName] / 30);
+              let currentAvg = item.endBalance / daysUntilNextMonth;
+              let check;
+
+              // If balance gives avg lower than 50%, then the balance is critically low!
+              if (currentAvg <= 0.5 * avg) {
+                check = "red";
+
+                // Display items with red check
+                return (
+                  <li key={item.id} className="risk-item">
+            <span className="risk-indicator">&#9888;</span> {item.displayName.replace('Commodities - ', '')}
+                  </li>
+                );
+              }
+
+              // Return null for items that don't meet the criteria
+              return null;
+            })}
+          </ul>
+
+          <div className="button-container">
+            <Button primary onClick={sendToNearbyClinic}>
+              Check nearby units
+            </Button>
+          </div>
+
+
+      </div>
+    </div>
+            
             <InputField
             type="text"
             id="search"
@@ -101,40 +161,9 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,se
             className="input-field"
             />
 
+            <CommoditiesTable filteredCommodities={filteredCommodities} />
 
-            <Table>
-                <TableHead>
-                    <TableRowHead>
-                        <TableCellHead>Commodities</TableCellHead>
-                        <TableCellHead>Administered</TableCellHead>
-                        <TableCellHead>End Balance</TableCellHead>
-                        <TableCellHead>Consumption</TableCellHead>
-                        <TableCellHead>Quantity to be ordered</TableCellHead>
-                        <TableCellHead>ID</TableCellHead>
-                    </TableRowHead>
-                </TableHead>
-    
-                <TableBody>
-                    {filteredCommodities.map(item => (
-                        <TableRow key={item.id}>
-                            <TableCell>{item.displayName.replace('Commodities - ', '')}</TableCell>
-                            <TableCell>
-                                {item.administered}
-                            </TableCell>
-                            <TableCell>
-                                {item.endBalance}
-                            </TableCell>
-                            <TableCell>
-                                {item.consumption}
-                            </TableCell>
-                            <TableCell>
-                                {item.quantityToBeOrdered}
-                            </TableCell>
-                            <TableCell>{item.id}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+
         </div>
     );
 }

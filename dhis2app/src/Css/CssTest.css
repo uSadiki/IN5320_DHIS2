@@ -70,3 +70,29 @@
 .risk.green {
   color: green;
 }
+
+.table-row {
+  /* Your existing styles for table rows go here */
+}
+
+
+/* Override zebra striping for highlighted rows */
+table.jsx-2430604489 .highlighted-row.zebraStriping {
+  background-color:#d0e7e1; ;
+}
+
+.balance-status-span {
+  cursor: pointer;
+}
+
+.balance-status-span.orange {
+  color: orange;
+}
+
+.balance-status-span.green {
+  color: green;
+}
+
+.balance-status-span.red {
+  color: red;
+}
