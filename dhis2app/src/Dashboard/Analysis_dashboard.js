@@ -4,9 +4,11 @@ import { CircularLoader,} from '@dhis2/ui';
 import * as CommonUtils from '../CommonUtils';
 import {Button, InputField} from '@dhis2/ui';
 import calculateAverageConsumption from './HelperMethods/CalculateAverageConsumption';
+
 import CommoditiesTable from './ComponentsDashboard/CommoditiesTable'
 import '../Css/Dashboard.css';
 import StoreManager from '../Images/StoreManager.jpeg';
+
 
 
  //Query to get commodity data
