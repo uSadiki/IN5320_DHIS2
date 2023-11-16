@@ -2,7 +2,7 @@ import React from 'react';
 import {TableCell, TableRow} from '@dhis2/ui'
 import '../../Css/CssTest.css';
 
-export function DataBody({ commodityData,averageConsumption,handleInputChange,daysUntilNextMonth,dispensing,showBalanceInfo}) {
+export function DataBody({ commodityData,averageConsumption,handleInputChange,daysUntilNextMonth,dispensing,showBalanceInfo,inputValues}) {
 
     return (
         <React.Fragment>
@@ -22,11 +22,14 @@ export function DataBody({ commodityData,averageConsumption,handleInputChange,da
         }
       
 
+        // Determine if there's input in the row
+        const hasInput = inputValues[item.id] !== undefined && inputValues[item.id] !== '';
+
       //Shows commodity data
       return (
         
-          <TableRow key={item.id}>
-          <TableCell>{item.displayName.replace('Commodities - ', '')}</TableCell>
+  <TableRow key={item.id} className={`zebraStriping ${hasInput ? 'highlighted-row' : ''}`}>
+        <TableCell>{item.displayName.replace('Commodities - ', '')}</TableCell>
           <TableCell>
               {item.endBalance }
           </TableCell>
@@ -35,27 +38,27 @@ export function DataBody({ commodityData,averageConsumption,handleInputChange,da
           </TableCell>
           <TableCell>
               <div className="input-wrapper">
-              <input
-                name="dispense"
-                type="number"
-                min="0"
-                onChange={(e) => handleInputChange(e, item)}
-              />      
+               <input
+                  name="dispense"
+                  type="number"
+                  min="0"
+                  onChange={(e) => handleInputChange(e, item)}
+                />    
             </div>
           </TableCell>
 
-      {dispensing ? (
-        <TableCell>
-          {check && (
-            <span
-              style={{ color: check === "orange" ? "orange" : check === "green" ? "green" : "red" }}
-              onClick={() => showBalanceInfo(item, check === "orange" || check === "green" ? "Sufficient" : "NotSufficient")}
-            >
-              {check === "orange" ? "Moderate" : check === "green" ? "Healthy" : "Critical"}
-            </span>
-          )}
-        </TableCell>
-      ) : null}  
+          {dispensing ? (
+              <TableCell>
+                {check && (
+                  <span
+                    className={`balance-status-span ${check}`}
+                    onClick={() => showBalanceInfo(item, check === "orange" || check === "green" ? "Sufficient" : "NotSufficient")}
+                  >
+                    {check === "orange" ? "Moderate" : check === "green" ? "Healthy" : "Critical"}
+                  </span>
+                )}
+              </TableCell>
+            ) : null}
 
           </TableRow>
       );

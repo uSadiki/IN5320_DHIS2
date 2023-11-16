@@ -61,43 +61,76 @@
     background-color: #45a049; /* Darker green on hover */
   }
 
-  .tooltip-container {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    cursor: pointer;
-    font-size: 14px;
-  }
+  /* Common styles for the tooltip component */
   
   .clickable-symbol {
-    font-size: 18px;
-    margin-right: 5px;
+    cursor: pointer;
+    color: #007bff; /* Blue color */
+    text-decoration: underline;
+    font-size: 1.2em; /* Adjust the font size as needed */
+    margin-left: 5px; /* Add margin for spacing */
+  }
+
+   
+  .tooltip-container {
+      position: absolute;
+      display: inline-block;
+    }
+  
+  .tooltip-container .tooltip-content {
+    top: 100%;
+    left: 0;
+    z-index: 1;
+    background-color: #ffffff; /* White background */
+    border: 1px solid #ccc;
+    border-radius: 5px; /* Add border-radius for rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+    width: 300px; /* Set a fixed width or adjust as needed */
   }
   
-  .tooltip-content {
-    position: absolute;
-    top: 120%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-    background-color: #ffffff;
-    color: #333333;
-    border-radius: 12px;
-    padding: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 300px;
-    max-height: 250px;
-    overflow-y: auto;
+  .tooltip-container:hover .tooltip-content {
+    display: block;
   }
   
   .stockout-container {
-    max-width: 100%;
+    padding: 10px;
   }
+  
   
   .stockout-category {
-    margin-bottom: 8px;
+    margin-bottom: 12px;
   }
   
+  .stockout-category strong {
+    font-weight: bold;
+    margin-right: 5px;
+  }
   
+  .stockout-category-info {
+    color: #777; /* Dim gray for additional information */
+  }
+  
+  /* Common styles for the AlertBar component */
+.alert-bar {
+  position: absolute;
+  width: 100%; /* Adjust as needed */
+  text-align: center;
+  padding: 10px;
   /* Add more styles as needed */
+}
+
+.invalid-input {
+  background-color: #ff9999; /* Light red for invalid input */
+  color: #990000; /* Darker red text color */
+}
+
+.missing-info {
+  background-color: #ffcc00; /* Light yellow for missing info */
+  color: #996600; /* Darker yellow text color */
+}
     
+.page-title {
+  color: #333;
+  font-size: 2em;
+  margin-bottom: 20px;
+}

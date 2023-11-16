@@ -15,8 +15,8 @@ function RecipientForm({
     dispensing && (
       <div>
         <label>
-          Recipient:
-          <input
+          Recipient:  
+            <input
             list="recipientOptions"
             name="recipientInput"
             value={recipientInput}
