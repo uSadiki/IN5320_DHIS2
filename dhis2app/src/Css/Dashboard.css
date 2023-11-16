@@ -1,0 +1,58 @@
+/* YourComponent.css */
+
+
+
+/* YourComponent.css */
+
+.boxes-container {
+    display: flex;
+    justify-content: space-between; /* or space-around for some space on the sides */
+    margin: 10px;
+  }
+  
+  .box {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 40%;
+    height: 250px; /* Set a fixed height in pixels */
+    box-shadow: 0 10px 5px rgba(0, 0, 0, 0.1);
+    margin: 10px; /* Add margin to create space between the boxes */
+}
+h2 {
+    text-align: center;
+}
+  
+
+  .box img {
+    max-width: 40%; /* Make the image responsive within the box */
+    max-height: 60%; /* Make the image responsive within the box */
+    display: block; /* Remove any extra space below the image */
+    margin: auto; /* Center the image horizontally */
+  }
+  
+  #leftbox {
+    background-color: white; /* Light blue */
+  
+    /* Set the display properties to handle the image */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  #middlebox {
+    background-color: white; /* Light yellow */
+  }
+
+  #middlebox p {
+    font-size: 60px; /* Set the font size for the text */
+    text-align: center; /* Center the text */
+  }
+  
+  #rightbox {
+    background-color: white; /* Light red */
+  }
+  
+  

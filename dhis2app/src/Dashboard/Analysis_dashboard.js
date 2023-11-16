@@ -4,6 +4,10 @@ import { CircularLoader,} from '@dhis2/ui';
 import * as CommonUtils from '../CommonUtils';
 import { Table, TableBody, TableCell, TableCellHead, TableHead, TableRow, TableRowHead, InputField} from '@dhis2/ui';
 import calculateAverageConsumption from './HelperMethods/CalculateAverageConsumption';
+import CommoditiesTable from './ComponentsDashboard/CommoditiesTable'
+import '../Css/Dashboard.css';
+import StoreManager from '../Images/StoreManager.jpeg';
+
 
  //Query to get commodity data
  const dataQuery = {
@@ -28,7 +32,7 @@ import calculateAverageConsumption from './HelperMethods/CalculateAverageConsump
 };
 
 
-export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,setAverageConsumption }) {
+export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,setAverageConsumption,name, averageConsumption }) {
 
     const { loading, error, data } = useDataQuery(dataQuery, {
         variables: {
@@ -89,6 +93,57 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,se
     
     return (
         <div>
+         <div className="boxes-container">
+      <div className="box" id="leftbox">
+        <h2>Welcome {name.split(' ')[0]}</h2>
+       
+        <img src={StoreManager} alt="Store Manager" />
+        Have a nice day at work!
+
+      </div>
+
+      <div className="box" id="middlebox">
+        <h2>Days until restock</h2>
+       
+        <p >{CommonUtils.calculateDaysUntilNextMonth()}</p>
+
+      </div>
+
+      <div className="box" id="rightbox">
+        <h2>Commodities with high risk</h2>
+        <React.Fragment>
+  {commodityData.map((item) => {
+    let daysUntilNextMonth = CommonUtils.calculateDaysUntilNextMonth();
+    let avg = Math.ceil(averageConsumption[item.displayName] / 30);
+    let currentAvg = item.endBalance / daysUntilNextMonth;
+    let check;
+
+    // If balance gives avg lower than 50% then balance is critically low!
+    if (currentAvg <= 0.5 * avg) {
+      check = "red";
+    } else if (avg * daysUntilNextMonth <= item.endBalance || avg === currentAvg) {
+      check = "green";
+    } else if (currentAvg > 0.5 * avg) {
+      check = "orange";
+    }
+
+    // Display items with red or orange check
+    if (check === "red" || check === "orange") {
+      return (
+        <div key={item.id}>
+          <p>Display Name: {item.displayName}</p>
+          <p>Check: {check}</p>
+        </div>
+      );
+    }
+
+    // Return null for items that don't meet the criteria
+    return null;
+  })}
+</React.Fragment>
+      </div>
+    </div>
+            
             <InputField
             type="text"
             id="search"
@@ -98,40 +153,9 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,se
             onChange={(value) => handleSearchChange(value)}
             />
 
+            <CommoditiesTable filteredCommodities={filteredCommodities} />
 
-            <Table>
-                <TableHead>
-                    <TableRowHead>
-                        <TableCellHead>Commodities</TableCellHead>
-                        <TableCellHead>Administered</TableCellHead>
-                        <TableCellHead>End Balance</TableCellHead>
-                        <TableCellHead>Consumption</TableCellHead>
-                        <TableCellHead>Quantity to be ordered</TableCellHead>
-                        <TableCellHead>ID</TableCellHead>
-                    </TableRowHead>
-                </TableHead>
-    
-                <TableBody>
-                    {filteredCommodities.map(item => (
-                        <TableRow key={item.id}>
-                            <TableCell>{item.displayName.replace('Commodities - ', '')}</TableCell>
-                            <TableCell>
-                                {item.administered}
-                            </TableCell>
-                            <TableCell>
-                                {item.endBalance}
-                            </TableCell>
-                            <TableCell>
-                                {item.consumption}
-                            </TableCell>
-                            <TableCell>
-                                {item.quantityToBeOrdered}
-                            </TableCell>
-                            <TableCell>{item.id}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+
         </div>
     );
 }

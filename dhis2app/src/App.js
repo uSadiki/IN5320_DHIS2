@@ -62,7 +62,9 @@ function MyApp() {
                                                         setCommodityData={setCommodityData}
                                                         commodityData={commodityData} 
                                                         setActivePage={setActivePage}
-                                                        setAverageConsumption={setAverageConsumption} />}
+                                                        setAverageConsumption={setAverageConsumption}
+                                                        name={name}
+                                                        averageConsumption={averageConsumption} />}
                                                     
         
         {activePage === "StockRecount" && <RecountMain 
