@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDataQuery } from '@dhis2/app-runtime';
 import { CircularLoader,} from '@dhis2/ui';
 import * as CommonUtils from '../CommonUtils';
-import { Table, TableBody, TableCell, TableCellHead, TableHead, TableRow, TableRowHead, InputField} from '@dhis2/ui';
+import {Button, InputField} from '@dhis2/ui';
 import calculateAverageConsumption from './HelperMethods/CalculateAverageConsumption';
 import CommoditiesTable from './ComponentsDashboard/CommoditiesTable'
 import '../Css/Dashboard.css';
@@ -32,7 +32,7 @@ import StoreManager from '../Images/StoreManager.jpeg';
 };
 
 
-export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,setAverageConsumption,name, averageConsumption }) {
+export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,setActivePage,setAverageConsumption,name, averageConsumption }) {
 
     const { loading, error, data } = useDataQuery(dataQuery, {
         variables: {
@@ -68,6 +68,7 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,se
     }, [data]);
 
 
+    let daysUntilNextMonth = CommonUtils.calculateDaysUntilNextMonth();
     //search filter state
     const [searchInput, setSearchInput] = useState('');
 
@@ -81,6 +82,10 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,se
         setSearchInput(event.value);
     };
 
+    function sendToNearbyClinic(){
+      setActivePage("NearbyUnits")
+    }
+  
     //Error handling
     if (error) {
         return <span>ERROR: {error.message}</span>;
@@ -94,53 +99,54 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,se
     return (
         <div>
          <div className="boxes-container">
-      <div className="box" id="leftbox">
-        <h2>Welcome {name.split(' ')[0]}</h2>
-       
-        <img src={StoreManager} alt="Store Manager" />
-        Have a nice day at work!
+          <div className="box" id="leftbox">
+            <h2>Welcome {name.split(' ')[0]}</h2>
+          
+            <img src={StoreManager} alt="Store Manager" />
+            Have a nice day at work!
 
-      </div>
+          </div>
 
-      <div className="box" id="middlebox">
-        <h2>Days until restock</h2>
-       
-        <p >{CommonUtils.calculateDaysUntilNextMonth()}</p>
+          <div className="box" id="middlebox">
+            <h2>Days until restock</h2>
+          
+            <p >{daysUntilNextMonth}</p>
 
-      </div>
+          </div>
 
-      <div className="box" id="rightbox">
-        <h2>Commodities with high risk</h2>
-        <React.Fragment>
-  {commodityData.map((item) => {
-    let daysUntilNextMonth = CommonUtils.calculateDaysUntilNextMonth();
-    let avg = Math.ceil(averageConsumption[item.displayName] / 30);
-    let currentAvg = item.endBalance / daysUntilNextMonth;
-    let check;
+          <div className="box" id="rightbox">
+            <h2>Critical low stock on:</h2>
+            <ul className="risk-list">
+            {commodityData.map((item) => {
+              let daysUntilNextMonth = CommonUtils.calculateDaysUntilNextMonth();
+              let avg = Math.ceil(averageConsumption[item.displayName] / 30);
+              let currentAvg = item.endBalance / daysUntilNextMonth;
+              let check;
 
-    // If balance gives avg lower than 50% then balance is critically low!
-    if (currentAvg <= 0.5 * avg) {
-      check = "red";
-    } else if (avg * daysUntilNextMonth <= item.endBalance || avg === currentAvg) {
-      check = "green";
-    } else if (currentAvg > 0.5 * avg) {
-      check = "yellow";
-    }
+              // If balance gives avg lower than 50%, then the balance is critically low!
+              if (currentAvg <= 0.5 * avg) {
+                check = "red";
 
-    // Display items with red or orange check
-    if (check === "red" || check === "yellow") {
-      return (
-        <div key={item.id}>
-          <p>Display Name: {item.displayName}</p>
-          <p>Check: {check}</p>
-        </div>
-      );
-    }
+                // Display items with red check
+                return (
+                  <li key={item.id} className="risk-item">
+            <span className="risk-indicator">&#9888;</span> {item.displayName.replace('Commodities - ', '')}
+                  </li>
+                );
+              }
 
-    // Return null for items that don't meet the criteria
-    return null;
-  })}
-</React.Fragment>
+              // Return null for items that don't meet the criteria
+              return null;
+            })}
+          </ul>
+
+          <div className="button-container">
+            <Button primary onClick={sendToNearbyClinic}>
+              Check nearby units
+            </Button>
+          </div>
+
+
       </div>
     </div>
             

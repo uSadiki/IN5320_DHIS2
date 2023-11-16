@@ -217,7 +217,7 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
      )}
      
       
-     <h1 className="page-title">Inventory Management System</h1>
+     <h1 className="page-title">Inventory Management System: {dispensing ? 'Dispensing' : 'Adding stock'} </h1>
       
      {invalidInp && (
         <AlertBar className="alert-bar invalid-input" duration={2000} onHidden={alertNegativInp}>

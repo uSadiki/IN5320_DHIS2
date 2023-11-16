@@ -5,6 +5,7 @@ import { Table, TableBody, TableCellHead, TableHead, TableRowHead, AlertBar, Swi
 import {DataBody} from'./Databody'
 import Tooltip from './Tooltip'; // Adjust the import path based on your project structure
 import '../../Css/dataMan.css';
+import Info from '../../Images/info.png';
 
 
 const LeftContainer = ({
@@ -44,17 +45,18 @@ const LeftContainer = ({
               <TableCellHead>Consumption</TableCellHead>
               <TableCellHead>{dispensing ? "Dispense" : "Add Stock"}</TableCellHead>      
 
-            {dispensing ? (
-              <TableCellHead>
-                Balance Status
-                <span className="clickable-symbol" onClick={() => setShowTooltip(true)} onMouseLeave={() => setShowTooltip(false)}>
-                  i
-                </span>
-
-                {showTooltip && <Tooltip />}
-                
-              </TableCellHead>
-
+              {dispensing ? (
+                <TableCellHead>
+                  Status
+                  <img
+                    className="info-icon"
+                    src={Info}
+                    alt="Info Icon"
+                    onClick={() => setShowTooltip(true)}
+                    onMouseLeave={() => setShowTooltip(false)}
+                  />
+                  {showTooltip && <Tooltip />}
+                </TableCellHead>
               ) : null}
 
 

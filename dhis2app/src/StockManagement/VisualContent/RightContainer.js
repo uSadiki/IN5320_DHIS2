@@ -37,8 +37,6 @@ const RightContainer = ({
             ]}
             />
 
-     
-
       </div>
 
       <div className="recipient-form-container">
