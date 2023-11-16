@@ -1,4 +1,5 @@
 import React from 'react';
+import '../../Css/dataMan.css';
 
 function RecipientForm({
   dispensing,
@@ -14,9 +15,11 @@ function RecipientForm({
   return (
     dispensing && (
       <div>
-        <label>
-          Choose a recipient:
-          <input
+        <label className='recipientLabel'>
+          Recipient:
+          <br></br>  
+            <input
+            className='recipientInput'
             list="recipientOptions"
             name="recipientInput"
             value={recipientInput}
@@ -25,9 +28,15 @@ function RecipientForm({
         </label>
 
         <datalist id="recipientOptions">{recipientOptions}</datalist>
-
-        <label htmlFor="department">Department:</label>
-        <select name="department" value={department} onChange={changeDepartment} disabled={hasDepartment}>
+        <br></br>
+        <label htmlFor="department" className='recipientLabel'>Department:</label>
+        <br></br>
+        <select
+          className='recipientInput' 
+          name="department" 
+          value={department} 
+          onChange={changeDepartment} 
+          disabled={hasDepartment}>
           <option value="">Select department</option>
           {departments.map((department) => (
             <option key={department} value={department}>

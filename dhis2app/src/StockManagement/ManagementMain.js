@@ -6,11 +6,11 @@ import BalanceInfo from '../Notification/BalanceInfo';
 import { UpdateConfirmLogic } from './UpdateConfirmLogic';
 import * as CommonUtils from '../CommonUtils';
 import { getData } from '../DataStoreUtils/DatastorePull';
-import { Table, TableBody, TableCellHead, TableHead, TableRowHead, AlertBar, SwitchField, InputField } from '@dhis2/ui'
+import {AlertBar} from '@dhis2/ui'
 import '../Css/CssTest.css';
 import '../Css/dataMan.css';
-import {DataBody} from'./VisualContent/Databody'
-import RecipientForm from './VisualContent/RecipientForm';
+import LeftContainer from './VisualContent/LeftContainer'; // Adjust the import path based on your project structure
+import RightContainer from './VisualContent/RightContainer';
 
 
 //TODO: Find a name for representing dispense and add to stock
@@ -54,7 +54,6 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
   const [balanceInfo, setBalanceInfo] = useState(false);
   const [selectedCommodity, setSelectedCommodity] = useState(null);
   const [status, setStatus] = useState(null);
-  const [toLargeDispense, setToLargeDispense] = useState(false);
 
   const confirm = () => {
     let period =  CommonUtils.getDateAndTime();
@@ -123,7 +122,9 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
   //used for removing modular showing not enough stock
   function stock(){
     setStockOut(false)
+    setActivePage("NearbyUnits")
   }
+
 
   //remove invalid inp alert
   function alertNegativInp(){
@@ -136,15 +137,6 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
     setToLargeDispense(false);
   }
 
-  //called when the switch is pressed between dispense and add
-  function switchDispenseOrAdd(){
-    if (dispensing){
-      setDispensing(false);
-    }
-    else{
-      setDispensing(true) 
-    }
-  }
   
   const changeDepartment = (event) => {
     setDepartment(event.target.value);
@@ -192,137 +184,10 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
   const handleSearchChange = (event) => {
     setSearchInput(event.value);
   };
-  
+
   return (
-    
-    <div className='container'> 
-   
-   <div className="right-container">
-      <div className="switch-field-container">
-        <SwitchField
-          checked={dispensing}
-          helpText={dispensing ? "You are currently dispensing. Press/switch to add stock" : "You are currently adding to stock. Press/switch to dispense"}
-          label={dispensing ? "Dispense": "Add to Stock"}
-          onChange={switchDispenseOrAdd}
-          name="switchName"
-          value="defaultValue"
-        />
-      </div>
-
-      <div className="recipient-form-container">
-        <RecipientForm
-          dispensing={dispensing}
-          recipientInput={recipientInput}
-          handleRecipientInputChange={handleRecipientInputChange}
-          recipientOptions={recipientOptions}
-          department={department}
-          changeDepartment={changeDepartment}
-          departments={departments}
-          hasDepartment={hasDepartment}
-        />
-      </div>
-
-      <div className="days-info-container">
-        <br />
-        Days until stock in {daysUntilNextMonth}
-      </div>
-      <button className="update-button" onClick={showConfirmationWindow}>
-        Update
-      </button>
-    
-    </div>
-    
-
-
-<div className="left-container">
-<InputField
-        type="text"
-        id="search"
-        label="Search Commodities"
-        placeholder="Type to search..."
-        value={searchInput}
-        onChange={(value) => handleSearchChange(value)}
-      />
-    <Table>
-      
-        <TableHead>
-        
-            <TableRowHead>
-            <TableCellHead>Commodities</TableCellHead>
-            <TableCellHead>Balance</TableCellHead>
-            <TableCellHead>Consumption</TableCellHead>
-            <TableCellHead>{dispensing ? "Dispense" : "Add Stock"}</TableCellHead>      
-
-            {dispensing ?  <TableCellHead>Balance Status
-              <div onClick={() => setShowTooltip(true)}
-                     onMouseLeave={() => setShowTooltip(false)}>?
-                     {showTooltip && 
-                     <div style={{
-                        position: 'absolute',
-                        backgroundColor: '#f5f5f5',
-                        color: 'black',
-                        borderRadius: '5px',
-                        padding: '5px',
-                        zIndex: '10'
-                     }}> <div className="stockout-container">
-                     <h2>Stockout Categories</h2>
-                     <div className="stockout-category">
-                         <strong>Purple:</strong> When item end balance is less than days until next month.
-                     </div>
-                     <div className="stockout-category">
-                         <strong>Red:</strong> When current average is less than or equal to 50% of historical average.
-                     </div>
-                     <div className="stockout-category">
-                         <strong>Green:</strong> When the item's end balance is greater than or equal to the product of historical average and days until next month, or when historical average and current average are the same.
-                     </div>
-                     <div className="stockout-category">
-                         <strong>Orange:</strong> When current average is greater than 50% of historical average.
-                     </div>
-                 </div>
-                 </div>}
-                </div>
-            </TableCellHead> :null}
-           
-            </TableRowHead>
-        </TableHead>
-
-        <TableBody>
-                <DataBody
-                    commodityData={filteredCommodities}
-                    averageConsumption={averageConsumption}
-                    handleInputChange={handleInputChange}
-                    daysUntilNextMonth={daysUntilNextMonth}
-                    dispensing={dispensing}
-                    showBalanceInfo={showBalanceInfo}
-                    
-                    />
-        </TableBody>
-
-    </Table>
-
-    </div>
-
-    {invalidInp && (
-        <AlertBar duration={2000} onHidden={alertNegativInp}>
-        Invalid input
-        </AlertBar>
-      )}
-
-    {missingInfo && (
-        <AlertBar duration={2000} onHidden={alertNegativInp}>
-        Invalid: choose recipient and department
-        </AlertBar>
-      )}
-
-
-    {toLargeDispense && (
-        <AlertBar duration={2000} onHidden={alertLargeDispense}>
-        Trying to dispense more than balance
-        </AlertBar>
-      )}
-
-     
-    {balanceInfo && (
+    <div> 
+       {balanceInfo && (
         <BalanceInfo
         selectedCommodity={selectedCommodity}
         averageConsumption={averageConsumption[selectedCommodity.displayName]}
@@ -347,9 +212,59 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
         stockOut={stockOut}
         commodityData={commodityData}
         inputValues={inputValues}
-        stock={stock} />
+        stock={stock}
+      />
      )}
+     
+      
+     <h1 className="page-title">Inventory Management System: {dispensing ? 'Dispensing' : 'Adding stock'} </h1>
+      
+     {invalidInp && (
+        <AlertBar className="alert-bar invalid-input" duration={2000} onHidden={alertNegativInp}>
+          Invalid input
+        </AlertBar>
+      )}
 
-    </div>
+      {missingInfo && (
+        <AlertBar className="alert-bar missing-info" duration={2000} onHidden={alertNegativInp}>
+          Invalid: choose recipient and department
+        </AlertBar>
+      )}
+
+    <div id="container">
+
+        <LeftContainer
+          searchInput={searchInput}
+          handleSearchChange={handleSearchChange}
+          averageConsumption={averageConsumption}
+          handleInputChange={handleInputChange}
+          daysUntilNextMonth={daysUntilNextMonth}
+          dispensing={dispensing}
+          showBalanceInfo={showBalanceInfo}
+          inputValues={inputValues}
+          showTooltip={showTooltip}
+          setShowTooltip={setShowTooltip}
+          filteredCommodities={filteredCommodities}
+        />
+
+      <RightContainer
+          setDispensing={setDispensing}
+          recipientInput={recipientInput}
+          handleRecipientInputChange={handleRecipientInputChange}
+          recipientOptions={recipientOptions}
+          department={department}
+          changeDepartment={changeDepartment}
+          departments={departments}
+          hasDepartment={hasDepartment}
+          dispensing={dispensing}
+          showConfirmationWindow={showConfirmationWindow}
+         
+        />
+       
+   
+
+  </div>
+ 
+  </div>
   );
 }

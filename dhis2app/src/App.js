@@ -9,6 +9,7 @@ import { History }  from "./LogedData/History";
 import * as CommonUtils from './CommonUtils';
 import { RecountMain } from './Recount/RecountMain';  
 
+
 function MyApp() {
 
   //State, hold current page, orgUnit and the data
@@ -61,7 +62,9 @@ function MyApp() {
                                                         setCommodityData={setCommodityData}
                                                         commodityData={commodityData} 
                                                         setActivePage={setActivePage}
-                                                        setAverageConsumption={setAverageConsumption} />}
+                                                        setAverageConsumption={setAverageConsumption}
+                                                        name={name}
+                                                        averageConsumption={averageConsumption} />}
                                                     
         
         {activePage === "StockRecount" && <RecountMain 
