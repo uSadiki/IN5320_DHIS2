@@ -5,7 +5,7 @@ import { Table, TableBody, TableCellHead, TableHead, TableRowHead, AlertBar, Swi
 import {DataBody} from'./Databody'
 import Tooltip from './Tooltip'; // Adjust the import path based on your project structure
 import '../../Css/dataMan.css';
-import Info from '../../Images/info.png';
+import Info from '../../images/info.png';
 
 
 const LeftContainer = ({
