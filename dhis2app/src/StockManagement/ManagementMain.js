@@ -122,7 +122,9 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
   //used for removing modular showing not enough stock
   function stock(){
     setStockOut(false)
+    setActivePage("NearbyUnits")
   }
+
 
   //remove invalid inp alert
   function alertNegativInp(){
@@ -185,6 +187,35 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
 
   return (
     <div> 
+       {balanceInfo && (
+        <BalanceInfo
+        selectedCommodity={selectedCommodity}
+        averageConsumption={averageConsumption[selectedCommodity.displayName]}
+        status={status}
+        decline={decline}
+        confirm={sendToNearbyClinic}
+       />
+     )}
+
+    {confirmationWindow && (
+        <ConfirmationWindow
+        dispensing={dispensing}
+        commodityData={commodityData}
+        inputValues={inputValues}
+        decline={decline}
+        confirm={confirm}
+        averageConsumption={averageConsumption} />
+     )}
+
+    {stockOut && (
+        <DispenseStockOut
+        stockOut={stockOut}
+        commodityData={commodityData}
+        inputValues={inputValues}
+        stock={stock}
+      />
+     )}
+     
       
      <h1 className="page-title">Inventory Management System</h1>
       
@@ -230,35 +261,10 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
          
         />
        
-    {balanceInfo && (
-        <BalanceInfo
-        selectedCommodity={selectedCommodity}
-        averageConsumption={averageConsumption[selectedCommodity.displayName]}
-        status={status}
-        decline={decline}
-        confirm={sendToNearbyClinic}
-       />
-     )}
-
-    {confirmationWindow && (
-        <ConfirmationWindow
-        dispensing={dispensing}
-        commodityData={commodityData}
-        inputValues={inputValues}
-        decline={decline}
-        confirm={confirm}
-        averageConsumption={averageConsumption} />
-     )}
-
-    {stockOut && (
-        <DispenseStockOut
-        stockOut={stockOut}
-        commodityData={commodityData}
-        inputValues={inputValues}
-        stock={stock} />
-     )}
+   
 
   </div>
+ 
   </div>
   );
 }
