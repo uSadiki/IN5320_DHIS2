@@ -62,8 +62,7 @@ const [currentPage, setCurrentPage] = useState(1);
 // Calculate the index range for the current page
 const startIndex = (currentPage - 1) * itemsPerPage;
 const endIndex = startIndex + itemsPerPage;
-  
-    const paginatedData = Object.entries(data).slice(startIndex, endIndex);
+  const paginatedData = Object.entries(data).slice(startIndex, endIndex);
     
     console.log(paginatedData)
   return (
@@ -157,11 +156,13 @@ const endIndex = startIndex + itemsPerPage;
                           ))
                         ) : (
                           <>
+                          
                             {transaction.Commodities &&
                               Object.entries(transaction.Commodities).map(([commodityName, commodity], commodityIndex) => (
                                 <TableRow key={`${transactionKey}-${commodityName}`}>
                                   {commodityIndex === 0 ? (
-                                    <TableCell rowSpan={String(Object.entries(transaction.Commodities).length)}>{transaction.date.split(",")[0]}</TableCell>
+
+                                    <TableCell rowSpan={String(Object.entries(transaction.Commodities).length)}>{transaction.Date.split(",")[0]}</TableCell>
                                   ) : null}
                                   <TableCell>{commodityName}</TableCell>
                                   <TableCell>{transaction.ChangedBy}</TableCell>
