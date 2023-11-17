@@ -22,16 +22,6 @@ The History section offers a detailed overview of past dispensing transactions a
 ## Stock Recount
 Stock Recount feature enables manual adjustments, ensuring digital inventory aligns with physical counts.
 
-Screenshots of application:
-  
-<img width="900" alt="Screenshot 2023-11-17 at 15 27 22" src="https://media.github.uio.no/user/7391/files/af25e46f-01a4-444e-ba29-209fb6a8ab6f">
-  
-<img width="900" alt="Screenshot 2023-11-17 at 15 27 42" src="https://media.github.uio.no/user/7391/files/59f0271b-3792-48b4-85cd-3d20f98e5cb7">
-
-<img width="900" alt="Screenshot 2023-11-17 at 15 27 56" src="https://media.github.uio.no/user/7391/files/336b540e-b848-429e-b690-5e7c58164315">
-  
-<img width="900" alt="Screenshot 2023-11-17 at 15 28 10" src="https://media.github.uio.no/user/7391/files/bf8afed4-d57f-4659-b618-a35e199831b4">
-
 # Technology Stack
 
 ## React
