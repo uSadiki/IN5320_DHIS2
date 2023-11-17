@@ -53,7 +53,7 @@ const LeftContainer = ({
                     className="info-icon"
                     src={Info}
                     alt="Info Icon"
-                    onClick={() => setShowTooltip(true)}
+                    onMouseEnter={() => setShowTooltip(true)}
                     onMouseLeave={() => setShowTooltip(false)}
                   />
                   {showTooltip && <Tooltip />}

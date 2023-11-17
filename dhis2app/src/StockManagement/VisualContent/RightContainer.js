@@ -23,12 +23,11 @@ const RightContainer = ({
   return (
     <div id="right-container">
 
-        <div id="sub-box">
+    <div id="sub-box">
     
     <div className="switch-field-container">
-        
-            
-                <SegmentedControl
+      
+            <SegmentedControl
             selected={dispensing ? 'dispense' : 'addToStock'}
             onChange={({ value }) => setDispensing(value === 'dispense')}
             options={[
@@ -39,7 +38,7 @@ const RightContainer = ({
 
       </div>
 
-      <div className="recipient-form-container">
+      <div>
         <RecipientForm
           dispensing={dispensing}
           recipientInput={recipientInput}
@@ -52,11 +51,8 @@ const RightContainer = ({
         />
       </div>
 
-      <div className="days-info-container">
-       
-      </div>
       <button className="update-button" onClick={showConfirmationWindow}>
-        Update
+        {dispensing ? 'Dispense' : 'Add Stock'}
       </button>
       </div>
 

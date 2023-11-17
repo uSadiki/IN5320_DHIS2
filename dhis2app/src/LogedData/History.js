@@ -27,21 +27,23 @@ export function History() {
     return <CircularLoader />;
   }
 
+  //Saves data depending on what segment we are in.
   const data = showTransactions ? transactionsData : recountsData;
 
+  //Filtered data for the calendar filtering
   let filteredData = [];
+
+  //Pagination data
   const itemsPerPage = 5; // Adjust the number of items per page as needed
   const [currentPage, setCurrentPage] = useState(1);
-  
-  // Calculate the index range for the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   let paginatedData = null;
 
+  //If we have the data..
   if (data) {
 
     paginatedData = Object.entries(data).slice(startIndex, endIndex);
-
     filteredData = Object.entries(data).filter(
       ([, item]) => {
         let date, time;
@@ -65,19 +67,14 @@ export function History() {
     ? ['Date', 'Commodities', 'Values', 'Dispensed By', 'Dispensed To']
     : ['Date', 'Commodities', 'Changed By', 'From Value', 'To Value'];
 
-
-
-
-const handleSegmentedControlChange = ({ value }) => {
-  setShowTransactions(value === 'transactions');
- 
-    setCurrentPage(1);
+  const handleSegmentedControlChange = ({ value }) => {
+    setShowTransactions(value === 'transactions');
   
-};
+      setCurrentPage(1);
+    
+  };
     
   return (
-
-
       <div>
         <h1>{showTransactions ? 'Transaction' : 'Recount'} History</h1>
 
@@ -106,9 +103,7 @@ const handleSegmentedControlChange = ({ value }) => {
               ))}
             </TableRowHead>
           </TableHead>
-          
           <TableBody>
-
             
            {dateFilter !== "" ? (
                 // Render content when dateFilter has a value
@@ -190,12 +185,8 @@ const handleSegmentedControlChange = ({ value }) => {
                   ))}
                 </>
               )}
-
               </>
-
-              ) }
-
-
+              )}
           </TableBody>
         </Table>
 

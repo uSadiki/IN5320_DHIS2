@@ -18,7 +18,7 @@ function DisplayNearbyData({ data, orgUnitName, setSelectedOrgUnit }) {
      
         <ModalTitle>{orgUnitName}</ModalTitle>
         <ModalContent>
-          Information: Number, location
+          Number: +47999999
           <DataTable>
 
             <TableHead>
@@ -48,7 +48,7 @@ function DisplayNearbyData({ data, orgUnitName, setSelectedOrgUnit }) {
         <ModalActions>
            
               <Button secondary onClick={onCancleClick}>
-                Cancle
+                Close
               </Button>
           
             
