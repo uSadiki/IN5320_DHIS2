@@ -30,8 +30,17 @@ export function History() {
   const data = showTransactions ? transactionsData : recountsData;
 
   let filteredData = [];
+  const itemsPerPage = 5; // Adjust the number of items per page as needed
+  const [currentPage, setCurrentPage] = useState(1);
+  
+  // Calculate the index range for the current page
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  let paginatedData = null;
 
   if (data) {
+
+    paginatedData = Object.entries(data).slice(startIndex, endIndex);
 
     filteredData = Object.entries(data).filter(
       ([, item]) => {
@@ -56,22 +65,25 @@ export function History() {
     ? ['Date', 'Commodities', 'Values', 'Dispensed By', 'Dispensed To']
     : ['Date', 'Commodities', 'Changed By', 'From Value', 'To Value'];
 
-    const itemsPerPage = 5; // Adjust the number of items per page as needed
-const [currentPage, setCurrentPage] = useState(1);
 
-// Calculate the index range for the current page
-const startIndex = (currentPage - 1) * itemsPerPage;
-const endIndex = startIndex + itemsPerPage;
-  const paginatedData = Object.entries(data).slice(startIndex, endIndex);
+
+
+const handleSegmentedControlChange = ({ value }) => {
+  setShowTransactions(value === 'transactions');
+ 
+    setCurrentPage(1);
+  
+};
     
-    console.log(paginatedData)
   return (
+
+
       <div>
         <h1>{showTransactions ? 'Transaction' : 'Recount'} History</h1>
 
         <SegmentedControl
           selected={showTransactions ? 'transactions' : 'recounts'}
-          onChange={({ value }) => setShowTransactions(value === 'transactions')}
+          onChange={handleSegmentedControlChange  }
           options={[
             { value: 'transactions', label: 'Transactions' },
             { value: 'recounts', label: 'Recounts' },
@@ -138,46 +150,47 @@ const endIndex = startIndex + itemsPerPage;
                 ))
               ) : (
                 <>
-                {paginatedData.map(([transactionKey, transaction], index) => (
-                   <React.Fragment key={transactionKey}>
-                    {transaction && (
-                      <>
-                        {showTransactions ? (
-                          transaction.Commodities?.map((commodity, commodityIndex) => (
-                            <TableRow key={`${transactionKey}-${commodityIndex}`}>
-                              {commodityIndex === 0 ? (
-                                <TableCell rowSpan={`${transaction.Commodities.length}`}>{transaction.date.split(",")[0]}</TableCell>
-                              ) : null}
-                              <TableCell>{commodity.commodity.substring(13)}</TableCell>
-                              <TableCell>{commodity.value}</TableCell>
-                              <TableCell>{transaction.dispensedBy}</TableCell>
-                              <TableCell>{transaction.dispensedTo}</TableCell>
-                            </TableRow>
-                          ))
-                        ) : (
-                          <>
-                          
-                            {transaction.Commodities &&
-                              Object.entries(transaction.Commodities).map(([commodityName, commodity], commodityIndex) => (
-                                <TableRow key={`${transactionKey}-${commodityName}`}>
-                                  {commodityIndex === 0 ? (
+               {paginatedData !== null && (
+                <>
+                  {paginatedData.map(([transactionKey, transaction], index) => (
+                    <React.Fragment key={transactionKey}>
+                      {transaction && (
+                        <>
+                          {showTransactions ? (
+                            transaction.Commodities?.map((commodity, commodityIndex) => (
+                              <TableRow key={`${transactionKey}-${commodityIndex}`}>
+                                {commodityIndex === 0 ? (
+                                  <TableCell rowSpan={`${transaction.Commodities.length}`}>{transaction.date.split(",")[0]}</TableCell>
+                                ) : null}
+                                <TableCell>{commodity.commodity.substring(13)}</TableCell>
+                                <TableCell>{commodity.value}</TableCell>
+                                <TableCell>{transaction.dispensedBy}</TableCell>
+                                <TableCell>{transaction.dispensedTo}</TableCell>
+                              </TableRow>
+                            ))
+                          ) : (
+                            <>
+                              {transaction.Commodities &&
+                                Object.entries(transaction.Commodities).map(([commodityName, commodity], commodityIndex) => (
+                                  <TableRow key={`${transactionKey}-${commodityName}`}>
+                                    {commodityIndex === 0 ? (
+                                      <TableCell rowSpan={String(Object.entries(transaction.Commodities).length)}>{transaction.Date.split(",")[0]}</TableCell>
+                                    ) : null}
+                                    <TableCell>{commodityName}</TableCell>
+                                    <TableCell>{transaction.ChangedBy}</TableCell>
+                                    <TableCell>{commodity.fromValue}</TableCell>
+                                    <TableCell>{commodity.toValue}</TableCell>
+                                  </TableRow>
+                                ))}
+                            </>
+                          )}
+                        </>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </>
+              )}
 
-                                    <TableCell rowSpan={String(Object.entries(transaction.Commodities).length)}>{transaction.Date.split(",")[0]}</TableCell>
-                                  ) : null}
-                                  <TableCell>{commodityName}</TableCell>
-                                  <TableCell>{transaction.ChangedBy}</TableCell>
-                                  <TableCell>{commodity.fromValue}</TableCell>
-                                  <TableCell>{commodity.toValue}</TableCell>
-                                </TableRow>
-                              ))}
-                          </>
-                        )}
-                      </>
-                    )}
-                  </React.Fragment>
-                  
-                ))}
-                 
               </>
 
               ) }
@@ -188,7 +201,7 @@ const endIndex = startIndex + itemsPerPage;
 
         <>  
         
-        {dateFilter == "" && (
+        {paginatedData !== null && dateFilter === "" && (
           <div className="pagination-container">
             <button
               className="pagination-button"
@@ -206,7 +219,7 @@ const endIndex = startIndex + itemsPerPage;
               Next
             </button>
           </div>
-        )}
+)}
         </>
       </div>
   );
