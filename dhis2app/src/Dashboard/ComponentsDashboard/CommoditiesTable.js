@@ -3,6 +3,7 @@ import { Table, TableBody, TableCell, TableCellHead, TableHead, TableRow, TableR
 
 const CommoditiesTable = ({ filteredCommodities }) => {
   return (
+    <ul className="commodity-table">
     <Table>
       <TableHead>
         <TableRowHead>
@@ -27,6 +28,7 @@ const CommoditiesTable = ({ filteredCommodities }) => {
         ))}
       </TableBody>
     </Table>
+    </ul>
   );
 };
 

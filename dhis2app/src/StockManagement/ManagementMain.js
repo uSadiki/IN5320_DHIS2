@@ -7,7 +7,12 @@ import { UpdateConfirmLogic } from './UpdateConfirmLogic';
 import * as CommonUtils from '../CommonUtils';
 import { getData } from '../DataStoreUtils/DatastorePull';
 import {AlertBar} from '@dhis2/ui'
+<<<<<<< Updated upstream
 import '../CSS/ManagementMain.css';
+=======
+
+import '../Css/ManagementMain.css';
+>>>>>>> Stashed changes
 import LeftContainer from './VisualContent/LeftContainer'; // Adjust the import path based on your project structure
 import RightContainer from './VisualContent/RightContainer';
 
@@ -231,7 +236,7 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
       )}
 
     <div id="container">
-
+      
         <LeftContainer
           searchInput={searchInput}
           handleSearchChange={handleSearchChange}
@@ -259,6 +264,7 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
           showConfirmationWindow={showConfirmationWindow}
          
         />
+
        
    
 

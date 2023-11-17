@@ -1,7 +1,12 @@
 import React from 'react';
 import { getData } from '../DataStoreUtils/DatastorePull';
 import { RecountManager } from './RecountComponents/RecountManager';
+<<<<<<< Updated upstream
 import '../CSS/Shared.css';
+=======
+
+import '../Css/Shared.css';
+>>>>>>> Stashed changes
 
 
 //Main Recount starter

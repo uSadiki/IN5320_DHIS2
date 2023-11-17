@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useMutation } from '../../DataHandlingHelper/DataMutation'; 
 import { UpdateRecount } from './UpdateRecount';
+//import '../Css/Recount.css';
+
 import {  Table,  TableBody,  TableCell,  TableCellHead,  TableHead,  TableRow,  TableRowHead,  AlertBar, InputField} from '@dhis2/ui'
 
 //Manages the inputs for recounts
@@ -70,6 +72,7 @@ export function RecountManager({ orgUnit, commodityData,user,earlierRecounts }) 
 
 
           
+<<<<<<< Updated upstream
           {invalidInput && (
             <AlertBar duration={2000} onHidden={alertNegativInp}>
             Invalid input
@@ -77,6 +80,22 @@ export function RecountManager({ orgUnit, commodityData,user,earlierRecounts }) 
           )}
           
         <Table>
+=======
+
+          {invalidInput ? (
+        <AlertBar  className="alert-bar-recount" duration={2000} onHidden={alertNegativInp}>
+          Invalid input
+        </AlertBar>
+      ) : (
+        updateSuccess && (
+          <AlertBar success className="alert-bar-recount" duration={2000} onHidden={hideSuccessMessage}>
+            Successfully updated
+          </AlertBar>
+        )
+      )}
+        <ul className="commodity-table">
+        <Table style={tableStyles}>
+>>>>>>> Stashed changes
           
             <TableHead>
                 <TableRowHead>
@@ -113,6 +132,7 @@ export function RecountManager({ orgUnit, commodityData,user,earlierRecounts }) 
     
             </TableBody>
         </Table>
+        </ul>
     
         <button className="update-button" onClick={confirm}>Update</button>
          

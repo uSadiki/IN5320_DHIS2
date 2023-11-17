@@ -5,8 +5,14 @@ import * as CommonUtils from '../CommonUtils';
 import {Button, InputField} from '@dhis2/ui';
 import calculateAverageConsumption from './HelperMethods/CalculateAverageConsumption';
 import CommoditiesTable from './ComponentsDashboard/CommoditiesTable'
+<<<<<<< Updated upstream
 import '../CSS/Dashboard.css';
 import StoreManager from '../images/StoreManager.jpeg';
+=======
+import '../Css/Shared.css';
+import '../Css/Dashboard.css';
+import StoreManager from '../Images/StoreManager.jpeg';
+>>>>>>> Stashed changes
 
  //Query to get commodity data for the periods need
  const dataQuery = {
