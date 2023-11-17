@@ -4,7 +4,7 @@ import { Navigation } from "./Navigation";
 import { Dashboard } from "./Dashboard/Dashboard";
 import { ManagementMain } from "./StockManagement/ManagementMain";
 import { CorrectData } from "./DataCorrection/CorrectData";
-import { NearByUnits } from "./NearByUnits/NearByUnits";
+import { NearbyUnits } from "./NearbyUnits/NearbyUnits";
 import { History }  from "./LogedData/History"; 
 import * as CommonUtils from './CommonUtils';
 import { RecountMain } from './Recount/RecountMain';  
@@ -77,7 +77,7 @@ function MyApp() {
     
                                               
 
-        {activePage === "NearbyUnits" &&  <NearByUnits />}
+        {activePage === "NearbyUnits" &&  <NearbyUnits />}
         {activePage === "History" &&  <History/>}
                                                     
         

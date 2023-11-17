@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDataQuery } from '@dhis2/app-runtime'
 import { CircularLoader } from '@dhis2/ui'
 import "../CSS/NearbyUnits.css"; 
-import FetchNearbyData from './NearByClinicHelper/FetchNearbyData';
+import FetchNearbyData from './NearbyClinicHelper/FetchNearbyData';
 import image1 from '../images/Geoma Jagor CHC.jpeg';
 import image2 from '../images/Upper Komende MCHP.jpeg';
 
@@ -23,7 +23,7 @@ const OrgUnitQuery = {
     }
 }
 
-export function NearByUnits() {
+export function NearbyUnits() {
     const [selectedOrgUnit, setSelectedOrgUnit] = useState(null);
     const [selectedOrgUnitName, setSelectedOrgUnitName] = useState(null);
 
