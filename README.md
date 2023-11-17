@@ -42,7 +42,7 @@ The DHIS2 API played a pivotal role in our project, serving as the gateway for f
 
 # Code Structure
 
-## Component Organization
+## Component Structure
 To enhance maintainability and readability, we structured our code into organized folders. Each major functionality, such as data management and the dashboard, has its dedicated folder. This approach helps in isolating concerns and simplifying debugging and collaboration.
 
 ## Logic Breakdown
