@@ -5,7 +5,7 @@ import { Dashboard } from "./Dashboard/Dashboard";
 import { ManagementMain } from "./StockManagement/ManagementMain";
 import { CorrectData } from "./DataCorrection/CorrectData";
 import { NearbyUnits } from "./NearbyUnits/NearbyUnits";
-import { History }  from "./LogedData/History"; 
+import { History }  from "./LoggedData/History"; 
 import * as CommonUtils from './CommonUtils';
 import { RecountMain } from './Recount/RecountMain';  
 

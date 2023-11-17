@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useMutation } from '../DataHandlingHelper/DataMutation'; 
-import DispenseStockOut from '../Notification/DispenseStockOut';
-import ConfirmationWindow from '../Notification/ConfirmationWindow';
-import BalanceInfo from '../Notification/BalanceInfo';
+import DispenseStockOut from '../ModalWindows/DispenseStockOut';
+import ConfirmationWindow from '../ModalWindows/ConfirmationWindow';
+import BalanceInfo from '../ModalWindows/BalanceInfo';
 import { UpdateConfirmLogic } from './UpdateConfirmLogic';
 import * as CommonUtils from '../CommonUtils';
 import { getData } from '../DataStoreUtils/DatastorePull';
@@ -56,22 +56,22 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
 
   const confirm = () => {
     let period =  CommonUtils.getDateAndTime();
-    UpdateConfirmLogic(commodityData, inputValues, recipientInput , dispensing, setStockOut, updateEndBalance, updateConsumption, updateAdministered, orgUnit, setConfirmationWindow, username, transactions, pushTransaction, period, recipients, pushRecipients, department);
+    UpdateConfirmLogic(commodityData, inputValues, recipientInput , dispensing, setStockOut, updateEndBalance, updateConsumption, updateAdministered, orgUnit, setConfirmationWindow, username, transactions, pushTransaction, period, recipients, pushRecipients, department,setActivePage);
     };
 
   //called when pressing update, checks for valid input and calls/shows the confirmation window if success
   function showConfirmationWindow(){
-    //TODO: make alert if not choosen department
+  
+
     if (dispensing && department === "Select department"){
       setMissingInfo(true);
       return;
     }
-
-    //TODO: make alert if not choosen recipient
     if (dispensing && recipientInput === ""){
       setMissingInfo(true);
       return;
     }
+
 
     let negativeInp = false
     let moredispense = false
@@ -80,20 +80,14 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
     commodityData.forEach((item) => {
        const dispenseInput = inputValues[item.id];
        
-       if (Number(dispenseInput) > item.endBalance){
-        moredispense = false;
-      } 
-      if (Number(dispenseInput) < 0){
+       
+      if (Number(dispenseInput) <= 0 && dispenseInput !== ""){
         negativeInp = true;
       }
      
     });
-    
     if (negativeInp === false &&  moredispense === false){
       setConfirmationWindow(true);
-    }
-    else if( moredispense){
-      setToLargeDispense(true);
     }
     else{
       setInvalidInp(true);
@@ -119,9 +113,14 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
   };
 
   //used for removing modular showing not enough stock
-  function stock(){
+  function sendToNearby(){
     setStockOut(false)
     setActivePage("NearbyUnits")
+  }
+
+  function close(){
+    setStockOut(false)
+   
   }
 
 
@@ -130,12 +129,6 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
     setInvalidInp(false);
     setMissingInfo(false);
   }
-
-
-  function alertLargeDispense(){
-    setToLargeDispense(false);
-  }
-
   
   const changeDepartment = (event) => {
     setDepartment(event.target.value);
@@ -211,7 +204,8 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
         stockOut={stockOut}
         commodityData={commodityData}
         inputValues={inputValues}
-        stock={stock}
+        close={close}
+        sendToNearby={sendToNearby}
       />
      )}
      
@@ -244,6 +238,7 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
           showTooltip={showTooltip}
           setShowTooltip={setShowTooltip}
           filteredCommodities={filteredCommodities}
+          
         />
 
       <RightContainer

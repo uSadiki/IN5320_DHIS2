@@ -22,7 +22,7 @@ export function DataBody({ commodityData,averageConsumption,handleInputChange,da
       
 
         // Determine if there's input in the row
-        const hasInput = inputValues[item.id] !== undefined && inputValues[item.id] !== '';
+        const hasInput = inputValues[item.id] !== undefined && inputValues[item.id] !== '' && inputValues[item.id] >0;
 
       //Shows commodity data
       return (

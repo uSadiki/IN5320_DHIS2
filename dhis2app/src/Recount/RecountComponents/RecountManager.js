@@ -93,7 +93,7 @@ export function RecountManager({ orgUnit, commodityData,user,earlierRecounts }) 
                 //Shows commodity data
                 return (
                     <TableRow key={item.id}>
-                    <TableCell>{item.displayName}</TableCell>
+                    <TableCell>{item.displayName.replace('Commodities - ', '')}</TableCell>
                     <TableCell>
                         {item.endBalance === null ? 'Needs Update' : item.endBalance}
                     </TableCell>
