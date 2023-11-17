@@ -71,7 +71,15 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
       setMissingInfo(true);
       return;
     }
+    console.log(inputValues)
+ 
 
+    const hasNonEmptyValue = Object.values(inputValues).some(value => value !== "");
+
+    if (Object.keys(inputValues).length === 0 || !hasNonEmptyValue) {
+        setInvalidInp(true);
+        return;
+    }
 
     let negativeInp = false
     let moredispense = false
