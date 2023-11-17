@@ -2,6 +2,7 @@
 
 import React from 'react';
 
+//Infomration about the different categories
 const Tooltip = () => {
   return (
     <div className="tooltip-container">

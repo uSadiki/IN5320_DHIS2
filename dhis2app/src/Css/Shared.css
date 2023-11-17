@@ -8,19 +8,19 @@
 }
 
 .update-button {
-  background-color: #4caf50; /* Green background color */
-  color: white; /* White text color */
-  padding: 10px 20px; /* Padding to make the button look nicer */
-  font-size: 16px; /* Adjust font size as needed */
-  border: none; /* Remove border */
-  border-radius: 4px; /* Add border radius for rounded corners */
-  cursor: pointer; /* Add pointer cursor on hover */
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px; 
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
 .update-button:hover {
-  background-color: #45a049; /* Darker green on hover */
+  background-color: #45a049;
 }
 
 .navPic{
@@ -93,4 +93,32 @@ button.jsx-441677069 {
   border: 1px solid rgb(160, 173, 186);
   background-color: rgb(249, 250, 251);
   margin-left : 5px;
+}
+
+
+.commodity-table {
+  list-style: none;
+  text-align: center;
+  max-height: 480px;
+  width: 100%;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px; 
+}
+
+
+.commodity-table::-webkit-scrollbar {
+  width: 15px;
+  border: 1px solid #000000;
+  border-radius: 8px;
+}
+
+.commodity-table::-webkit-scrollbar-thumb {
+  background-color: #3c7397;
+  border-radius: 8px;
+}
+
+body {
+  overflow: hidden;
 }

@@ -1,12 +1,11 @@
+// RightContainer.js
+
 import React from 'react';
 import {SegmentedControl } from '@dhis2/ui'
 import RecipientForm from './RecipientForm';
-import '../../CSS/ManagementMain.css';
-
+import '../../Css/ManagementMain.css';
 
 const RightContainer = ({
- 
-
     setDispensing,
           recipientInput,
           handleRecipientInputChange,
@@ -18,6 +17,8 @@ const RightContainer = ({
           dispensing,
           showConfirmationWindow
 }) => {
+
+
   return (
     <div id="right-container">
 

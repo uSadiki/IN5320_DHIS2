@@ -1,7 +1,7 @@
 
 .boxes-container {
   display: flex;
-  justify-content: space-between; /* or space-around for some space on the sides */
+  justify-content: space-between;
   margin: 10px;
 }
 
@@ -11,15 +11,13 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   width: 40%;
-  height: 250px; /* Set a fixed height in pixels */
+  height: 250px;
   box-shadow: 0 10px 5px rgba(0, 0, 0, 0.1);
-  margin: 10px; /* Add margin to create space between the boxes */
+  margin: 10px;
 }
 
 #leftbox {
-  background-color: white; /* Light blue */
-  
-  /* Set the display properties to handle the image */
+  background-color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,12 +25,12 @@
 }
 
 #middlebox {
-  background-color: white; /* Light yellow */
+  background-color: white;
 }
 
 #middlebox p {
-  font-size: 60px; /* Set the font size for the text */
-  text-align: center; /* Center the text */
+  font-size: 60px;
+  text-align: center;
 }
     
 h2 {
@@ -53,10 +51,10 @@ h2 {
   list-style: none;
 
   text-align: center;
-  max-height: 90px; /* Adjust the max-height based on your design */
+  max-height: 90px;
   overflow-y: auto;
-  border: 1px solid #ccc; /* Add a border to the container */
-  border-radius: 8px; /* Optional: Add border-radius for a nicer look */
+  border: 1px solid #ccc;
+  border-radius: 8px;
   padding: 10px; 
 }
 
@@ -70,15 +68,15 @@ h2 {
 }
 
 #rightbox {
-  background-color: white; /* Light red */
+  background-color: white;
   position: relative;
 }
 
 .box img {
-  max-width: 40%; /* Make the image responsive within the box */
-  max-height: 60%; /* Make the image responsive within the box */
-  display: block; /* Remove any extra space below the image */
-  margin: auto; /* Center the image horizontally */
+  max-width: 40%;
+  max-height: 60%;
+  display: block;
+  margin: auto;
 }
   
 

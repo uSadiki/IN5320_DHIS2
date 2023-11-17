@@ -1,8 +1,6 @@
 import React from 'react';
-import {  Modal, ModalTitle,ModalContent, ModalActions, ButtonStrip, Button, TableHead,DataTable,DataTableRow,DataTableColumnHeader,TableBody,DataTableCell} from '@dhis2/ui'
+import {  Modal, ModalTitle,ModalContent, ModalActions, Button, TableHead,DataTable,DataTableRow,DataTableColumnHeader,TableBody,DataTableCell} from '@dhis2/ui'
 import * as CommonUtils from '../../CommonUtils';
-
-
 
 //Display data in a modal for selected org unit
 function DisplayNearbyData({ data, orgUnitName, setSelectedOrgUnit }) {

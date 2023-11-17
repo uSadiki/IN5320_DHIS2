@@ -9,7 +9,7 @@ import {
   } from '@dhis2/ui'
   
 //This method will show a message to the user that some of the wanted dispenes are not possible because of not enough stock
-const DispenseStockOut = ({ stockOut, commodityData, inputValues, stock }) => {
+const DispenseStockOut = ({ stockOut, commodityData, inputValues, close,sendToNearby }) => {
   return (
     <>
       {stockOut && (
@@ -33,10 +33,10 @@ const DispenseStockOut = ({ stockOut, commodityData, inputValues, stock }) => {
           </ModalContent>
           <ModalActions>
             
-              <Button primary onClick={stock}>
+              <Button primary onClick={sendToNearby}>
                 Check clinics
               </Button>
-              <Button secondary onClick={stock}>
+              <Button secondary onClick={close}>
                 I understand
               </Button>
               

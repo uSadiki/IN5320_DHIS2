@@ -1,10 +1,10 @@
 import React from "react";
 import { Menu, MenuItem } from "@dhis2/ui";
-import Dashboard from "./images/dashboard.png"
-import Dispense from "./images/dispense.png"
-import Nearby from "./images/nearby.png"
-import History from "./images/history.png"
-import Recount from "./images/recount.png"
+import Dashboard from "./Images/dashboard.png"
+import Dispense from "./Images/dispense.png"
+import Nearby from "./Images/nearby.png"
+import History from "./Images/history.png"
+import Recount from "./Images/recount.png"
 
 
 
@@ -16,7 +16,6 @@ export function Navigation(props) {
     { label: "Nearby Units", page: "NearbyUnits", pic: Nearby },
     { label: "History", page: "History", pic: History },
     { label: "Stock Recount", page: "StockRecount", pic: Recount },
-    { label: "Stock Correction", page: "DataCorrection", pic: Recount}
   ];
 
   const handleClick = page => {
@@ -26,13 +25,12 @@ export function Navigation(props) {
   return (
     <Menu>
       {menuItems.map(item => (
-        <div className="menu" onClick={() => handleClick(item.page)}>
+        <div key={item.page} className="menu" onClick={() => handleClick(item.page)}>
             <MenuItem
-              key={item.page}
               label={item.label}
               active={props.activePage === item.page}
               icon = {<img src= {item.pic} alt={item.label} className="navPic"/>}
-            />
+              />
         </div>
       ))}
     </Menu>

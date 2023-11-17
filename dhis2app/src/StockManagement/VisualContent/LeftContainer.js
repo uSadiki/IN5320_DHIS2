@@ -1,12 +1,10 @@
 // LeftContainer.js
-
 import React from 'react';
 import { Table, TableBody, TableCellHead, TableHead, TableRowHead, AlertBar, SwitchField, InputField,SegmentedControl } from '@dhis2/ui'
 import {DataBody} from'./Databody'
 import Tooltip from './Tooltip'; // Adjust the import path based on your project structure
-import '../../CSS/ManagementMain.css';
-import Info from '../../images/info.png';
-
+import '../../Css/ManagementMain.css';
+import Info from '../../Images/info.png';
 
 const LeftContainer = ({
  
@@ -35,7 +33,9 @@ const LeftContainer = ({
             onChange={(value) => handleSearchChange(value)}
             className="input-field"
           />
-      
+
+    <ul className="commodity-table">
+
     <Table>
           
           <TableHead>
@@ -79,7 +79,7 @@ const LeftContainer = ({
           </TableBody>
 
     </Table>
-          
+    </ul>
     </div>
   );
 };

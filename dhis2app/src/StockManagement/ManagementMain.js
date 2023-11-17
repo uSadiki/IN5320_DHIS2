@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useMutation } from '../DataHandlingHelper/DataMutation'; 
-import DispenseStockOut from '../Notification/DispenseStockOut';
-import ConfirmationWindow from '../Notification/ConfirmationWindow';
-import BalanceInfo from '../Notification/BalanceInfo';
+import DispenseStockOut from '../ModalWindows/DispenseStockOut';
+import ConfirmationWindow from '../ModalWindows/ConfirmationWindow';
+import BalanceInfo from '../ModalWindows/BalanceInfo';
 import { UpdateConfirmLogic } from './UpdateConfirmLogic';
 import * as CommonUtils from '../CommonUtils';
 import { getData } from '../DataStoreUtils/DatastorePull';
 import {AlertBar} from '@dhis2/ui'
-import '../CSS/ManagementMain.css';
+import '../Css/ManagementMain.css';
 import LeftContainer from './VisualContent/LeftContainer'; // Adjust the import path based on your project structure
 import RightContainer from './VisualContent/RightContainer';
 
@@ -34,7 +34,8 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
   //switch between dispense and add
   const [dispensing, setDispensing] = useState(true);
 
-  const [department, setDepartment] = useState("Select department");
+  const [department, setDepartment] = useState("Select departmenst");
+
   const departments = ['Department 1' ,'Department 2', 'Department 3'];
 
   const [hasDepartment, setHasDepartment] = useState(false);
@@ -56,21 +57,29 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
 
   const confirm = () => {
     let period =  CommonUtils.getDateAndTime();
-    UpdateConfirmLogic(commodityData, inputValues, recipientInput , dispensing, setStockOut, updateEndBalance, updateConsumption, updateAdministered, orgUnit, setConfirmationWindow, username, transactions, pushTransaction, period, recipients, pushRecipients, department);
+    UpdateConfirmLogic(commodityData, inputValues, recipientInput , dispensing, setStockOut, updateEndBalance, updateConsumption, updateAdministered, orgUnit, setConfirmationWindow, username, transactions, pushTransaction, period, recipients, pushRecipients, department,setActivePage);
     };
 
   //called when pressing update, checks for valid input and calls/shows the confirmation window if success
   function showConfirmationWindow(){
-    //TODO: make alert if not choosen department
+  
+
     if (dispensing && department === "Select department"){
       setMissingInfo(true);
       return;
     }
-
-    //TODO: make alert if not choosen recipient
     if (dispensing && recipientInput === ""){
       setMissingInfo(true);
       return;
+    }
+    console.log(inputValues)
+ 
+
+    const hasNonEmptyValue = Object.values(inputValues).some(value => value !== "");
+
+    if (Object.keys(inputValues).length === 0 || !hasNonEmptyValue) {
+        setInvalidInp(true);
+        return;
     }
 
     let negativeInp = false
@@ -80,20 +89,14 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
     commodityData.forEach((item) => {
        const dispenseInput = inputValues[item.id];
        
-       if (Number(dispenseInput) > item.endBalance){
-        moredispense = false;
-      } 
-      if (Number(dispenseInput) < 0){
+       
+      if (Number(dispenseInput) <= 0 && dispenseInput !== ""){
         negativeInp = true;
       }
      
     });
-    
     if (negativeInp === false &&  moredispense === false){
       setConfirmationWindow(true);
-    }
-    else if( moredispense){
-      setToLargeDispense(true);
     }
     else{
       setInvalidInp(true);
@@ -119,24 +122,22 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
   };
 
   //used for removing modular showing not enough stock
-  function stock(){
+  function sendToNearby(){
     setStockOut(false)
     setActivePage("NearbyUnits")
   }
 
-
+  //Removes alert
+  function close(){
+    setStockOut(false)
+   
+  }
   //remove invalid inp alert
   function alertNegativInp(){
     setInvalidInp(false);
     setMissingInfo(false);
   }
-
-
-  function alertLargeDispense(){
-    setToLargeDispense(false);
-  }
-
-  
+  //Department change
   const changeDepartment = (event) => {
     setDepartment(event.target.value);
   };
@@ -147,7 +148,7 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
     updatedInputValues[item.id] = event.target.value;
     setinputValues(updatedInputValues);
 };
-
+  //Recipient change
   const handleRecipientInputChange = (event) => {
     const recipientName = event.target.value;
     setRecipientInput(recipientName);
@@ -155,13 +156,13 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
   };
 
   let recipientOptions = [];
-
   if (recipients) {
     recipientOptions = Object.keys(recipients).map((key) => (
       <option key={key} value={recipients[key].name} />
     ));
   }
 
+  //Find the department of existing recipient
   const setDepartmentForRecipient = (recipientName) => {
     setHasDepartment(false);
     let department = "Select department";
@@ -211,7 +212,8 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
         stockOut={stockOut}
         commodityData={commodityData}
         inputValues={inputValues}
-        stock={stock}
+        close={close}
+        sendToNearby={sendToNearby}
       />
      )}
      
@@ -244,6 +246,7 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
           showTooltip={showTooltip}
           setShowTooltip={setShowTooltip}
           filteredCommodities={filteredCommodities}
+          
         />
 
       <RightContainer

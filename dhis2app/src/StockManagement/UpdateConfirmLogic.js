@@ -3,10 +3,7 @@
 
 import { createTransaction, createRecipient } from "../DataStoreUtils/TransactionAndRecipientBody";
 
-export function UpdateConfirmLogic(commodityData, inputValues, dispensedToValues ,dispensing, setStockOut, updateEndBalance, updateConsumption, updateAdministered, orgUnit, setConfirmationWindow, username, transactions, pushTransaction, period, recipients, pushRecipients, department) {
-
-const currentDateTime = new Date();
-const formattedDateTime = currentDateTime.toLocaleString();
+export function UpdateConfirmLogic(commodityData, inputValues, dispensedToValues ,dispensing, setStockOut, updateEndBalance, updateConsumption, updateAdministered, orgUnit, setConfirmationWindow, username, transactions, pushTransaction, period, recipients, pushRecipients, department,setActivePage) {
 
     if (commodityData) {
         let empty = false;
@@ -83,9 +80,14 @@ const formattedDateTime = currentDateTime.toLocaleString();
         }
         
         
+        
         if (empty) {
             setStockOut(true);
         } 
+
     }
+
+    setActivePage("UpdateData");
+   
     setConfirmationWindow(false);
 }
