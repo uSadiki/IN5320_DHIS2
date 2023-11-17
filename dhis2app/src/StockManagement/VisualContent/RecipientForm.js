@@ -1,6 +1,7 @@
 import React from 'react';
 import '../../Css/ManagementMain.css';
 
+//Holds recipeint form data and options
 function RecipientForm({
   dispensing,
   recipientInput,

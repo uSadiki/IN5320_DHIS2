@@ -1,6 +1,7 @@
 import React from 'react';
 import {TableCell, TableRow} from '@dhis2/ui'
 
+//Body of the table, where the data is presented
 export function DataBody({ commodityData,averageConsumption,handleInputChange,daysUntilNextMonth,dispensing,showBalanceInfo,inputValues}) {
 
     return (

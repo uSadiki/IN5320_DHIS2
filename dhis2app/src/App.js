@@ -26,12 +26,8 @@ function MyApp() {
 
   return (
     
-    
      //Site content, depending on which is the active page, different data are being sent as props and data is shown
     <div className={classes.container}>
-
-
-      
       <div className={classes.left}>
         <Navigation activePage={activePage} activePageHandler={activePageHandler} />
       </div>
@@ -61,10 +57,6 @@ function MyApp() {
                                                    commodityData={commodityData} 
                                                    user = {name}
                                                     />}     
-
-        
-    
-                                              
 
         {activePage === "NearbyUnits" &&  <NearbyUnits />}
         {activePage === "History" &&  <History/>}

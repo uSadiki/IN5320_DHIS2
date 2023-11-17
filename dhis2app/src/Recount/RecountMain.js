@@ -6,8 +6,6 @@ import '../Css/Shared.css';
 
 //Main Recount starter
 export function RecountMain({ orgUnit, commodityData,user }) {
-
-
       return ( 
             <RecountManager
             orgUnit={orgUnit}

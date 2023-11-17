@@ -1,5 +1,5 @@
 import React from 'react';
-
+//Button component for pagination
 const ButtonComponent = ({ currentPage, setCurrentPage, data, itemsPerPage }) => (
   <div className="pagination-container">
     <button

@@ -127,18 +127,17 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
     setActivePage("NearbyUnits")
   }
 
+  //Removes alert
   function close(){
     setStockOut(false)
    
   }
-
-
   //remove invalid inp alert
   function alertNegativInp(){
     setInvalidInp(false);
     setMissingInfo(false);
   }
-  
+  //Department change
   const changeDepartment = (event) => {
     setDepartment(event.target.value);
   };
@@ -149,7 +148,7 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
     updatedInputValues[item.id] = event.target.value;
     setinputValues(updatedInputValues);
 };
-
+  //Recipient change
   const handleRecipientInputChange = (event) => {
     const recipientName = event.target.value;
     setRecipientInput(recipientName);
@@ -157,13 +156,13 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
   };
 
   let recipientOptions = [];
-
   if (recipients) {
     recipientOptions = Object.keys(recipients).map((key) => (
       <option key={key} value={recipients[key].name} />
     ));
   }
 
+  //Find the department of existing recipient
   const setDepartmentForRecipient = (recipientName) => {
     setHasDepartment(false);
     let department = "Select department";

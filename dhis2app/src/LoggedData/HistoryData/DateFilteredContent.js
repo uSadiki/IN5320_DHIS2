@@ -1,6 +1,7 @@
 import React from 'react';
 import {  TableRow, TableCell} from '@dhis2/ui';
   
+//Data holder for the date filter
 const DateFilteredContent = ({ filteredData, showTransactions }) => (
     filteredData.map(([id, item]) => (
         <React.Fragment key={id}>

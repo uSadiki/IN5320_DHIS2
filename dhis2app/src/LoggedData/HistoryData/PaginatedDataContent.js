@@ -1,6 +1,7 @@
 import React from 'react';
 import {  TableRow, TableCell } from '@dhis2/ui';
-  
+
+//Data holder for the pagination option
 const PaginatedDataContent = ({ paginatedData, showTransactions }) => (
     <>
                {paginatedData !== null && (
