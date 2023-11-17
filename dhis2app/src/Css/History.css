@@ -59,7 +59,7 @@
 }
 
 .pagination-button {
-  background-color: #4caf50; /* Green background color */
+  background-color: rgb(44, 102, 147); /* Green background color */
   border: none;
   color: white;
   padding: 10px 15px;

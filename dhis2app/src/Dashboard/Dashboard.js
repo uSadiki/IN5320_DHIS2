@@ -8,9 +8,7 @@ import CommoditiesTable from './ComponentsDashboard/CommoditiesTable'
 import '../Css/Dashboard.css';
 import StoreManager from '../images/StoreManager.jpeg';
 
-
-
- //Query to get commodity data
+ //Query to get commodity data for the periods need
  const dataQuery = {
     dataValues: {
         resource: "/dataValueSets",
@@ -21,7 +19,6 @@ import StoreManager from '../images/StoreManager.jpeg';
             dataSet: 'ULowA8V3ucd',
             fields: ['id'],
           }),
-      
     },
     dataElements: {
         resource: "/dataElements",
@@ -33,7 +30,7 @@ import StoreManager from '../images/StoreManager.jpeg';
 };
 
 
-export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,setActivePage,setAverageConsumption,name, averageConsumption }) {
+export function Dashboard({ orgUnit, setCommodityData, commodityData,setActivePage,setAverageConsumption,name, averageConsumption }) {
 
     const { loading, error, data } = useDataQuery(dataQuery, {
         variables: {
@@ -47,9 +44,7 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,se
         //Here we store data in an array that holds a dict, easier for access and will set state value for final commodity data
         if (data) {
             let array = [];
-
             const mergedData = CommonUtils.mergeData(data);
-            console.log(mergedData)
             setAverageConsumption(calculateAverageConsumption(data, "rQLFnNXXIL0", ["202308", "202309"]));
 
             mergedData.map(row => {
@@ -78,7 +73,6 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,se
         item.displayName.toLowerCase().startsWith(`commodities - ${searchInput.toLowerCase()}`)
     );
     
-
     const handleSearchChange = (event) => {
         setSearchInput(event.value);
     };
@@ -101,26 +95,26 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,se
         <div>
          <div className="boxes-container">
           <div className="box" id="leftbox">
-          {name && (
-        <h2>Welcome {name.split(' ')[0]}</h2>
-      )}
           
+            {name && ( <h2>Welcome {name.split(' ')[0]}</h2>)}
             <img src={StoreManager} alt="Store Manager" />
-            Have a nice day at work!
+             Have a nice day at work!
 
           </div>
 
           <div className="box" id="middlebox">
+
             <h2>Days until restock</h2>
-          
             <p >{daysUntilNextMonth}</p>
 
           </div>
 
           <div className="box" id="rightbox">
             <h2>Critical low stock on:</h2>
+
             <ul className="risk-list">
             {commodityData.map((item) => {
+
               let daysUntilNextMonth = CommonUtils.calculateDaysUntilNextMonth();
               let avg = Math.ceil(averageConsumption[item.displayName] / 30);
               let currentAvg = item.endBalance / daysUntilNextMonth;
@@ -133,7 +127,9 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,se
                 // Display items with red check
                 return (
                   <li key={item.id} className="risk-item">
-            <span className="risk-indicator">&#9888;</span> {item.displayName.replace('Commodities - ', '')}
+
+                  <span className="risk-indicator">&#9888;</span> {item.displayName.replace('Commodities - ', '')}
+                  
                   </li>
                 );
               }
@@ -144,14 +140,14 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,se
           </ul>
 
           <div className="button-container">
+
             <Button primary onClick={sendToNearbyClinic}>
               Check nearby units
             </Button>
+
           </div>
-
-
-      </div>
-    </div>
+         </div>
+       </div>
             
             <InputField
             type="text"
@@ -164,8 +160,6 @@ export function Analysis_dashboard({ orgUnit, setCommodityData, commodityData,se
             />
 
             <CommoditiesTable filteredCommodities={filteredCommodities} />
-
-
-        </div>
-    );
+     </div>
+   );
 }
