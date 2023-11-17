@@ -1,9 +1,7 @@
-// LeftContainer.js
-
 import React from 'react';
 import {SegmentedControl } from '@dhis2/ui'
 import RecipientForm from './RecipientForm';
-import '../../Css/dataMan.css';
+import '../../CSS/ManagementMain.css';
 
 
 const RightContainer = ({

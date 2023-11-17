@@ -7,8 +7,7 @@ import { UpdateConfirmLogic } from './UpdateConfirmLogic';
 import * as CommonUtils from '../CommonUtils';
 import { getData } from '../DataStoreUtils/DatastorePull';
 import {AlertBar} from '@dhis2/ui'
-import '../Css/CssTest.css';
-import '../Css/dataMan.css';
+import '../CSS/ManagementMain.css';
 import LeftContainer from './VisualContent/LeftContainer'; // Adjust the import path based on your project structure
 import RightContainer from './VisualContent/RightContainer';
 

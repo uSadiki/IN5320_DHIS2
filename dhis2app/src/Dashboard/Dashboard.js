@@ -5,7 +5,7 @@ import * as CommonUtils from '../CommonUtils';
 import {Button, InputField} from '@dhis2/ui';
 import calculateAverageConsumption from './HelperMethods/CalculateAverageConsumption';
 import CommoditiesTable from './ComponentsDashboard/CommoditiesTable'
-import '../Css/Dashboard.css';
+import '../CSS/Dashboard.css';
 import StoreManager from '../images/StoreManager.jpeg';
 
  //Query to get commodity data for the periods need

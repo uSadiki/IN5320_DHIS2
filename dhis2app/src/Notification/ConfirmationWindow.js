@@ -1,13 +1,12 @@
 import React from 'react';
 import {calculateDaysUntilNextMonth} from '../CommonUtils'
-import '../Css/main.css'
+import '../CSS/Shared.css';
 
   import { 
     Modal,
     ModalTitle,
     ModalContent,
     ModalActions,
-    ButtonStrip,
     Button
   } from '@dhis2/ui'
 
