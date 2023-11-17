@@ -1,4 +1,4 @@
-// LeftContainer.js
+// RightContainer.js
 
 import React from 'react';
 import {SegmentedControl } from '@dhis2/ui'

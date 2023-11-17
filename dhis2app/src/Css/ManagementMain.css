@@ -6,36 +6,34 @@
 
 .alert-bar {
   position: absolute;
-  width: 100%; /* Adjust as needed */
+  width: 100%;
   text-align: center;
   padding: 10px;
-  /* Add more styles as needed */
 }
 .alert-bar-recount {
-  position: fixed; /* or absolute depending on your preference */
+  position: fixed;
   bottom: 0;
   right: 0;
-  width: 100%; /* Adjust as needed */
+  width: 100%;
   text-align: center;
   padding: 10px;
-  /* Add more styles as needed */
 }
 
 .invalid-input {
-  background-color: #ff9999; /* Light red for invalid input */
-  color: #990000; /* Darker red text color */
+  background-color: #ff9999;
+  color: #990000;
 }
 
 .missing-info {
-  background-color: #ffcc00; /* Light yellow for missing info */
-  color: #996600; /* Darker yellow text color */
+  background-color: #ffcc00;
+  color: #996600;
 }  
 
 .info-icon {
   margin-left: 10px;
-  width: 20px; /* Adjust the width as needed */
-  height: 20px; /* Adjust the height as needed */
-  cursor: pointer; /* Add a pointer cursor to indicate it's clickable */
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
 }
 
 #container {
@@ -50,7 +48,7 @@
 }
 
 #left-container {
-  flex: 2; /* Initial width ratio for left container */
+  flex: 2;
 }
 
 #right-container {
@@ -105,17 +103,17 @@
   color: red;
 }
 
-/* Override zebra striping for highlighted rows */
+
 table.jsx-2430604489 .highlighted-row.zebraStriping {
   background-color:#d0e7e1; ;
 }
 
 .clickable-symbol {
   cursor: pointer;
-  color: #007bff; /* Blue color */
+  color: #007bff;
   text-decoration: underline;
-  font-size: 1.2em; /* Adjust the font size as needed */
-  margin-left: 5px; /* Add margin for spacing */
+  font-size: 1.2em;
+  margin-left: 5px;
 }
 
 .tooltip-container {
@@ -127,11 +125,11 @@ table.jsx-2430604489 .highlighted-row.zebraStriping {
   top: 100%;
   left: 0;
   z-index: 1;
-  background-color: #ffffff; /* White background */
+  background-color: #ffffff;
   border: 1px solid #ccc;
-  border-radius: 5px; /* Add border-radius for rounded corners */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
-  width: 300px; /* Set a fixed width or adjust as needed */
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 300px;
 }
 
 .tooltip-container:hover .tooltip-content {
@@ -153,7 +151,7 @@ table.jsx-2430604489 .highlighted-row.zebraStriping {
 }
 
 .stockout-category-info {
-  color: #777; /* Dim gray for additional information */
+  color: #777;
 }
 
 

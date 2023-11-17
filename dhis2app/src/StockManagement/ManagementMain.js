@@ -35,7 +35,7 @@ export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageCo
   const [dispensing, setDispensing] = useState(true);
 
   const [department, setDepartment] = useState("Select departmenst");
-  console.log("DEPART",department);
+
   const departments = ['Department 1' ,'Department 2', 'Department 3'];
 
   const [hasDepartment, setHasDepartment] = useState(false);

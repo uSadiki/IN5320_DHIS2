@@ -5,8 +5,6 @@ import { createTransaction, createRecipient } from "../DataStoreUtils/Transactio
 
 export function UpdateConfirmLogic(commodityData, inputValues, dispensedToValues ,dispensing, setStockOut, updateEndBalance, updateConsumption, updateAdministered, orgUnit, setConfirmationWindow, username, transactions, pushTransaction, period, recipients, pushRecipients, department,setActivePage) {
 
-const currentDateTime = new Date();
-
     if (commodityData) {
         let empty = false;
         let transactionArray = []
