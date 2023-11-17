@@ -158,8 +158,9 @@ export function Dashboard({ orgUnit, setCommodityData, commodityData,setActivePa
             onChange={(value) => handleSearchChange(value)}
             className="input-field"
             />
-
+            <ul className="commodity-table">
             <CommoditiesTable filteredCommodities={filteredCommodities} />
+            </ul>
      </div>
    );
 }

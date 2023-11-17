@@ -7,8 +7,6 @@
   box-sizing: border-box;
 }
 
-
-
 .update-button {
   background-color: #4caf50; /* Green background color */
   color: white; /* White text color */
@@ -95,4 +93,32 @@ button.jsx-441677069 {
   border: 1px solid rgb(160, 173, 186);
   background-color: rgb(249, 250, 251);
   margin-left : 5px;
+}
+
+
+.commodity-table {
+  list-style: none;
+  text-align: center;
+  max-height: 480px;
+  width: 100%;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px; 
+}
+
+
+.commodity-table::-webkit-scrollbar {
+  width: 15px;
+  border: 1px solid #000000;
+  border-radius: 8px;
+}
+
+.commodity-table::-webkit-scrollbar-thumb {
+  background-color: #3c7397;
+  border-radius: 8px;
+}
+
+body {
+  overflow: hidden;
 }

@@ -96,7 +96,7 @@ export function RecountManager({ orgUnit, commodityData,user,earlierRecounts }) 
           </AlertBar>
         )
       )}
-          
+        <ul className="commodity-table">
         <Table style={tableStyles} >
           
             <TableHead>
@@ -136,7 +136,7 @@ export function RecountManager({ orgUnit, commodityData,user,earlierRecounts }) 
     
             </TableBody>
         </Table>
-    
+        </ul>
         <button className="update-button" onClick={confirm}>Update</button>
          
         </div>

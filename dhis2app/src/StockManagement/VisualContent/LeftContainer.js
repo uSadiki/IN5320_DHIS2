@@ -33,7 +33,9 @@ const LeftContainer = ({
             onChange={(value) => handleSearchChange(value)}
             className="input-field"
           />
-      
+
+    <ul className="commodity-table">
+
     <Table>
           
           <TableHead>
@@ -77,7 +79,7 @@ const LeftContainer = ({
           </TableBody>
 
     </Table>
-          
+    </ul>
     </div>
   );
 };
