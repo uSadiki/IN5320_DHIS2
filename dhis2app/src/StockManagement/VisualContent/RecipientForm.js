@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../CSS/ManagementMain.css';
+import '../../Css/ManagementMain.css';
 
 function RecipientForm({
   dispensing,

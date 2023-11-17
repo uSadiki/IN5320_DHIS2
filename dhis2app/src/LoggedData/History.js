@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { getData } from '../DataStoreUtils/DatastorePull';
-import '../CSS/History.css'
+import '../Css/History.css'
 import { CircularLoader, 
   Table, 
   TableHead, 

@@ -1,10 +1,10 @@
 import React from "react";
 import { Menu, MenuItem } from "@dhis2/ui";
-import Dashboard from "./images/dashboard.png"
-import Dispense from "./images/dispense.png"
-import Nearby from "./images/nearby.png"
-import History from "./images/history.png"
-import Recount from "./images/recount.png"
+import Dashboard from "./Images/dashboard.png"
+import Dispense from "./Images/dispense.png"
+import Nearby from "./Images/nearby.png"
+import History from "./Images/history.png"
+import Recount from "./Images/recount.png"
 
 
 

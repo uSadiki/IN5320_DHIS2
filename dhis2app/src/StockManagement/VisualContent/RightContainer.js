@@ -3,7 +3,7 @@
 import React from 'react';
 import {SegmentedControl } from '@dhis2/ui'
 import RecipientForm from './RecipientForm';
-import '../../CSS/ManagementMain.css';
+import '../../Css/ManagementMain.css';
 
 const RightContainer = ({
     setDispensing,

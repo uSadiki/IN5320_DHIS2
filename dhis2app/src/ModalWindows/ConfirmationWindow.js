@@ -1,6 +1,6 @@
 import React from 'react';
 import {calculateDaysUntilNextMonth} from '../CommonUtils'
-import '../CSS/Shared.css';
+import '../Css/Shared.css';
 
   import { 
     Modal,

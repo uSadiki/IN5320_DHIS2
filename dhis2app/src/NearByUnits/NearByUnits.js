@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useDataQuery } from '@dhis2/app-runtime'
 import { CircularLoader } from '@dhis2/ui'
-import "../CSS/NearbyUnits.css"; 
-import FetchNearbyData from './NearbyClinicHelper/FetchNearbyData';
-import image1 from '../images/Geoma Jagor CHC.jpeg';
-import image2 from '../images/Upper Komende MCHP.jpeg';
+import "../Css/NearByUnits.css"; 
+import FetchNearbyData from './NearByClinicHelper/FetchNearbyData';
+import image1 from '../Images/Geoma Jagor CHC.jpeg';
+import image2 from '../Images/Upper Komende MCHP.jpeg';
 
 //Store images
 const imageMap = {
