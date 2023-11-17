@@ -10,7 +10,6 @@ const RightContainer = ({
           recipientInput,
           handleRecipientInputChange,
           recipientOptions,
-          department,
           changeDepartment,
           departments,
           hasDepartment,
