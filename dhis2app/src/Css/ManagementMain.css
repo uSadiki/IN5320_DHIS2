@@ -155,8 +155,34 @@ table.jsx-2430604489 .highlighted-row.zebraStriping {
 }
 
 
+#container {
+  display: flex;
+  justify-content: space-between;
+}
 
+#container::after {
+  content: '';
+  display: table;
+  clear: both;
+}
 
+.left-container {
+  float: left;
+  width: 20%; /* Adjust the initial width as needed */
+}
 
+.right-container {
+  float: right;
+  width: 20%; /* Adjust the initial width as needed */
+}
 
-  
+@media (max-width: 1260px) {
+  #container {
+    flex-direction: column;
+  }
+
+  .left-container,
+  .right-container {
+    width: 100%;
+  }
+}

@@ -8,9 +8,8 @@ import * as CommonUtils from '../CommonUtils';
 import { getData } from '../DataStoreUtils/DatastorePull';
 import {AlertBar} from '@dhis2/ui'
 import '../Css/ManagementMain.css';
-import LeftContainer from './VisualContent/LeftContainer'; // Adjust the import path based on your project structure
+import LeftContainer from './VisualContent/LeftContainer'; 
 import RightContainer from './VisualContent/RightContainer';
-
 
 //TODO: Find a name for representing dispense and add to stock
 export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageConsumption,username}) {
