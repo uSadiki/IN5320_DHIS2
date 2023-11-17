@@ -11,7 +11,6 @@ import '../Css/ManagementMain.css';
 import LeftContainer from './VisualContent/LeftContainer'; 
 import RightContainer from './VisualContent/RightContainer';
 
-//TODO: Find a name for representing dispense and add to stock
 export function ManagementMain({ orgUnit, commodityData,setActivePage ,averageConsumption,username}) {
   //    !!!    STATE declaration    !!!
   const { updateEndBalance, updateConsumption,updateAdministered, pushTransaction, pushRecipients } = useMutation();
