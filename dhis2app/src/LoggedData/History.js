@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { getData } from '../DataStoreUtils/DatastorePull';
 import '../Css/History.css'
+import DateFilteredContent from './HistoryData/DateFilteredContent';
+import PaginatedDataContent from './HistoryData/PaginatedDataContent';
+import ButtonComponent from './ButtonComponent';
 import { CircularLoader, 
   Table, 
   TableHead, 
   TableRowHead, 
   TableCellHead, 
   TableBody, 
-  TableRow, 
-  TableCell, 
   SegmentedControl} from '@dhis2/ui';
 
 //Function to show transaction history and recount history
@@ -105,112 +106,27 @@ export function History() {
           </TableHead>
           <TableBody>
             
-           {dateFilter !== "" ? (
-                // Render content when dateFilter has a value
-                filteredData.map(([id, item]) => (
-                  <React.Fragment key={id}>
-                    {item && (
-                      <>
-                        {showTransactions ? (
-                          item.Commodities?.map((commodity, index) => (
-                            <TableRow key={`${id}-${index}`}>
-                              {index === 0 ? (
-                                <TableCell rowSpan={`${item.Commodities.length}`}>{item.date.split(",")[0]}</TableCell>
-                              ) : null}
-                              <TableCell>{commodity.commodity.substring(13)}</TableCell>
-                              <TableCell>{commodity.value}</TableCell>
-                              <TableCell>{item.dispensedBy}</TableCell>
-                              <TableCell>{item.dispensedTo}</TableCell>
-                            </TableRow>
-                          ))
-                        ) : (
-                          <>
-                            {item.Commodities &&
-                              Object.entries(item.Commodities).map(([commodityName, commodity], index) => (
-                                <TableRow key={`${id}-${commodityName}`}>
-                                  {index === 0 ? (
-                                    <TableCell rowSpan={String(Object.entries(item.Commodities).length)}>{item.Date.split(",")[0]}</TableCell>
-                                  ) : null}
-                                  <TableCell>{commodityName}</TableCell>
-                                  <TableCell>{item.ChangedBy}</TableCell>
-                                  <TableCell>{commodity.fromValue}</TableCell>
-                                  <TableCell>{commodity.toValue}</TableCell>
-                                </TableRow>
-                              ))}
-                          </>
-                        )}
-                      </>
-                    )}
-                  </React.Fragment>
-                ))
+           {dateFilter !== "" ? (      
+                <DateFilteredContent filteredData={filteredData} showTransactions={showTransactions} />
               ) : (
-                <>
-               {paginatedData !== null && (
-                <>
-                  {paginatedData.map(([transactionKey, transaction], index) => (
-                    <React.Fragment key={transactionKey}>
-                      {transaction && (
-                        <>
-                          {showTransactions ? (
-                            transaction.Commodities?.map((commodity, commodityIndex) => (
-                              <TableRow key={`${transactionKey}-${commodityIndex}`}>
-                                {commodityIndex === 0 ? (
-                                  <TableCell rowSpan={`${transaction.Commodities.length}`}>{transaction.date.split(",")[0]}</TableCell>
-                                ) : null}
-                                <TableCell>{commodity.commodity.substring(13)}</TableCell>
-                                <TableCell>{commodity.value}</TableCell>
-                                <TableCell>{transaction.dispensedBy}</TableCell>
-                                <TableCell>{transaction.dispensedTo}</TableCell>
-                              </TableRow>
-                            ))
-                          ) : (
-                            <>
-                              {transaction.Commodities &&
-                                Object.entries(transaction.Commodities).map(([commodityName, commodity], commodityIndex) => (
-                                  <TableRow key={`${transactionKey}-${commodityName}`}>
-                                    {commodityIndex === 0 ? (
-                                      <TableCell rowSpan={String(Object.entries(transaction.Commodities).length)}>{transaction.Date.split(",")[0]}</TableCell>
-                                    ) : null}
-                                    <TableCell>{commodityName}</TableCell>
-                                    <TableCell>{transaction.ChangedBy}</TableCell>
-                                    <TableCell>{commodity.fromValue}</TableCell>
-                                    <TableCell>{commodity.toValue}</TableCell>
-                                  </TableRow>
-                                ))}
-                            </>
-                          )}
-                        </>
-                      )}
-                    </React.Fragment>
-                  ))}
-                </>
+                <PaginatedDataContent paginatedData={paginatedData} showTransactions={showTransactions} />
               )}
-              </>
-              )}
+
           </TableBody>
         </Table>
 
         <>  
-        
+
         {paginatedData !== null && dateFilter === "" && (
-          <div className="pagination-container">
-            <button
-              className="pagination-button"
-              onClick={() => setCurrentPage(prevPage => Math.max(prevPage - 1, 1))}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
-            <span className="pagination-info">Page {currentPage} of {Math.ceil(Object.entries(data).length / itemsPerPage)}</span>
-            <button
-              className="pagination-button"
-              onClick={() => setCurrentPage(prevPage => Math.min(prevPage + 1, Math.ceil(Object.entries(data).length / itemsPerPage)))}
-              disabled={currentPage === Math.ceil(Object.entries(data).length / itemsPerPage)}
-            >
-              Next
-            </button>
-          </div>
-)}
+            <ButtonComponent
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              data={data}
+              itemsPerPage={itemsPerPage}
+            />
+        )}
+
+  
         </>
       </div>
   );

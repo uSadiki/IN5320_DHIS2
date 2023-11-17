@@ -16,7 +16,6 @@ export function Navigation(props) {
     { label: "Nearby Units", page: "NearbyUnits", pic: Nearby },
     { label: "History", page: "History", pic: History },
     { label: "Stock Recount", page: "StockRecount", pic: Recount },
-    { label: "Stock Correction", page: "DataCorrection", pic: Recount}
   ];
 
   const handleClick = page => {

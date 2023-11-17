@@ -3,7 +3,6 @@ import classes from "./App.module.css";
 import { Navigation } from "./Navigation";
 import { Dashboard } from "./Dashboard/Dashboard";
 import { ManagementMain } from "./StockManagement/ManagementMain";
-import { CorrectData } from "./DataCorrection/CorrectData";
 import { NearbyUnits } from "./NearByUnits/NearByUnits";
 import { History }  from "./LoggedData/History"; 
 import * as CommonUtils from './CommonUtils';
@@ -15,10 +14,7 @@ function MyApp() {
   //State, hold current page, orgUnit and the data
   const [activePage, setActivePage] = useState("Dashboard");
   const [activeOrgUnit, setActiveOrgUnit] = useState("FNnj3jKGS7i");
-  const [activeOrgUnitName, setActiveOrgUnitName] = useState("Bandajuma Clinic CHC");
   const [commodityData, setCommodityData] = useState([]);
-  const [activeOrgUnitParent, setActiveOrgUnitParent] = useState("NqWaKXcg01b");
-  const [activeOrgUnitNameParent, setActiveOrgUnitNameParent] = useState("Sowa");
   const [averageConsumption, setAverageConsumption] = useState();
 
   //Set method for active page
@@ -50,13 +46,6 @@ function MyApp() {
                                            averageConsumption={averageConsumption}
                                            username={name}/>}
      
-       {activePage === "DataCorrection" && <CorrectData 
-                                                   orgUnit={activeOrgUnit} 
-                                                   commodityData={commodityData} 
-                                                   setActivePage={setActivePage}
-                                                  
-                                                  />}
-    
        {activePage === "Dashboard" &&  <Dashboard 
                                                         orgUnit={activeOrgUnit} 
                                                         setCommodityData={setCommodityData}
