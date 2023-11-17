@@ -10,12 +10,15 @@ const RightContainer = ({
           recipientInput,
           handleRecipientInputChange,
           recipientOptions,
+          department,
           changeDepartment,
           departments,
           hasDepartment,
           dispensing,
           showConfirmationWindow
 }) => {
+
+
   return (
     <div id="right-container">
 
