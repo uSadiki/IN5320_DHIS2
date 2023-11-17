@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, TableBody, TableCell, TableCellHead, TableHead, TableRow, TableRowHead, InputField} from '@dhis2/ui';
+import { Table, TableBody, TableCell, TableCellHead, TableHead, TableRow, TableRowHead} from '@dhis2/ui';
 
 const CommoditiesTable = ({ filteredCommodities }) => {
   return (
@@ -14,7 +14,6 @@ const CommoditiesTable = ({ filteredCommodities }) => {
           <TableCellHead>ID</TableCellHead>
         </TableRowHead>
       </TableHead>
-
       <TableBody>
         {filteredCommodities.map((item) => (
           <TableRow key={item.id}>

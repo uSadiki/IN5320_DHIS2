@@ -5,7 +5,6 @@ import React from 'react';
     ModalTitle,
     ModalContent,
     ModalActions,
-    ButtonStrip,
     Button
   } from '@dhis2/ui'
 

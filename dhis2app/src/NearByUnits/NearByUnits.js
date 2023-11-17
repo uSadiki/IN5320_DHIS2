@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
 import { useDataQuery } from '@dhis2/app-runtime'
 import { CircularLoader } from '@dhis2/ui'
-import "../Css/nearbyUnits.css"; 
-import "../Css/start.css"; 
-import FetchNearbyData from './NearByClinicHelper/FetchNearbyData';
-
+import "../CSS/NearbyUnits.css"; 
+import FetchNearbyData from './NearbyClinicHelper/FetchNearbyData';
 import image1 from '../images/Geoma Jagor CHC.jpeg';
 import image2 from '../images/Upper Komende MCHP.jpeg';
 
-
+//Store images
 const imageMap = {
     'Geoma Jagor CHC': image1,
     'Upper Komende MCHP': image2,
   };
 
-
+//Org unit query for parent
 const OrgUnitQuery = {
     orgUnits: {
         resource: "/organisationUnits",
@@ -25,9 +23,7 @@ const OrgUnitQuery = {
     }
 }
 
-export function NearByUnits() {
-
-
+export function NearbyUnits() {
     const [selectedOrgUnit, setSelectedOrgUnit] = useState(null);
     const [selectedOrgUnitName, setSelectedOrgUnitName] = useState(null);
 
@@ -41,8 +37,8 @@ export function NearByUnits() {
     if (error) return <span>ERROR: {error.message}</span>
     
     if (data) {
-        
         const organizationUnits = data.orgUnits.organisationUnits;
+        
         //Filter away our orgunit
         const filteredOrganizationUnits = organizationUnits.filter(({ id }) => id !== 'FNnj3jKGS7i');
 
@@ -66,10 +62,10 @@ export function NearByUnits() {
                         </div>
                     ))}
 
-        {selectedOrgUnit && <FetchNearbyData orgUnit={selectedOrgUnit}
-                 orgUnitName={selectedOrgUnitName} 
-                 setSelectedOrgUnit={setSelectedOrgUnit}
-                />}
+                    {selectedOrgUnit && <FetchNearbyData orgUnit={selectedOrgUnit}
+                            orgUnitName={selectedOrgUnitName} 
+                            setSelectedOrgUnit={setSelectedOrgUnit}
+                            />}
 
                 </div>
            

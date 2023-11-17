@@ -1,0 +1,155 @@
+.page-title {
+  color: #333;
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+.alert-bar {
+  position: absolute;
+  width: 100%; /* Adjust as needed */
+  text-align: center;
+  padding: 10px;
+  /* Add more styles as needed */
+}
+
+.invalid-input {
+  background-color: #ff9999; /* Light red for invalid input */
+  color: #990000; /* Darker red text color */
+}
+
+.missing-info {
+  background-color: #ffcc00; /* Light yellow for missing info */
+  color: #996600; /* Darker yellow text color */
+}  
+
+.info-icon {
+  margin-left: 10px;
+  width: 20px; /* Adjust the width as needed */
+  height: 20px; /* Adjust the height as needed */
+  cursor: pointer; /* Add a pointer cursor to indicate it's clickable */
+}
+
+#container {
+  display: flex;
+  height: 100%;
+}
+
+#left-container, #right-container {
+  overflow: auto;
+  
+  box-sizing: border-box;
+}
+
+#left-container {
+  flex: 2; /* Initial width ratio for left container */
+}
+
+#right-container {
+  flex: 1;
+}
+
+#sub-box {
+  padding: 20px;
+  background-color: #f7f7f7;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.switch-field-container {
+  display: flex;
+  align-items: center;
+}
+
+.switch-field-container label {
+  margin-right: 10px;
+}
+
+.recipientLabel{
+  font-weight: 500;
+}
+
+.recipientInput{
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.input-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.balance-status-span {
+  cursor: pointer;
+}
+
+.balance-status-span.orange {
+  color: orange;
+}
+
+.balance-status-span.green {
+  color: green;
+}
+
+.balance-status-span.red {
+  color: red;
+}
+
+/* Override zebra striping for highlighted rows */
+table.jsx-2430604489 .highlighted-row.zebraStriping {
+  background-color:#d0e7e1; ;
+}
+
+.clickable-symbol {
+  cursor: pointer;
+  color: #007bff; /* Blue color */
+  text-decoration: underline;
+  font-size: 1.2em; /* Adjust the font size as needed */
+  margin-left: 5px; /* Add margin for spacing */
+}
+
+.tooltip-container {
+    position: absolute;
+    display: inline-block;
+  }
+
+.tooltip-container .tooltip-content {
+  top: 100%;
+  left: 0;
+  z-index: 1;
+  background-color: #ffffff; /* White background */
+  border: 1px solid #ccc;
+  border-radius: 5px; /* Add border-radius for rounded corners */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+  width: 300px; /* Set a fixed width or adjust as needed */
+}
+
+.tooltip-container:hover .tooltip-content {
+  display: block;
+}
+
+.stockout-container {
+  padding: 10px;
+}
+
+
+.stockout-category {
+  margin-bottom: 12px;
+}
+
+.stockout-category strong {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.stockout-category-info {
+  color: #777; /* Dim gray for additional information */
+}
+
+
+
+
+
+
+  

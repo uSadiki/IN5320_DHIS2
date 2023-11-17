@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import classes from "./App.module.css";
 import { Navigation } from "./Navigation";
-import { Analysis_dashboard } from "./Dashboard/Analysis_dashboard";
+import { Dashboard } from "./Dashboard/Dashboard";
 import { ManagementMain } from "./StockManagement/ManagementMain";
 import { CorrectData } from "./DataCorrection/CorrectData";
-import { NearByUnits } from "./NearByUnits/NearByUnits";
+import { NearbyUnits } from "./NearbyUnits/NearbyUnits";
 import { History }  from "./LogedData/History"; 
 import * as CommonUtils from './CommonUtils';
 import { RecountMain } from './Recount/RecountMain';  
@@ -57,7 +57,7 @@ function MyApp() {
                                                   
                                                   />}
     
-       {activePage === "Dashboard" &&  <Analysis_dashboard 
+       {activePage === "Dashboard" &&  <Dashboard 
                                                         orgUnit={activeOrgUnit} 
                                                         setCommodityData={setCommodityData}
                                                         commodityData={commodityData} 
@@ -77,7 +77,7 @@ function MyApp() {
     
                                               
 
-        {activePage === "NearbyUnits" &&  <NearByUnits />}
+        {activePage === "NearbyUnits" &&  <NearbyUnits />}
         {activePage === "History" &&  <History/>}
                                                     
         

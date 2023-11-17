@@ -1,12 +1,12 @@
 import React from 'react';
 import {calculateDaysUntilNextMonth} from '../CommonUtils'
+import '../CSS/Shared.css';
 
   import { 
     Modal,
     ModalTitle,
     ModalContent,
     ModalActions,
-    ButtonStrip,
     Button
   } from '@dhis2/ui'
 
@@ -62,9 +62,10 @@ const ConfirmationWindow = ({ dispensing, commodityData, inputValues, decline, c
       </ModalContent>
       <ModalActions>
         
-          <Button secondary onClick={decline}>
-            Decline
+          <Button destructive onClick={decline}>
+            Cancel
           </Button>
+          
           <Button primary onClick={confirm}>
             Confirm
           </Button>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { getData } from '../DataStoreUtils/DatastorePull';
 import { RecountManager } from './RecountComponents/RecountManager';
-import '../Css/main.css';
+import '../CSS/Shared.css';
 
 
 //Main Recount starter

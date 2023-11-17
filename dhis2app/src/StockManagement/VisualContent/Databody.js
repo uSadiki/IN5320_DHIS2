@@ -1,6 +1,5 @@
 import React from 'react';
 import {TableCell, TableRow} from '@dhis2/ui'
-import '../../Css/CssTest.css';
 
 export function DataBody({ commodityData,averageConsumption,handleInputChange,daysUntilNextMonth,dispensing,showBalanceInfo,inputValues}) {
 
