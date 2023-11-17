@@ -1,36 +1,73 @@
-  /* Add more styles as needed */
-  .update-button {
-    background-color: #4caf50; /* Green background color */
-    color: white; /* White text color */
-    padding: 10px 20px; /* Padding to make the button look nicer */
-    font-size: 16px; /* Adjust font size as needed */
-    border: none; /* Remove border */
-    border-radius: 4px; /* Add border radius for rounded corners */
-    cursor: pointer; /* Add pointer cursor on hover */
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
-  
-  .update-button:hover {
-    background-color: #45a049; /* Darker green on hover */
-  }
-
-
-/* Input field style */
 .input-field {
-    width: 100%;
-    padding: 20px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-sizing: border-box;
-  }
-  
-  .input-field input {
-    border-radius: 10px; 
-  }
+  width: 100%;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.update-button {
+  background-color: #4caf50; /* Green background color */
+  color: white; /* White text color */
+  padding: 10px 20px; /* Padding to make the button look nicer */
+  font-size: 16px; /* Adjust font size as needed */
+  border: none; /* Remove border */
+  border-radius: 4px; /* Add border radius for rounded corners */
+  cursor: pointer; /* Add pointer cursor on hover */
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.update-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
 
 .navPic{
   width: 25px;
   height: 25px;
+}
+
+/* The following classes override the default DHIS2 styling */
+.segmented-control.jsx-2069710253 {
+  margin-bottom: 10px;
+  position: relative;
+  width: 400px;
+  height: 50px;
+}
+.segment.selected.jsx-2069710253 {
+  cursor: default;
+  font-weight: 600;
+  border: 1px solid rgb(23, 65, 98);
+  background: rgb(44, 102, 147);
+  color: white;
+}
+
+.segment.selected.jsx-2069710253:focus{
+  background: rgb(44, 102, 147);
+}
+
+.segment.jsx-2069710253 {
+  all: unset;
+  box-sizing: border-box;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+  width: 50%;
+  color: rgb(108, 119, 135);
+  border-width: 1px 0px 1px 1px;
+  border-style: solid;
+  border-color: rgb(213, 221, 229);
+  border-image: initial;
+  background: rgb(251, 252, 253);
+  padding: 8px 16px;
+  height: 40px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
