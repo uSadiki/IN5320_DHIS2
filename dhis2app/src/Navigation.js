@@ -26,13 +26,12 @@ export function Navigation(props) {
   return (
     <Menu>
       {menuItems.map(item => (
-        <div className="menu" onClick={() => handleClick(item.page)}>
+        <div key={item.page} className="menu" onClick={() => handleClick(item.page)}>
             <MenuItem
-              key={item.page}
               label={item.label}
               active={props.activePage === item.page}
               icon = {<img src= {item.pic} alt={item.label} className="navPic"/>}
-            />
+              />
         </div>
       ))}
     </Menu>
