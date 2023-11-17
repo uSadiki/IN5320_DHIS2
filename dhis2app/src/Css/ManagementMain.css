@@ -11,6 +11,15 @@
   padding: 10px;
   /* Add more styles as needed */
 }
+.alert-bar-recount {
+  position: fixed; /* or absolute depending on your preference */
+  bottom: 0;
+  right: 0;
+  width: 100%; /* Adjust as needed */
+  text-align: center;
+  padding: 10px;
+  /* Add more styles as needed */
+}
 
 .invalid-input {
   background-color: #ff9999; /* Light red for invalid input */

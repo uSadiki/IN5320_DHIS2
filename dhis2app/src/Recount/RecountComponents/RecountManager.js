@@ -19,7 +19,7 @@ export function RecountManager({ orgUnit, commodityData,user,earlierRecounts }) 
     setInvalidInput(false);
   }
 
- 
+  
   //Handling onchange data for inputs
   const handleInputChange = (event, id) => {
     const updatedInputValues = { ...inputValues };
@@ -44,14 +44,28 @@ export function RecountManager({ orgUnit, commodityData,user,earlierRecounts }) 
     const confirm = () => {
         //Check for negative inputs
         for (const value of Object.values(inputValues)) {
-          if (parseFloat(value) < 0) {
+          if (Object.keys(inputValues).length === 0 || Object.values(inputValues).every(value => !value || parseFloat(value) <= 0)) {
             setInvalidInput(true);
             return; 
           }
         }
+       
         setInvalidInput(false); 
         UpdateRecount(commodityData, inputValues , updateEndBalance, orgUnit,pushRecount,user,earlierRecounts);
+        setUpdateSuccess(true);
       };
+
+      const [updateSuccess, setUpdateSuccess] = useState(false);
+      const hideSuccessMessage = () => {
+        setUpdateSuccess(false);
+      };
+
+
+      const tableStyles = {
+        height: '20%', // Adjust the width as needed
+        // Add other styles like borderCollapse, margin, etc.
+      };
+
       return (
 
    
@@ -70,13 +84,20 @@ export function RecountManager({ orgUnit, commodityData,user,earlierRecounts }) 
 
 
           
-          {invalidInput && (
-            <AlertBar duration={2000} onHidden={alertNegativInp}>
-            Invalid input
-            </AlertBar>
-          )}
+
+          {invalidInput ? (
+        <AlertBar  className="alert-bar-recount" duration={2000} onHidden={alertNegativInp}>
+          Invalid input
+        </AlertBar>
+      ) : (
+        updateSuccess && (
+          <AlertBar success className="alert-bar-recount" duration={2000} onHidden={hideSuccessMessage}>
+            Successfully updated
+          </AlertBar>
+        )
+      )}
           
-        <Table>
+        <Table style={tableStyles} >
           
             <TableHead>
                 <TableRowHead>
@@ -89,11 +110,13 @@ export function RecountManager({ orgUnit, commodityData,user,earlierRecounts }) 
             <TableBody>
               
                 {filteredCommodities.map((item) => {
+                const hasInput = inputValues[item.id] !== undefined && inputValues[item.id] !== '' && inputValues[item.id] >0;
+
                
                 //Shows commodity data
                 return (
-                    <TableRow key={item.id}>
-                    <TableCell>{item.displayName.replace('Commodities - ', '')}</TableCell>
+                  <TableRow key={item.id} className={`zebraStriping ${hasInput ? 'highlighted-row' : ''}`}>
+                  <TableCell>{item.displayName.replace('Commodities - ', '')}</TableCell>
                     <TableCell>
                         {item.endBalance === null ? 'Needs Update' : item.endBalance}
                     </TableCell>
