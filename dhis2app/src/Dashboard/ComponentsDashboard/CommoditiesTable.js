@@ -14,7 +14,6 @@ const CommoditiesTable = ({ filteredCommodities }) => {
           <TableCellHead>ID</TableCellHead>
         </TableRowHead>
       </TableHead>
-
       <TableBody>
         {filteredCommodities.map((item) => (
           <TableRow key={item.id}>

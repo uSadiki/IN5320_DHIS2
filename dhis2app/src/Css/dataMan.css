@@ -35,25 +35,30 @@
   height: 40px;
 }
 
+@media (max-width: 768px) {
+  #container {
+    flex-direction: column; /* Stack containers vertically on smaller screens */
+  }
+}
 
-    #container {
-      display: flex;
-      height: 100%;
-    }
+#container {
+  display: flex;
+  height: 100%;
+}
 
-    #left-container, #right-container {
-      overflow: auto;
-      
-      box-sizing: border-box;
-    }
+#left-container, #right-container {
+  overflow: auto;
+  
+  box-sizing: border-box;
+}
 
-    #left-container {
-      flex: 2; /* Initial width ratio for left container */
-    }
+#left-container {
+  flex: 2; /* Initial width ratio for left container */
+}
 
-    #right-container {
-      flex: 1;
-    }
+#right-container {
+  flex: 1;
+}
  
     #sub-box {
       padding: 20px;
